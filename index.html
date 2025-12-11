@@ -368,7 +368,8 @@
         }
 
         .showcase-icon {
-            font-size: 6rem;
+            width: 180px;
+            height: 180px;
             filter: drop-shadow(0 0 30px rgba(102, 126, 234, 0.8));
             animation: iconFloat 4s ease-in-out infinite;
             transition: all 0.3s ease;
@@ -469,6 +470,36 @@
             max-width: 1400px;
             margin: 0 auto;
             position: relative;
+        }
+
+        /* About Section */
+        .about {
+            padding: 8rem 4rem;
+            max-width: 1400px;
+            margin: 0 auto;
+            position: relative;
+            background: linear-gradient(180deg, rgba(0, 0, 0, 0) 0%, rgba(20, 10, 40, 0.2) 100%);
+        }
+
+        .about-content {
+            max-width: 1200px;
+            margin: 0 auto;
+        }
+
+        .about-text-container {
+            margin: 3rem 0 4rem;
+        }
+
+        .about-text {
+            font-size: 1.1rem;
+            line-height: 1.8;
+            color: #d4d0e6;
+            margin-bottom: 1.5rem;
+        }
+
+        .about-text strong {
+            color: #b8a8ff;
+            font-weight: 600;
         }
 
         .section-title {
@@ -650,7 +681,7 @@
             }
         }
 
-        @media (max-width: 768px) {
+                    @media (max-width: 768px) {
             .hero-title {
                 font-size: 2.5rem;
             }
@@ -660,11 +691,16 @@
             }
 
             .showcase-icon {
-                font-size: 4rem;
+                width: 120px;
+                height: 120px;
             }
 
             .showcase-title {
                 font-size: 1.5rem;
+            }
+
+            .about-text {
+                font-size: 1rem;
             }
         }
     </style>
@@ -678,7 +714,8 @@
             <div class="logo">Solo Prodigy Dev</div>
             <nav class="nav-links">
                 <a href="#games">Games</a>
-                <a href="mailto:soloprodigydev@gmail.com">Contact</a>
+                <a href="#about">About</a>
+                <a href="https://soloprodigydev.carrd.co/" target="_blank">Contact</a>
                 <a href="https://github.com/soloprodigydev" target="_blank">GitHub</a>
             </nav>
         </header>
@@ -707,7 +744,7 @@
                     <div class="game-showcase" onclick="window.location.href='./shadewalker'">
                         <div class="showcase-particles" id="showcase-particles"></div>
                         <div class="showcase-inner">
-                            <div class="showcase-icon">🗡️</div>
+                            <img src="./shadewalker/icon.png" alt="Shadewalker" class="showcase-icon">
                             <div class="showcase-title">Shadewalker</div>
                             <div class="showcase-subtitle">Click to enter the shadows</div>
                         </div>
@@ -755,9 +792,50 @@
             </div>
         </section>
 
+        <section class="about" id="about">
+            <div class="about-content">
+                <h2 class="section-title">About the Developer</h2>
+                <p class="section-subtitle">The story behind the games</p>
+
+                <div class="about-text-container">
+                    <p class="about-text"><strong>Solo.Prodigy</strong> is an independent game developer who just really likes making cool stuff for people to play. His goal is simple: create fun and enjoyable games that players actually feel are worth buying. Nothing fancy. Just good vibes and good gameplay.</p>
+
+                    <p class="about-text">Before starting Shadewalker he made a couple of absolutely legendary school projects: Serein and OverStory (DEFINITELY NOT AN UNDERTALE RIPOFF), both on itch.io, both 3D, and both powered by an unhealthy amount of copyrighted assets because he was too lazy to make his own at the time (Still is). Those projects will not be going professional anytime soon, but they taught him a lot about game dev and how not to get sued.</p>
+
+                    <p class="about-text">Shadewalker is his first real professional game (I think?..). It is built from scratch, properly licensed, fully original, and genuinely something he is proud of. Every system, animation, and idea comes from learning, improving, and wanting to make something players will actually enjoy.</p>
+
+                    <p class="about-text">He might be young, but Solo.Prodigy is aiming to grow as a developer, keep making creative games, and prove that anyone can build something awesome if they just start and don't stop.</p>
+                </div>
+
+                <div class="features-grid">
+                    <div class="feature-card">
+                        <span class="feature-icon">🎮</span>
+                        <h3 class="feature-title">Gameplay First</h3>
+                        <p class="feature-description">
+                            Every mechanic is designed to be fun, responsive, and satisfying. No fluff, just pure gaming joy.
+                        </p>
+                    </div>
+                    <div class="feature-card">
+                        <span class="feature-icon">🌙</span>
+                        <h3 class="feature-title">Dark Fantasy</h3>
+                        <p class="feature-description">
+                            Immerse yourself in a shadowy world where light and darkness are your greatest allies.
+                        </p>
+                    </div>
+                    <div class="feature-card">
+                        <span class="feature-icon">✨</span>
+                        <h3 class="feature-title">Made with Passion</h3>
+                        <p class="feature-description">
+                            Built from the ground up by an indie dev who genuinely cares about creating quality experiences.
+                        </p>
+                    </div>
+                </div>
+            </div>
+        </section>
+
         <footer>
             <div class="social-links">
-                <a href="mailto:soloprodigydev@gmail.com">📧 Email</a>
+                <a href="https://soloprodigydev.carrd.co/" target="_blank">📧 Contact</a>
                 <a href="https://github.com/soloprodigydev" target="_blank">💻 GitHub</a>
             </div>
             <p class="copyright">&copy; 2025 Solo Prodigy Dev. All rights reserved.</p>
