@@ -1,0 +1,612 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>EULA – Shadewalker</title>
+
+<style>
+    * {
+        margin: 0;
+        padding: 0;
+        box-sizing: border-box;
+    }
+
+    html {
+        scroll-behavior: smooth;
+    }
+
+    body {
+        background: #000000;
+        color: #e4e4f0;
+        font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Arial, sans-serif;
+        overflow-x: hidden;
+        position: relative;
+    }
+
+    #particle-canvas {
+        position: fixed;
+        top: 0;
+        left: 0;
+        width: 100%;
+        height: 100%;
+        z-index: 0;
+        pointer-events: none;
+    }
+
+    .bg-gradient {
+        position: fixed;
+        top: 0;
+        left: 0;
+        width: 100%;
+        height: 100%;
+        background: 
+            radial-gradient(ellipse at 20% 10%, rgba(100, 60, 200, 0.15), transparent 50%),
+            radial-gradient(ellipse at 80% 80%, rgba(120, 80, 255, 0.12), transparent 50%),
+            radial-gradient(ellipse at 50% 50%, rgba(80, 50, 180, 0.08), transparent 60%);
+        z-index: -1;
+        animation: gradientShift 20s ease infinite;
+    }
+
+    @keyframes gradientShift {
+        0%, 100% { opacity: 1; transform: scale(1) rotate(0deg); }
+        33% { opacity: 0.8; transform: scale(1.1) rotate(2deg); }
+        66% { opacity: 0.9; transform: scale(0.95) rotate(-2deg); }
+    }
+
+    .content {
+        position: relative;
+        z-index: 1;
+    }
+
+    nav {
+        background: rgba(5, 5, 10, 0.85);
+        backdrop-filter: blur(20px) saturate(180%);
+        -webkit-backdrop-filter: blur(20px) saturate(180%);
+        padding: 20px 0;
+        position: fixed;
+        top: 0;
+        left: 0;
+        right: 0;
+        z-index: 1000;
+        border-bottom: 1px solid rgba(120, 80, 255, 0.15);
+        transition: all 0.4s cubic-bezier(0.4, 0, 0.2, 1);
+    }
+
+    nav.scrolled {
+        padding: 12px 0;
+        background: rgba(5, 5, 10, 0.95);
+        border-bottom: 1px solid rgba(120, 80, 255, 0.25);
+        box-shadow: 0 8px 32px rgba(0, 0, 0, 0.6);
+    }
+
+    .nav-container {
+        max-width: 1400px;
+        margin: 0 auto;
+        padding: 0 40px;
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+    }
+
+    .logo {
+        height: 60px;
+        filter: drop-shadow(0 0 30px rgba(126, 93, 255, 0.8));
+        cursor: pointer;
+        transition: all 0.3s ease;
+        user-select: none;
+    }
+
+    .logo:hover {
+        filter: drop-shadow(0 0 40px rgba(126, 93, 255, 1)) drop-shadow(0 0 60px rgba(126, 93, 255, 0.5));
+        transform: scale(1.05);
+    }
+
+    .nav-links {
+        display: flex;
+        gap: 4px;
+        align-items: center;
+    }
+
+    .nav-links a {
+        color: #b8b0d4;
+        padding: 10px 20px;
+        text-decoration: none;
+        font-size: 15px;
+        font-weight: 500;
+        transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+        border-radius: 8px;
+        position: relative;
+        letter-spacing: 0.5px;
+    }
+
+    .nav-links a::before {
+        content: '';
+        position: absolute;
+        top: 0;
+        left: 0;
+        right: 0;
+        bottom: 0;
+        background: linear-gradient(135deg, rgba(110, 91, 255, 0.1), rgba(140, 100, 255, 0.1));
+        border-radius: 8px;
+        opacity: 0;
+        transition: opacity 0.3s ease;
+    }
+
+    .nav-links a:hover::before {
+        opacity: 1;
+    }
+
+    .nav-links a:hover {
+        color: white;
+        transform: translateY(-1px);
+    }
+
+    .nav-links a.active {
+        color: white;
+        background: rgba(110, 91, 255, 0.15);
+    }
+
+    .container {
+        max-width: 900px;
+        margin: 0 auto;
+        padding: 140px 40px 80px;
+        line-height: 1.8;
+    }
+
+    .page-title {
+        font-size: 48px;
+        font-weight: 700;
+        margin-bottom: 20px;
+        background: linear-gradient(135deg, #ffffff, #b8b0d4);
+        -webkit-background-clip: text;
+        -webkit-text-fill-color: transparent;
+        background-clip: text;
+        animation: titleGlow 3s ease-in-out infinite;
+    }
+
+    @keyframes titleGlow {
+        0%, 100% { 
+            filter: drop-shadow(0 0 30px rgba(110, 91, 255, 0.6));
+        }
+        50% { 
+            filter: drop-shadow(0 0 50px rgba(142, 123, 255, 0.9));
+        }
+    }
+
+    .last-updated {
+        color: #a8a0c4;
+        font-size: 15px;
+        margin-bottom: 40px;
+        font-weight: 500;
+    }
+
+    .intro-text {
+        font-size: 18px;
+        line-height: 1.8;
+        color: #d4d0e6;
+        margin-bottom: 50px;
+        padding: 25px;
+        background: rgba(110, 91, 255, 0.08);
+        border-left: 4px solid rgba(110, 91, 255, 0.5);
+        border-radius: 8px;
+    }
+
+    .section {
+        margin-bottom: 40px;
+    }
+
+    .section h2 {
+        font-size: 26px;
+        color: #b8a8ff;
+        margin-bottom: 15px;
+        font-weight: 600;
+        position: relative;
+        padding-left: 20px;
+    }
+
+    .section h2::before {
+        content: '';
+        position: absolute;
+        left: 0;
+        top: 50%;
+        transform: translateY(-50%);
+        width: 4px;
+        height: 24px;
+        background: linear-gradient(180deg, #6e5bff, #8a74ff);
+        border-radius: 2px;
+    }
+
+    .section p {
+        font-size: 17px;
+        line-height: 1.8;
+        color: #d4d0e6;
+        margin-bottom: 15px;
+    }
+
+    .section ul {
+        list-style: none;
+        padding-left: 0;
+        margin: 15px 0;
+    }
+
+    .section li {
+        font-size: 17px;
+        line-height: 1.8;
+        color: #d4d0e6;
+        margin-bottom: 12px;
+        padding-left: 30px;
+        position: relative;
+    }
+
+    .section li::before {
+        content: '→';
+        position: absolute;
+        left: 0;
+        color: #8a74ff;
+        font-weight: bold;
+    }
+
+    strong {
+        color: #c7baff;
+        font-weight: 600;
+    }
+
+    .quick-nav {
+        background: rgba(20, 15, 40, 0.4);
+        border: 1px solid rgba(110, 91, 255, 0.2);
+        border-radius: 12px;
+        padding: 25px;
+        margin-bottom: 50px;
+        backdrop-filter: blur(10px);
+    }
+
+    .quick-nav h3 {
+        color: #b8a8ff;
+        font-size: 18px;
+        margin-bottom: 15px;
+        font-weight: 600;
+    }
+
+    .quick-nav-links {
+        display: grid;
+        grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+        gap: 10px;
+    }
+
+    .quick-nav-links a {
+        color: #c7baff;
+        text-decoration: none;
+        font-size: 15px;
+        padding: 8px 12px;
+        border-radius: 6px;
+        transition: all 0.3s ease;
+        display: block;
+    }
+
+    .quick-nav-links a:hover {
+        background: rgba(110, 91, 255, 0.15);
+        color: white;
+        transform: translateX(5px);
+    }
+
+    footer {
+        background: rgba(10, 5, 20, 0.9);
+        border-top: 1px solid rgba(110, 91, 255, 0.2);
+        padding: 40px 40px 30px;
+        text-align: center;
+        backdrop-filter: blur(20px);
+        margin-top: 80px;
+    }
+
+    .footer-links {
+        display: flex;
+        justify-content: center;
+        gap: 30px;
+        margin-bottom: 20px;
+        flex-wrap: wrap;
+    }
+
+    .footer-links a {
+        color: #b8b0d4;
+        text-decoration: none;
+        font-size: 15px;
+        transition: all 0.3s ease;
+        padding: 5px 10px;
+        border-radius: 6px;
+    }
+
+    .footer-links a:hover {
+        color: white;
+        background: rgba(110, 91, 255, 0.1);
+    }
+
+    .copyright {
+        color: #8a8099;
+        font-size: 14px;
+        margin-top: 20px;
+    }
+
+    @media (max-width: 768px) {
+        .nav-container {
+            padding: 0 20px;
+            flex-direction: column;
+            gap: 15px;
+        }
+
+        .logo {
+            height: 45px;
+        }
+
+        .nav-links {
+            flex-wrap: wrap;
+            justify-content: center;
+        }
+
+        .container {
+            padding: 120px 20px 60px;
+        }
+
+        .page-title {
+            font-size: 36px;
+        }
+
+        .section h2 {
+            font-size: 22px;
+        }
+
+        .quick-nav-links {
+            grid-template-columns: 1fr;
+        }
+    }
+</style>
+</head>
+
+<body>
+
+<canvas id="particle-canvas"></canvas>
+<div class="bg-gradient"></div>
+
+<div class="content">
+    <nav id="navbar">
+        <div class="nav-container">
+            <a href="index.html"><img src="title.png" alt="Shadewalker" class="logo"></a>
+            <div class="nav-links">
+                <a href="index.html">Home</a>
+                <a href="mods.html">Mods</a>
+                <a href="eula.html" class="active">EULA</a>
+                <a href="terms.html">Terms</a>
+                <a href="privacy.html">Privacy</a>
+                <a href="contact.html">Contact</a>
+            </div>
+        </div>
+    </nav>
+
+    <div class="container">
+        <h1 class="page-title">End User License Agreement</h1>
+        <p class="last-updated"><strong>Last Updated:</strong> January 2025</p>
+
+        <div class="intro-text">
+            This End User License Agreement (EULA) outlines your rights and restrictions when using Shadewalker. By installing, downloading, or playing the game, you agree to be bound by these terms.
+        </div>
+
+        <div class="quick-nav">
+            <h3>Quick Navigation</h3>
+            <div class="quick-nav-links">
+                <a href="#license">1. License Grant</a>
+                <a href="#ownership">2. Ownership</a>
+                <a href="#restrictions">3. Restrictions</a>
+                <a href="#modding">4. Modding</a>
+                <a href="#streaming">5. Streaming</a>
+                <a href="#disclaimer">6. Disclaimer</a>
+                <a href="#termination">7. Termination</a>
+            </div>
+        </div>
+
+        <div class="section" id="license">
+            <h2>1. License Grant</h2>
+            <p>Solo.Prodigy grants you a personal, non-exclusive, non-transferable, revocable license to install and play Shadewalker for your personal entertainment purposes only. This license does not grant you any ownership rights to the game.</p>
+        </div>
+
+        <div class="section" id="ownership">
+            <h2>2. Ownership</h2>
+            <p>Solo.Prodigy retains full ownership and all intellectual property rights to Shadewalker, including but not limited to:</p>
+            <ul>
+                <li>All game code, scripts, and source files</li>
+                <li>Game mechanics, systems, and animations</li>
+                <li>Story, characters, dialogue, and narrative content</li>
+                <li>The Shadewalker™ branding, logo, and visual identity</li>
+                <li>Original artwork, sound effects, and music</li>
+            </ul>
+            <p><strong>Note:</strong> While some CC0 (public domain) art and audio assets may be used in the game, the compiled game itself, including its unique combination of assets, code, and design, is NOT public domain and remains protected intellectual property.</p>
+        </div>
+
+        <div class="section" id="restrictions">
+            <h2>3. Restrictions</h2>
+            <p>You may NOT do the following:</p>
+            <ul>
+                <li>Redistribute, sell, or lease the full game or substantial portions thereof</li>
+                <li>Commercially exploit the game or its assets without written permission</li>
+                <li>Reverse-engineer, decompile, or extract source code from the game</li>
+                <li>Datamine, leak, or share unreleased content, story spoilers, or confidential information</li>
+                <li>Create derivative commercial games using Shadewalker's mechanics or assets</li>
+                <li>Remove, alter, or obscure any copyright notices or branding</li>
+                <li>Use the game for illegal purposes or to harm others</li>
+            </ul>
+        </div>
+
+        <div class="section" id="modding">
+            <h2>4. Modding Policy</h2>
+            <p>Modding is encouraged and permitted under the following conditions:</p>
+            <ul>
+                <li>Mods must be distributed for <strong>free</strong> (no paid mods)</li>
+                <li>Mods must be safe, respectful, and not contain malicious code</li>
+                <li>Mods cannot include copyrighted material from other properties</li>
+                <li>Mods cannot leak story content, unreleased features, or proprietary code</li>
+                <li>Mod creators must clearly state that mods are unofficial and not endorsed by Solo.Prodigy</li>
+                <li>Solo.Prodigy reserves the right to request removal of mods that violate this agreement</li>
+            </ul>
+            <p>For more detailed modding guidelines, please visit our <a href="mods.html" style="color: #8a74ff; text-decoration: underline;">Modding Page</a>.</p>
+        </div>
+
+        <div class="section" id="streaming">
+            <h2>5. Content Creation & Streaming</h2>
+            <p>You are welcome and encouraged to create content featuring Shadewalker, including:</p>
+            <ul>
+                <li>Live streaming gameplay on platforms like Twitch, YouTube, or similar</li>
+                <li>Creating Let's Play videos, reviews, or tutorials</li>
+                <li>Monetizing your content through ads, subscriptions, or donations</li>
+                <li>Sharing screenshots, clips, and gameplay highlights on social media</li>
+            </ul>
+            <p>We only ask that you credit the game appropriately and do not present yourself as officially affiliated with Shadewalker unless you have explicit permission.</p>
+        </div>
+
+        <div class="section" id="disclaimer">
+            <h2>6. Disclaimer of Warranties</h2>
+            <p>Shadewalker is provided "AS IS" and "AS AVAILABLE" without any warranties of any kind, either express or implied. Solo.Prodigy does not guarantee that the game will be error-free, uninterrupted, or free of harmful components.</p>
+            <p>Solo.Prodigy is not liable for any damages, data loss, or issues arising from the use or inability to use the game, including but not limited to:</p>
+            <ul>
+                <li>Loss of save data or game progress</li>
+                <li>Hardware or software incompatibilities</li>
+                <li>Bugs, glitches, or crashes</li>
+                <li>Any indirect, incidental, or consequential damages</li>
+            </ul>
+        </div>
+
+        <div class="section" id="termination">
+            <h2>7. Termination</h2>
+            <p>This license is effective until terminated. Your rights under this license will terminate automatically without notice if you fail to comply with any of its terms. Upon termination, you must cease all use of the game and destroy all copies in your possession.</p>
+            <p>Solo.Prodigy reserves the right to modify, suspend, or discontinue the game at any time without prior notice or liability.</p>
+        </div>
+
+        <div class="section">
+            <h2>8. Contact</h2>
+            <p>If you have any questions about this EULA or need clarification on any terms, please contact us at <strong>shadewalkerteam@gmail.com</strong> or visit our <a href="contact.html" style="color: #8a74ff; text-decoration: underline;">Contact Page</a>.</p>
+        </div>
+    </div>
+
+    <footer>
+        <div class="footer-links">
+            <a href="eula.html">EULA</a>
+            <a href="terms.html">Terms of Service</a>
+            <a href="privacy.html">Privacy Policy</a>
+            <a href="contact.html">Contact</a>
+        </div>
+        <div class="copyright">
+            © 2025 Shadewalker by Solo.Prodigy. All rights reserved.
+        </div>
+    </footer>
+</div>
+
+<script>
+    const canvas = document.getElementById('particle-canvas');
+    const ctx = canvas.getContext('2d');
+    canvas.width = window.innerWidth;
+    canvas.height = window.innerHeight;
+
+    const particles = [];
+    const particleCount = 80;
+
+    class Particle {
+        constructor() {
+            this.reset();
+        }
+
+        reset() {
+            this.x = Math.random() * canvas.width;
+            this.y = Math.random() * canvas.height;
+            this.size = Math.random() * 2 + 0.5;
+            this.speedY = Math.random() * 0.5 + 0.1;
+            this.speedX = (Math.random() - 0.5) * 0.3;
+            this.opacity = Math.random() * 0.5 + 0.2;
+            this.color = `rgba(${140 + Math.random() * 40}, ${80 + Math.random() * 40}, 255, ${this.opacity})`;
+        }
+
+        update() {
+            this.y -= this.speedY;
+            this.x += this.speedX;
+            
+            if (this.y < -10) {
+                this.y = canvas.height + 10;
+                this.x = Math.random() * canvas.width;
+            }
+            if (this.x < -10 || this.x > canvas.width + 10) {
+                this.x = Math.random() * canvas.width;
+            }
+        }
+
+        draw() {
+            ctx.fillStyle = this.color;
+            ctx.beginPath();
+            ctx.arc(this.x, this.y, this.size, 0, Math.PI * 2);
+            ctx.fill();
+        }
+    }
+
+    for (let i = 0; i < particleCount; i++) {
+        particles.push(new Particle());
+    }
+
+    function animate() {
+        ctx.clearRect(0, 0, canvas.width, canvas.height);
+        
+        particles.forEach(particle => {
+            particle.update();
+            particle.draw();
+        });
+
+        requestAnimationFrame(animate);
+    }
+
+    animate();
+
+    document.querySelectorAll('.quick-nav-links a').forEach(link => {
+        link.addEventListener('click', (e) => {
+            e.preventDefault();
+            const targetId = link.getAttribute('href').substring(1);
+            const targetElement = document.getElementById(targetId);
+            if (targetElement) {
+                targetElement.scrollIntoView({ behavior: 'smooth', block: 'start' });
+            }
+        });
+    });
+
+    window.addEventListener('scroll', () => {
+        const nav = document.getElementById('navbar');
+        if (window.pageYOffset > 50) {
+            nav.classList.add('scrolled');
+        } else {
+            nav.classList.remove('scrolled');
+        }
+    });
+
+    window.addEventListener('resize', () => {
+        canvas.width = window.innerWidth;
+        canvas.height = window.innerHeight;
+    });
+
+    document.querySelectorAll('a[href$=".html"]').forEach(link => {
+        link.addEventListener('click', (e) => {
+            e.preventDefault();
+            const href = link.getAttribute('href');
+            
+            document.body.style.opacity = '0';
+            document.body.style.transition = 'opacity 0.3s ease';
+            
+            setTimeout(() => {
+                window.location.href = href;
+            }, 300);
+        });
+    });
+
+    window.addEventListener('load', () => {
+        document.body.style.opacity = '0';
+        document.body.style.transition = 'opacity 0.5s ease';
+        setTimeout(() => {
+            document.body.style.opacity = '1';
+        }, 100);
+    });
+</script>
+
+</body>
+</html>

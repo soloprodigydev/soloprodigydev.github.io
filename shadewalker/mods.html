@@ -1,0 +1,696 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Modding Guidelines – Shadewalker</title>
+
+<style>
+    * {
+        margin: 0;
+        padding: 0;
+        box-sizing: border-box;
+    }
+
+    html {
+        scroll-behavior: smooth;
+    }
+
+    body {
+        background: #000000;
+        color: #e4e4f0;
+        font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Arial, sans-serif;
+        overflow-x: hidden;
+        position: relative;
+    }
+
+    #particle-canvas {
+        position: fixed;
+        top: 0;
+        left: 0;
+        width: 100%;
+        height: 100%;
+        z-index: 0;
+        pointer-events: none;
+    }
+
+    .bg-gradient {
+        position: fixed;
+        top: 0;
+        left: 0;
+        width: 100%;
+        height: 100%;
+        background: 
+            radial-gradient(ellipse at 20% 10%, rgba(100, 60, 200, 0.15), transparent 50%),
+            radial-gradient(ellipse at 80% 80%, rgba(120, 80, 255, 0.12), transparent 50%),
+            radial-gradient(ellipse at 50% 50%, rgba(80, 50, 180, 0.08), transparent 60%);
+        z-index: -1;
+        animation: gradientShift 20s ease infinite;
+    }
+
+    @keyframes gradientShift {
+        0%, 100% { opacity: 1; transform: scale(1) rotate(0deg); }
+        33% { opacity: 0.8; transform: scale(1.1) rotate(2deg); }
+        66% { opacity: 0.9; transform: scale(0.95) rotate(-2deg); }
+    }
+
+    .content {
+        position: relative;
+        z-index: 1;
+    }
+
+    nav {
+        background: rgba(5, 5, 10, 0.85);
+        backdrop-filter: blur(20px) saturate(180%);
+        -webkit-backdrop-filter: blur(20px) saturate(180%);
+        padding: 20px 0;
+        position: fixed;
+        top: 0;
+        left: 0;
+        right: 0;
+        z-index: 1000;
+        border-bottom: 1px solid rgba(120, 80, 255, 0.15);
+        transition: all 0.4s cubic-bezier(0.4, 0, 0.2, 1);
+    }
+
+    nav.scrolled {
+        padding: 12px 0;
+        background: rgba(5, 5, 10, 0.95);
+        border-bottom: 1px solid rgba(120, 80, 255, 0.25);
+        box-shadow: 0 8px 32px rgba(0, 0, 0, 0.6);
+    }
+
+    .nav-container {
+        max-width: 1400px;
+        margin: 0 auto;
+        padding: 0 40px;
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+    }
+
+    .logo {
+        height: 60px;
+        filter: drop-shadow(0 0 30px rgba(126, 93, 255, 0.8));
+        cursor: pointer;
+        transition: all 0.3s ease;
+        user-select: none;
+    }
+
+    .logo:hover {
+        filter: drop-shadow(0 0 40px rgba(126, 93, 255, 1)) drop-shadow(0 0 60px rgba(126, 93, 255, 0.5));
+        transform: scale(1.05);
+    }
+
+    .nav-links {
+        display: flex;
+        gap: 4px;
+        align-items: center;
+    }
+
+    .nav-links a {
+        color: #b8b0d4;
+        padding: 10px 20px;
+        text-decoration: none;
+        font-size: 15px;
+        font-weight: 500;
+        transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+        border-radius: 8px;
+        position: relative;
+        letter-spacing: 0.5px;
+    }
+
+    .nav-links a::before {
+        content: '';
+        position: absolute;
+        top: 0;
+        left: 0;
+        right: 0;
+        bottom: 0;
+        background: linear-gradient(135deg, rgba(110, 91, 255, 0.1), rgba(140, 100, 255, 0.1));
+        border-radius: 8px;
+        opacity: 0;
+        transition: opacity 0.3s ease;
+    }
+
+    .nav-links a:hover::before {
+        opacity: 1;
+    }
+
+    .nav-links a:hover {
+        color: white;
+        transform: translateY(-1px);
+    }
+
+    .nav-links a.active {
+        color: white;
+        background: rgba(110, 91, 255, 0.15);
+    }
+
+    .container {
+        max-width: 1000px;
+        margin: 0 auto;
+        padding: 140px 40px 80px;
+    }
+
+    .page-title {
+        font-size: 48px;
+        font-weight: 700;
+        margin-bottom: 20px;
+        text-align: center;
+        background: linear-gradient(135deg, #ffffff, #b8b0d4);
+        -webkit-background-clip: text;
+        -webkit-text-fill-color: transparent;
+        background-clip: text;
+        animation: titleGlow 3s ease-in-out infinite;
+    }
+
+    @keyframes titleGlow {
+        0%, 100% { 
+            filter: drop-shadow(0 0 30px rgba(110, 91, 255, 0.6));
+        }
+        50% { 
+            filter: drop-shadow(0 0 50px rgba(142, 123, 255, 0.9));
+        }
+    }
+
+    .intro-text {
+        font-size: 19px;
+        line-height: 1.8;
+        color: #d4d0e6;
+        margin-bottom: 60px;
+        text-align: center;
+        max-width: 800px;
+        margin-left: auto;
+        margin-right: auto;
+    }
+
+    .intro-text strong {
+        color: #b8a8ff;
+    }
+
+    .mod-grid {
+        display: grid;
+        grid-template-columns: repeat(auto-fit, minmax(450px, 1fr));
+        gap: 30px;
+        margin-bottom: 60px;
+    }
+
+    .mod-card {
+        background: rgba(20, 15, 40, 0.4);
+        border: 2px solid rgba(110, 91, 255, 0.2);
+        border-radius: 16px;
+        padding: 35px;
+        backdrop-filter: blur(10px);
+        transition: all 0.4s cubic-bezier(0.34, 1.56, 0.64, 1);
+        position: relative;
+        overflow: hidden;
+    }
+
+    .mod-card::before {
+        content: '';
+        position: absolute;
+        top: 0;
+        left: 0;
+        right: 0;
+        height: 4px;
+        background: linear-gradient(90deg, transparent, #6e5bff, transparent);
+        opacity: 0;
+        transition: opacity 0.4s ease;
+    }
+
+    .mod-card:hover::before {
+        opacity: 1;
+    }
+
+    .mod-card:hover {
+        transform: translateY(-5px);
+        border-color: rgba(110, 91, 255, 0.4);
+        box-shadow: 0 20px 60px rgba(110, 91, 255, 0.3);
+        background: rgba(30, 20, 50, 0.5);
+    }
+
+    .mod-card.allowed {
+        border-color: rgba(80, 200, 120, 0.3);
+    }
+
+    .mod-card.allowed:hover {
+        border-color: rgba(80, 200, 120, 0.5);
+        box-shadow: 0 20px 60px rgba(80, 200, 120, 0.2);
+    }
+
+    .mod-card.allowed::before {
+        background: linear-gradient(90deg, transparent, #50c878, transparent);
+    }
+
+    .mod-card.not-allowed {
+        border-color: rgba(255, 100, 100, 0.3);
+    }
+
+    .mod-card.not-allowed:hover {
+        border-color: rgba(255, 100, 100, 0.5);
+        box-shadow: 0 20px 60px rgba(255, 100, 100, 0.2);
+    }
+
+    .mod-card.not-allowed::before {
+        background: linear-gradient(90deg, transparent, #ff6464, transparent);
+    }
+
+    .mod-card-header {
+        display: flex;
+        align-items: center;
+        gap: 15px;
+        margin-bottom: 20px;
+    }
+
+    .mod-card-icon {
+        font-size: 36px;
+        line-height: 1;
+    }
+
+    .mod-card h2 {
+        font-size: 26px;
+        color: #b8a8ff;
+        font-weight: 600;
+        margin: 0;
+    }
+
+    .mod-card.allowed h2 {
+        color: #7dd89f;
+    }
+
+    .mod-card.not-allowed h2 {
+        color: #ff9999;
+    }
+
+    .mod-card ul {
+        list-style: none;
+        padding: 0;
+        margin: 0;
+    }
+
+    .mod-card li {
+        font-size: 16px;
+        line-height: 1.7;
+        color: #d4d0e6;
+        margin-bottom: 12px;
+        padding-left: 28px;
+        position: relative;
+    }
+
+    .mod-card.allowed li::before {
+        content: '✓';
+        position: absolute;
+        left: 0;
+        color: #50c878;
+        font-weight: bold;
+        font-size: 18px;
+    }
+
+    .mod-card.not-allowed li::before {
+        content: '✗';
+        position: absolute;
+        left: 0;
+        color: #ff6464;
+        font-weight: bold;
+        font-size: 18px;
+    }
+
+    .mod-card.neutral li::before {
+        content: '→';
+        position: absolute;
+        left: 0;
+        color: #8a74ff;
+        font-weight: bold;
+    }
+
+    .disclaimer-box {
+        background: rgba(110, 91, 255, 0.1);
+        border: 2px solid rgba(110, 91, 255, 0.3);
+        border-radius: 12px;
+        padding: 30px;
+        margin-top: 60px;
+        text-align: center;
+    }
+
+    .disclaimer-box h3 {
+        color: #b8a8ff;
+        font-size: 22px;
+        margin-bottom: 15px;
+        font-weight: 600;
+    }
+
+    .disclaimer-box p {
+        font-size: 17px;
+        line-height: 1.7;
+        color: #d4d0e6;
+        margin: 0;
+    }
+
+    .cta-section {
+        text-align: center;
+        margin-top: 60px;
+        padding: 40px;
+        background: rgba(20, 15, 40, 0.3);
+        border-radius: 16px;
+        border: 1px solid rgba(110, 91, 255, 0.2);
+    }
+
+    .cta-section h3 {
+        color: #b8a8ff;
+        font-size: 24px;
+        margin-bottom: 20px;
+        font-weight: 600;
+    }
+
+    .cta-section p {
+        font-size: 17px;
+        color: #d4d0e6;
+        margin-bottom: 30px;
+        line-height: 1.7;
+    }
+
+    .cta-buttons {
+        display: flex;
+        gap: 20px;
+        justify-content: center;
+        flex-wrap: wrap;
+    }
+
+    .btn {
+        padding: 14px 32px;
+        font-size: 16px;
+        font-weight: 600;
+        text-decoration: none;
+        border-radius: 10px;
+        transition: all 0.4s cubic-bezier(0.34, 1.56, 0.64, 1);
+        position: relative;
+        overflow: hidden;
+    }
+
+    .btn-primary {
+        background: linear-gradient(135deg, #6e5bff 0%, #8a74ff 100%);
+        color: white;
+        box-shadow: 0 8px 30px rgba(110, 91, 255, 0.4);
+    }
+
+    .btn-primary:hover {
+        transform: translateY(-3px);
+        box-shadow: 0 12px 40px rgba(110, 91, 255, 0.6);
+    }
+
+    .btn-secondary {
+        background: rgba(110, 91, 255, 0.1);
+        color: #c7baff;
+        border: 2px solid rgba(110, 91, 255, 0.4);
+    }
+
+    .btn-secondary:hover {
+        background: rgba(110, 91, 255, 0.2);
+        border-color: rgba(110, 91, 255, 0.6);
+        transform: translateY(-3px);
+        color: white;
+    }
+
+    footer {
+        background: rgba(10, 5, 20, 0.9);
+        border-top: 1px solid rgba(110, 91, 255, 0.2);
+        padding: 40px 40px 30px;
+        text-align: center;
+        backdrop-filter: blur(20px);
+        margin-top: 80px;
+    }
+
+    .footer-links {
+        display: flex;
+        justify-content: center;
+        gap: 30px;
+        margin-bottom: 20px;
+        flex-wrap: wrap;
+    }
+
+    .footer-links a {
+        color: #b8b0d4;
+        text-decoration: none;
+        font-size: 15px;
+        transition: all 0.3s ease;
+        padding: 5px 10px;
+        border-radius: 6px;
+    }
+
+    .footer-links a:hover {
+        color: white;
+        background: rgba(110, 91, 255, 0.1);
+    }
+
+    .copyright {
+        color: #8a8099;
+        font-size: 14px;
+        margin-top: 20px;
+    }
+
+    @media (max-width: 768px) {
+        .nav-container {
+            padding: 0 20px;
+            flex-direction: column;
+            gap: 15px;
+        }
+
+        .logo {
+            height: 45px;
+        }
+
+        .nav-links {
+            flex-wrap: wrap;
+            justify-content: center;
+        }
+
+        .container {
+            padding: 120px 20px 60px;
+        }
+
+        .page-title {
+            font-size: 36px;
+        }
+
+        .mod-grid {
+            grid-template-columns: 1fr;
+        }
+
+        .cta-buttons {
+            flex-direction: column;
+        }
+    }
+</style>
+</head>
+
+<body>
+
+<canvas id="particle-canvas"></canvas>
+<div class="bg-gradient"></div>
+
+<div class="content">
+    <nav id="navbar">
+        <div class="nav-container">
+            <a href="index.html"><img src="title.png" alt="Shadewalker" class="logo"></a>
+            <div class="nav-links">
+                <a href="index.html">Home</a>
+                <a href="mods.html" class="active">Mods</a>
+                <a href="eula.html">EULA</a>
+                <a href="terms.html">Terms</a>
+                <a href="privacy.html">Privacy</a>
+                <a href="contact.html">Contact</a>
+            </div>
+        </div>
+    </nav>
+
+    <div class="container">
+        <h1 class="page-title">Modding Guidelines</h1>
+
+        <p class="intro-text">
+            We <strong>love</strong> the modding community and encourage players to create and share their own content for Shadewalker. These guidelines explain what's allowed, what's not, and how to safely share your creations with the world.
+        </p>
+
+        <div class="mod-grid">
+            <div class="mod-card allowed">
+                <div class="mod-card-header">
+                    <span class="mod-card-icon">✓</span>
+                    <h2>What's Allowed</h2>
+                </div>
+                <ul>
+                    <li>Free mods only (no paid content)</li>
+                    <li>Texture, audio, and UI replacements</li>
+                    <li>New levels, enemies, or gameplay tweaks</li>
+                    <li>Quality-of-life improvements</li>
+                    <li>Custom difficulty modes</li>
+                    <li>Safe, respectful, non-harmful content</li>
+                    <li>Mods using CC0 assets or original work</li>
+                    <li>Content clearly marked as unofficial</li>
+                </ul>
+            </div>
+
+            <div class="mod-card not-allowed">
+                <div class="mod-card-header">
+                    <span class="mod-card-icon">✗</span>
+                    <h2>What's Not Allowed</h2>
+                </div>
+                <ul>
+                    <li>Paid or monetized mods</li>
+                    <li>Hateful, violent, or illegal content</li>
+                    <li>Story leaks or datamined assets</li>
+                    <li>Redistribution of original game code</li>
+                    <li>Malicious code or exploits</li>
+                    <li>Copyrighted material without permission</li>
+                    <li>Mods that harm the game's integrity</li>
+                    <li>Commercial derivatives or clones</li>
+                </ul>
+            </div>
+        </div>
+
+        <div class="mod-card neutral" style="margin-bottom: 40px;">
+            <div class="mod-card-header">
+                <span class="mod-card-icon">📦</span>
+                <h2>Distribution Rules</h2>
+            </div>
+            <ul>
+                <li>Mods must be shared completely free of charge</li>
+                <li>Clearly state that your mod is unofficial and fan-made</li>
+                <li>Never reupload the full game or substantial portions</li>
+                <li>Include a readme file with installation instructions</li>
+                <li>Credit any third-party assets you use (if allowed)</li>
+                <li>Respect the EULA and these modding guidelines</li>
+                <li>Be respectful to other modders and the community</li>
+            </ul>
+        </div>
+
+        <div class="disclaimer-box">
+            <h3>⚠️ Developer Disclaimer</h3>
+            <p>
+                Mods are unofficial, fan-made content and are used at your own risk. Solo.Prodigy is not responsible for any issues, bugs, crashes, or data loss caused by third-party modifications. Always backup your save files before installing mods!
+            </p>
+        </div>
+
+        <div class="cta-section">
+            <h3>Ready to Start Modding?</h3>
+            <p>Have questions about what's allowed? Need clarification on the rules? We're here to help!</p>
+            <div class="cta-buttons">
+                <a href="contact.html" class="btn btn-primary">Contact Us</a>
+                <a href="eula.html" class="btn btn-secondary">Read Full EULA</a>
+            </div>
+        </div>
+    </div>
+
+    <footer>
+        <div class="footer-links">
+            <a href="eula.html">EULA</a>
+            <a href="terms.html">Terms of Service</a>
+            <a href="privacy.html">Privacy Policy</a>
+            <a href="contact.html">Contact</a>
+        </div>
+        <div class="copyright">
+            © 2025 Shadewalker by Solo.Prodigy. All rights reserved.
+        </div>
+    </footer>
+</div>
+
+<script>
+    const canvas = document.getElementById('particle-canvas');
+    const ctx = canvas.getContext('2d');
+    canvas.width = window.innerWidth;
+    canvas.height = window.innerHeight;
+
+    const particles = [];
+    const particleCount = 80;
+
+    class Particle {
+        constructor() {
+            this.reset();
+        }
+
+        reset() {
+            this.x = Math.random() * canvas.width;
+            this.y = Math.random() * canvas.height;
+            this.size = Math.random() * 2 + 0.5;
+            this.speedY = Math.random() * 0.5 + 0.1;
+            this.speedX = (Math.random() - 0.5) * 0.3;
+            this.opacity = Math.random() * 0.5 + 0.2;
+            this.color = `rgba(${140 + Math.random() * 40}, ${80 + Math.random() * 40}, 255, ${this.opacity})`;
+        }
+
+        update() {
+            this.y -= this.speedY;
+            this.x += this.speedX;
+            
+            if (this.y < -10) {
+                this.y = canvas.height + 10;
+                this.x = Math.random() * canvas.width;
+            }
+            if (this.x < -10 || this.x > canvas.width + 10) {
+                this.x = Math.random() * canvas.width;
+            }
+        }
+
+        draw() {
+            ctx.fillStyle = this.color;
+            ctx.beginPath();
+            ctx.arc(this.x, this.y, this.size, 0, Math.PI * 2);
+            ctx.fill();
+        }
+    }
+
+    for (let i = 0; i < particleCount; i++) {
+        particles.push(new Particle());
+    }
+
+    function animate() {
+        ctx.clearRect(0, 0, canvas.width, canvas.height);
+        
+        particles.forEach(particle => {
+            particle.update();
+            particle.draw();
+        });
+
+        requestAnimationFrame(animate);
+    }
+
+    animate();
+
+    window.addEventListener('scroll', () => {
+        const nav = document.getElementById('navbar');
+        if (window.pageYOffset > 50) {
+            nav.classList.add('scrolled');
+        } else {
+            nav.classList.remove('scrolled');
+        }
+    });
+
+    window.addEventListener('resize', () => {
+        canvas.width = window.innerWidth;
+        canvas.height = window.innerHeight;
+    });
+
+    document.querySelectorAll('a[href$=".html"]').forEach(link => {
+        link.addEventListener('click', (e) => {
+            e.preventDefault();
+            const href = link.getAttribute('href');
+            
+            document.body.style.opacity = '0';
+            document.body.style.transition = 'opacity 0.3s ease';
+            
+            setTimeout(() => {
+                window.location.href = href;
+            }, 300);
+        });
+    });
+
+    window.addEventListener('load', () => {
+        document.body.style.opacity = '0';
+        document.body.style.transition = 'opacity 0.5s ease';
+        setTimeout(() => {
+            document.body.style.opacity = '1';
+        }, 100);
+    });
+</script>
+
+</body>
+</html>

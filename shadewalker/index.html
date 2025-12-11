@@ -1,0 +1,851 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Shadewalker – Master the Shadows</title>
+
+<style>
+    * {
+        margin: 0;
+        padding: 0;
+        box-sizing: border-box;
+    }
+
+    html {
+        scroll-behavior: smooth;
+    }
+
+    body {
+        background: #000000;
+        color: #e4e4f0;
+        font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Arial, sans-serif;
+        overflow-x: hidden;
+        position: relative;
+    }
+
+    /* Canvas for particles */
+    #particle-canvas {
+        position: fixed;
+        top: 0;
+        left: 0;
+        width: 100%;
+        height: 100%;
+        z-index: 0;
+        pointer-events: none;
+    }
+
+    /* Animated gradient background */
+    .bg-gradient {
+        position: fixed;
+        top: 0;
+        left: 0;
+        width: 100%;
+        height: 100%;
+        background: 
+            radial-gradient(ellipse at 20% 10%, rgba(100, 60, 200, 0.15), transparent 50%),
+            radial-gradient(ellipse at 80% 80%, rgba(120, 80, 255, 0.12), transparent 50%),
+            radial-gradient(ellipse at 50% 50%, rgba(80, 50, 180, 0.08), transparent 60%);
+        z-index: -1;
+        animation: gradientShift 20s ease infinite;
+    }
+
+    @keyframes gradientShift {
+        0%, 100% { opacity: 1; transform: scale(1) rotate(0deg); }
+        33% { opacity: 0.8; transform: scale(1.1) rotate(2deg); }
+        66% { opacity: 0.9; transform: scale(0.95) rotate(-2deg); }
+    }
+
+    /* Content wrapper */
+    .content {
+        position: relative;
+        z-index: 1;
+    }
+
+    /* NAVBAR */
+    nav {
+        background: rgba(5, 5, 10, 0.85);
+        backdrop-filter: blur(20px) saturate(180%);
+        -webkit-backdrop-filter: blur(20px) saturate(180%);
+        padding: 20px 0;
+        position: fixed;
+        top: 0;
+        left: 0;
+        right: 0;
+        z-index: 1000;
+        border-bottom: 1px solid rgba(120, 80, 255, 0.15);
+        transition: all 0.4s cubic-bezier(0.4, 0, 0.2, 1);
+    }
+
+    nav.scrolled {
+        padding: 12px 0;
+        background: rgba(5, 5, 10, 0.95);
+        border-bottom: 1px solid rgba(120, 80, 255, 0.25);
+        box-shadow: 0 8px 32px rgba(0, 0, 0, 0.6);
+    }
+
+    .nav-container {
+        max-width: 1400px;
+        margin: 0 auto;
+        padding: 0 40px;
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+    }
+
+    .logo {
+        height: 60px;
+        filter: drop-shadow(0 0 30px rgba(126, 93, 255, 0.8));
+        cursor: pointer;
+        transition: all 0.3s ease;
+        user-select: none;
+    }
+
+    .logo:hover {
+        filter: drop-shadow(0 0 40px rgba(126, 93, 255, 1)) drop-shadow(0 0 60px rgba(126, 93, 255, 0.5));
+        transform: scale(1.05);
+    }
+
+    .nav-links {
+        display: flex;
+        gap: 4px;
+        align-items: center;
+    }
+
+    .nav-links a {
+        color: #b8b0d4;
+        padding: 10px 20px;
+        text-decoration: none;
+        font-size: 15px;
+        font-weight: 500;
+        transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+        border-radius: 8px;
+        position: relative;
+        letter-spacing: 0.5px;
+    }
+
+    .nav-links a::before {
+        content: '';
+        position: absolute;
+        top: 0;
+        left: 0;
+        right: 0;
+        bottom: 0;
+        background: linear-gradient(135deg, rgba(110, 91, 255, 0.1), rgba(140, 100, 255, 0.1));
+        border-radius: 8px;
+        opacity: 0;
+        transition: opacity 0.3s ease;
+    }
+
+    .nav-links a:hover::before {
+        opacity: 1;
+    }
+
+    .nav-links a:hover {
+        color: white;
+        transform: translateY(-1px);
+    }
+
+    .nav-links a.active {
+        color: white;
+        background: rgba(110, 91, 255, 0.15);
+    }
+
+    /* Sections */
+    section {
+        min-height: 100vh;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        padding: 100px 40px;
+        position: relative;
+    }
+
+    /* HERO SECTION */
+    #home {
+        position: relative;
+        overflow: hidden;
+    }
+
+    .hero-glow {
+        position: absolute;
+        top: 50%;
+        left: 50%;
+        width: 800px;
+        height: 800px;
+        background: radial-gradient(circle, rgba(110, 91, 255, 0.2), transparent 70%);
+        transform: translate(-50%, -50%);
+        animation: heroGlow 6s ease-in-out infinite;
+        pointer-events: none;
+    }
+
+    @keyframes heroGlow {
+        0%, 100% { 
+            transform: translate(-50%, -50%) scale(1);
+            opacity: 0.4;
+        }
+        50% { 
+            transform: translate(-50%, -50%) scale(1.3);
+            opacity: 0.6;
+        }
+    }
+
+    .hero-content {
+        text-align: center;
+        max-width: 900px;
+        position: relative;
+        z-index: 2;
+    }
+
+    .hero-icon {
+        width: 200px;
+        height: 200px;
+        margin: 60px auto 30px;
+        filter: drop-shadow(0 0 40px rgba(126, 93, 255, 0.8));
+        animation: float 4s ease-in-out infinite;
+        transition: transform 0.5s cubic-bezier(0.34, 1.56, 0.64, 1), filter 0.3s ease;
+        cursor: pointer;
+        position: relative;
+    }
+
+    .hero-icon:hover {
+        transform: scale(1.15) rotate(5deg);
+        filter: drop-shadow(0 0 60px rgba(126, 93, 255, 1)) drop-shadow(0 0 100px rgba(126, 93, 255, 0.5));
+        animation-play-state: paused;
+    }
+
+    .hero-icon:active {
+        transform: scale(1.3) rotate(8deg);
+    }
+
+    /* Icon zoom modal */
+    .icon-modal {
+        position: fixed;
+        top: 0;
+        left: 0;
+        width: 100%;
+        height: 100%;
+        background: rgba(0, 0, 0, 0.95);
+        display: none;
+        align-items: center;
+        justify-content: center;
+        z-index: 10000;
+        backdrop-filter: blur(10px);
+        opacity: 0;
+        transition: opacity 0.4s ease;
+    }
+
+    .icon-modal.active {
+        display: flex;
+        opacity: 1;
+    }
+
+    .icon-modal img {
+        max-width: 90%;
+        max-height: 90vh;
+        filter: drop-shadow(0 0 80px rgba(126, 93, 255, 1)) drop-shadow(0 0 120px rgba(126, 93, 255, 0.6));
+        animation: modalFloat 3s ease-in-out infinite;
+        cursor: zoom-out;
+        transform: scale(0.8);
+        transition: transform 0.4s cubic-bezier(0.34, 1.56, 0.64, 1);
+    }
+
+    .icon-modal.active img {
+        transform: scale(1);
+    }
+
+    @keyframes modalFloat {
+        0%, 100% { transform: scale(1) translateY(0px); }
+        50% { transform: scale(1.02) translateY(-10px); }
+    }
+
+    .icon-modal .close-hint {
+        position: absolute;
+        bottom: 40px;
+        color: rgba(199, 186, 255, 0.6);
+        font-size: 14px;
+        animation: fadeInOut 2s ease-in-out infinite;
+    }
+
+    @keyframes fadeInOut {
+        0%, 100% { opacity: 0.4; }
+        50% { opacity: 1; }
+    }
+
+    @keyframes float {
+        0%, 100% { transform: translateY(0px) rotate(0deg); }
+        50% { transform: translateY(-20px) rotate(2deg); }
+    }
+
+    .hero-title {
+        max-width: 700px;
+        width: 100%;
+        height: auto;
+        margin: 0 auto 20px;
+        filter: drop-shadow(0 0 30px rgba(110, 91, 255, 0.6));
+        animation: titleShine 4s ease-in-out infinite;
+    }
+
+    @keyframes titleShine {
+        0%, 100% { 
+            filter: drop-shadow(0 0 30px rgba(110, 91, 255, 0.6));
+        }
+        50% { 
+            filter: drop-shadow(0 0 50px rgba(142, 123, 255, 0.9));
+        }
+    }
+
+    .hero-subtitle {
+        font-size: 24px;
+        color: #c7baff;
+        margin-bottom: 40px;
+        line-height: 1.6;
+        font-weight: 400;
+        opacity: 0.9;
+    }
+
+    .hero-buttons {
+        display: flex;
+        gap: 20px;
+        justify-content: center;
+        flex-wrap: wrap;
+    }
+
+    .btn {
+        padding: 18px 40px;
+        font-size: 17px;
+        font-weight: 600;
+        text-decoration: none;
+        border-radius: 12px;
+        transition: all 0.4s cubic-bezier(0.34, 1.56, 0.64, 1);
+        position: relative;
+        overflow: hidden;
+        letter-spacing: 0.5px;
+    }
+
+    .btn-primary {
+        background: linear-gradient(135deg, #6e5bff 0%, #8a74ff 100%);
+        color: white;
+        box-shadow: 0 10px 40px rgba(110, 91, 255, 0.4);
+    }
+
+    .btn-primary::before {
+        content: '';
+        position: absolute;
+        top: 0;
+        left: -100%;
+        width: 100%;
+        height: 100%;
+        background: linear-gradient(90deg, transparent, rgba(255, 255, 255, 0.3), transparent);
+        transition: left 0.6s ease;
+    }
+
+    .btn-primary:hover::before {
+        left: 100%;
+    }
+
+    .btn-primary:hover {
+        transform: translateY(-4px);
+        box-shadow: 0 15px 50px rgba(110, 91, 255, 0.6);
+    }
+
+    .btn-secondary {
+        background: rgba(110, 91, 255, 0.1);
+        color: #c7baff;
+        border: 2px solid rgba(110, 91, 255, 0.4);
+    }
+
+    .btn-secondary:hover {
+        background: rgba(110, 91, 255, 0.2);
+        border-color: rgba(110, 91, 255, 0.6);
+        transform: translateY(-4px);
+        color: white;
+    }
+
+    .scroll-indicator {
+        position: absolute;
+        bottom: 40px;
+        left: 50%;
+        transform: translateX(-50%);
+        color: rgba(199, 186, 255, 0.6);
+        font-size: 14px;
+        text-align: center;
+        animation: bounce 2s infinite;
+        cursor: pointer;
+        user-select: none;
+    }
+
+    .scroll-indicator::after {
+        content: '↓';
+        display: block;
+        font-size: 24px;
+        margin-top: 5px;
+    }
+
+    @keyframes bounce {
+        0%, 20%, 50%, 80%, 100% { transform: translateX(-50%) translateY(0); }
+        40% { transform: translateX(-50%) translateY(-10px); }
+        60% { transform: translateX(-50%) translateY(-5px); }
+    }
+
+    /* ABOUT SECTION */
+    #about {
+        background: linear-gradient(180deg, rgba(0, 0, 0, 0) 0%, rgba(20, 10, 40, 0.3) 100%);
+    }
+
+    .about-content {
+        max-width: 1100px;
+        width: 100%;
+    }
+
+    .section-title {
+        font-size: 48px;
+        font-weight: 700;
+        margin-bottom: 50px;
+        text-align: center;
+        background: linear-gradient(135deg, #ffffff, #b8b0d4);
+        -webkit-background-clip: text;
+        -webkit-text-fill-color: transparent;
+        background-clip: text;
+        position: relative;
+        display: inline-block;
+        width: 100%;
+    }
+
+    .section-title::after {
+        content: '';
+        position: absolute;
+        bottom: -15px;
+        left: 50%;
+        transform: translateX(-50%);
+        width: 100px;
+        height: 3px;
+        background: linear-gradient(90deg, transparent, #6e5bff, transparent);
+        border-radius: 2px;
+    }
+
+    .about-text {
+        font-size: 18px;
+        line-height: 1.8;
+        color: #d4d0e6;
+        margin-bottom: 25px;
+    }
+
+    .about-text strong {
+        color: #b8a8ff;
+        font-weight: 600;
+    }
+
+    .features-grid {
+        display: grid;
+        grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+        gap: 30px;
+        margin-top: 60px;
+    }
+
+    .feature-card {
+        background: rgba(20, 15, 40, 0.4);
+        border: 1px solid rgba(110, 91, 255, 0.2);
+        border-radius: 16px;
+        padding: 35px;
+        transition: all 0.4s cubic-bezier(0.34, 1.56, 0.64, 1);
+        backdrop-filter: blur(10px);
+        position: relative;
+        overflow: hidden;
+    }
+
+    .feature-card::before {
+        content: '';
+        position: absolute;
+        top: 0;
+        left: 0;
+        right: 0;
+        height: 3px;
+        background: linear-gradient(90deg, transparent, #6e5bff, transparent);
+        opacity: 0;
+        transition: opacity 0.4s ease;
+    }
+
+    .feature-card:hover::before {
+        opacity: 1;
+    }
+
+    .feature-card:hover {
+        transform: translateY(-8px);
+        border-color: rgba(110, 91, 255, 0.5);
+        box-shadow: 0 20px 60px rgba(110, 91, 255, 0.3);
+        background: rgba(30, 20, 50, 0.5);
+    }
+
+    .feature-icon {
+        font-size: 40px;
+        margin-bottom: 20px;
+        display: block;
+    }
+
+    .feature-card h3 {
+        font-size: 22px;
+        color: #b8a8ff;
+        margin-bottom: 15px;
+        font-weight: 600;
+    }
+
+    .feature-card p {
+        font-size: 16px;
+        line-height: 1.6;
+        color: #c7baff;
+        opacity: 0.9;
+    }
+
+    /* FOOTER */
+    footer {
+        background: rgba(10, 5, 20, 0.9);
+        border-top: 1px solid rgba(110, 91, 255, 0.2);
+        padding: 40px 40px 30px;
+        text-align: center;
+        backdrop-filter: blur(20px);
+    }
+
+    .footer-links {
+        display: flex;
+        justify-content: center;
+        gap: 30px;
+        margin-bottom: 20px;
+        flex-wrap: wrap;
+    }
+
+    .footer-links a {
+        color: #b8b0d4;
+        text-decoration: none;
+        font-size: 15px;
+        transition: all 0.3s ease;
+        padding: 5px 10px;
+        border-radius: 6px;
+    }
+
+    .footer-links a:hover {
+        color: white;
+        background: rgba(110, 91, 255, 0.1);
+    }
+
+    .copyright {
+        color: #8a8099;
+        font-size: 14px;
+        margin-top: 20px;
+    }
+
+    /* Responsive */
+    @media (max-width: 768px) {
+        .nav-container {
+            padding: 0 20px;
+            flex-direction: column;
+            gap: 15px;
+        }
+
+        .logo {
+            height: 45px;
+        }
+
+        .nav-links {
+            flex-wrap: wrap;
+            justify-content: center;
+        }
+
+        .hero-title {
+            max-width: 90%;
+        }
+
+        .hero-subtitle {
+            font-size: 18px;
+        }
+
+        .hero-icon {
+            width: 150px;
+            height: 150px;
+        }
+
+        .section-title {
+            font-size: 36px;
+        }
+
+        section {
+            padding: 80px 20px;
+        }
+
+        .features-grid {
+            grid-template-columns: 1fr;
+        }
+    }
+</style>
+</head>
+
+<body>
+
+<canvas id="particle-canvas"></canvas>
+<div class="bg-gradient"></div>
+
+<div class="content">
+    <!-- NAVBAR -->
+    <nav id="navbar">
+        <div class="nav-container">
+            <img src="title.png" alt="Shadewalker" class="logo" onclick="scrollToSection('home')">
+            <div class="nav-links">
+                <a href="#home" onclick="scrollToSection('home'); return false;">Home</a>
+                <a href="#about" onclick="scrollToSection('about'); return false;">About</a>
+                <a href="mods.html">Mods</a>
+                <a href="eula.html">EULA</a>
+                <a href="terms.html">Terms</a>
+                <a href="privacy.html">Privacy</a>
+                <a href="contact.html">Contact</a>
+            </div>
+        </div>
+    </nav>
+
+    <!-- HERO SECTION -->
+    <section id="home">
+        <div class="hero-glow"></div>
+        <div class="hero-content">
+            <img src="icon.png" alt="Shadewalker" class="hero-icon" id="hero-icon">
+            <img src="title.png" alt="Shadewalker" class="hero-title">
+            <p class="hero-subtitle">A dark fantasy action-platformer about splitting your shadow and mastering the night.</p>
+            <div class="hero-buttons">
+                <a href="#" class="btn btn-primary">Steam Page (Coming Soon)</a>
+                <a href="eula.html" class="btn btn-secondary">Read the EULA</a>
+            </div>
+        </div>
+        <div class="scroll-indicator" onclick="scrollToSection('about')">
+            Scroll to explore
+        </div>
+    </section>
+
+    <!-- Icon Modal -->
+    <div class="icon-modal" id="icon-modal">
+        <img src="icon.png" alt="Shadewalker Icon" id="modal-icon">
+        <div class="close-hint">Click anywhere to close</div>
+    </div>
+
+    <!-- ABOUT SECTION -->
+    <section id="about">
+        <div class="about-content">
+            <h2 class="section-title">About the Developer</h2>
+
+            <p class="about-text"><strong>Solo.Prodigy</strong> is an independent game developer who just really likes making cool stuff for people to play. His goal is simple: create fun and enjoyable games that players actually feel are worth buying. Nothing fancy. Just good vibes and good gameplay.</p>
+
+            <p class="about-text">Before starting Shadewalker he made a couple of absolutely legendary school projects: Serein and OverStory (DEFINITELY NOT AN UNDERTALE RIPOFF), both on itch.io, both 3D, and both powered by an unhealthy amount of copyrighted assets because he was too lazy to make his own at the time (Still is). Those projects will not be going professional anytime soon, but they taught him a lot about game dev and how not to get sued.</p>
+
+            <p class="about-text">Shadewalker is his first real professional game (I think?..). It is built from scratch, properly licensed, fully original, and genuinely something he is proud of. Every system, animation, and idea comes from learning, improving, and wanting to make something players will actually enjoy.</p>
+
+            <p class="about-text">He might be young, but Solo.Prodigy is aiming to grow as a developer, keep making creative games, and prove that anyone can build something awesome if they just start and don't stop.</p>
+
+            <div class="features-grid">
+                <div class="feature-card">
+                    <span class="feature-icon">🎮</span>
+                    <h3>Gameplay First</h3>
+                    <p>Every mechanic is designed to be fun, responsive, and satisfying. No fluff, just pure gaming joy.</p>
+                </div>
+                <div class="feature-card">
+                    <span class="feature-icon">🌙</span>
+                    <h3>Dark Fantasy</h3>
+                    <p>Immerse yourself in a shadowy world where light and darkness are your greatest allies.</p>
+                </div>
+                <div class="feature-card">
+                    <span class="feature-icon">✨</span>
+                    <h3>Made with Passion</h3>
+                    <p>Built from the ground up by an indie dev who genuinely cares about creating quality experiences.</p>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- FOOTER -->
+    <footer>
+        <div class="footer-links">
+            <a href="eula.html">EULA</a>
+            <a href="terms.html">Terms of Service</a>
+            <a href="privacy.html">Privacy Policy</a>
+            <a href="contact.html">Contact</a>
+        </div>
+        <div class="copyright">
+            © 2025 Shadewalker by Solo.Prodigy. All rights reserved.
+        </div>
+    </footer>
+</div>
+
+<script>
+    // Particle system
+    const canvas = document.getElementById('particle-canvas');
+    const ctx = canvas.getContext('2d');
+    canvas.width = window.innerWidth;
+    canvas.height = window.innerHeight;
+
+    const particles = [];
+    const particleCount = 100;
+
+    class Particle {
+        constructor() {
+            this.reset();
+        }
+
+        reset() {
+            this.x = Math.random() * canvas.width;
+            this.y = Math.random() * canvas.height;
+            this.size = Math.random() * 2 + 0.5;
+            this.speedY = Math.random() * 0.5 + 0.1;
+            this.speedX = (Math.random() - 0.5) * 0.3;
+            this.opacity = Math.random() * 0.5 + 0.2;
+            this.color = `rgba(${140 + Math.random() * 40}, ${80 + Math.random() * 40}, 255, ${this.opacity})`;
+        }
+
+        update() {
+            this.y -= this.speedY;
+            this.x += this.speedX;
+            
+            if (this.y < -10) {
+                this.y = canvas.height + 10;
+                this.x = Math.random() * canvas.width;
+            }
+            if (this.x < -10 || this.x > canvas.width + 10) {
+                this.x = Math.random() * canvas.width;
+            }
+        }
+
+        draw() {
+            ctx.fillStyle = this.color;
+            ctx.beginPath();
+            ctx.arc(this.x, this.y, this.size, 0, Math.PI * 2);
+            ctx.fill();
+        }
+    }
+
+    for (let i = 0; i < particleCount; i++) {
+        particles.push(new Particle());
+    }
+
+    function animate() {
+        ctx.clearRect(0, 0, canvas.width, canvas.height);
+        
+        particles.forEach(particle => {
+            particle.update();
+            particle.draw();
+        });
+
+        requestAnimationFrame(animate);
+    }
+
+    animate();
+
+    // Smooth scroll function
+    function scrollToSection(sectionId) {
+        const element = document.getElementById(sectionId);
+        if (element) {
+            element.scrollIntoView({ 
+                behavior: 'smooth',
+                block: 'start'
+            });
+        }
+    }
+
+    // Navbar scroll effect & active state
+    let lastScroll = 0;
+    window.addEventListener('scroll', () => {
+        const nav = document.getElementById('navbar');
+        const currentScroll = window.pageYOffset;
+        
+        if (currentScroll > 100) {
+            nav.classList.add('scrolled');
+        } else {
+            nav.classList.remove('scrolled');
+        }
+        
+        // Update active nav link based on scroll position
+        const sections = document.querySelectorAll('section[id]');
+        sections.forEach(section => {
+            const sectionTop = section.offsetTop - 150;
+            const sectionHeight = section.offsetHeight;
+            const sectionId = section.getAttribute('id');
+            
+            if (currentScroll >= sectionTop && currentScroll < sectionTop + sectionHeight) {
+                document.querySelectorAll('.nav-links a').forEach(link => {
+                    link.classList.remove('active');
+                    if (link.getAttribute('href') === `#${sectionId}`) {
+                        link.classList.add('active');
+                    }
+                });
+            }
+        });
+        
+        lastScroll = currentScroll;
+    });
+
+    // Icon zoom functionality
+    const heroIcon = document.getElementById('hero-icon');
+    const iconModal = document.getElementById('icon-modal');
+    const modalIcon = document.getElementById('modal-icon');
+
+    heroIcon.addEventListener('click', () => {
+        iconModal.classList.add('active');
+        document.body.style.overflow = 'hidden';
+    });
+
+    iconModal.addEventListener('click', () => {
+        iconModal.classList.remove('active');
+        document.body.style.overflow = 'auto';
+    });
+
+    // Prevent modal from closing when clicking the image
+    modalIcon.addEventListener('click', (e) => {
+        e.stopPropagation();
+    });
+
+    // Close modal with ESC key
+    document.addEventListener('keydown', (e) => {
+        if (e.key === 'Escape' && iconModal.classList.contains('active')) {
+            iconModal.classList.remove('active');
+            document.body.style.overflow = 'auto';
+        }
+    });
+
+    // Resize canvas on window resize
+    window.addEventListener('resize', () => {
+        canvas.width = window.innerWidth;
+        canvas.height = window.innerHeight;
+    });
+
+    // Parallax effect on mouse move
+    document.addEventListener('mousemove', (e) => {
+        const moveX = (e.clientX - window.innerWidth / 2) * 0.01;
+        const moveY = (e.clientY - window.innerHeight / 2) * 0.01;
+        
+        const heroGlow = document.querySelector('.hero-glow');
+        if (heroGlow) {
+            heroGlow.style.transform = `translate(calc(-50% + ${moveX}px), calc(-50% + ${moveY}px))`;
+        }
+    });
+
+    // Smooth page transitions for external links
+    document.querySelectorAll('a[href$=".html"]').forEach(link => {
+        link.addEventListener('click', (e) => {
+            e.preventDefault();
+            const href = link.getAttribute('href');
+            
+            document.body.style.opacity = '0';
+            document.body.style.transition = 'opacity 0.3s ease';
+            
+            setTimeout(() => {
+                window.location.href = href;
+            }, 300);
+        });
+    });
+
+    // Fade in on page load
+    window.addEventListener('load', () => {
+        document.body.style.opacity = '0';
+        document.body.style.transition = 'opacity 0.5s ease';
+        setTimeout(() => {
+            document.body.style.opacity = '1';
+        }, 100);
+    });
+</script>
+
+</body>
+</html>
