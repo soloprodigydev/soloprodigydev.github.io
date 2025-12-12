@@ -1,73 +1,4 @@
-.about-text {
-        font-size: 18px;
-        line-height: 1.8;
-        color: #d4d0e6;
-        margin-bottom: 25px;
-    }
-
-    .about-text.about-tagline {
-        font-size: 22px;
-        text-align: center;
-        color: #b8a8ff;
-        font-style: italic;
-        margin-bottom: 40px;
-        padding: 20px;
-        background: rgba(110, 91, 255, 0.05);
-        border-radius: 12px;
-        border-left: 4px solid rgba(110, 91, 255, 0.4);
-    }
-
-    .dev-note {
-        background: rgba(20, 15, 40, 0.5);
-        border: 2px solid rgba(110, 91, 255, 0.25);
-        border-radius: 16px;
-        padding: 35px;
-        margin: 40px 0 60px;
-        backdrop-filter: blur(10px);
-    }
-
-    .dev-note h3 {
-        color: #b8a8ff;
-        font-size: 24px;
-        margin-bottom: 20px;
-        font-weight: 600;
-    }
-
-    .dev-note p {
-        font-size: 17px;
-        line-height: 1.8;
-        color: #d4d0e6;
-        margin-bottom: 20px;
-    }
-
-    .dev-note p:last-child {
-        margin-bottom: 0;
-    }
-
-    .dev-note em {
-        color: #c7baff;
-        font-style: italic;
-    }
-
-    .about-text.about-tagline {
-        font-size: 22px;
-        text-align: center;
-        color: #b8a8ff;
-        font-style: italic;
-        margin-bottom: 40px;
-        padding: 20px;
-        background: rgba(110, 91, 255, 0.05);
-        border-radius: 12px;
-        border-left: 4px solid rgba(110, 91, 255, 0.4);
-    }
-
-    .dev-note {
-        background: rgba(20, 15, 40, 0.5);
-        border: 2px solid rgba(110, 91, 255, 0.25);
-        border-radius: 16px;
-        padding: 35px;
-        margin: 40px 0 60px;
-        backdrop<!DOCTYPE html>
+<!DOCTYPE html>
 <html lang="en">
 <head>
     <meta charset="UTF-8">
@@ -160,6 +91,39 @@
         display: flex;
         justify-content: space-between;
         align-items: center;
+    }
+
+    .nav-left {
+        display: flex;
+        align-items: center;
+        gap: 20px;
+    }
+
+    .back-button {
+        display: flex;
+        align-items: center;
+        gap: 8px;
+        padding: 10px 20px;
+        background: rgba(110, 91, 255, 0.1);
+        border: 1px solid rgba(110, 91, 255, 0.3);
+        border-radius: 8px;
+        color: #b8b0d4;
+        text-decoration: none;
+        font-size: 14px;
+        font-weight: 500;
+        transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+    }
+
+    .back-button:hover {
+        background: rgba(110, 91, 255, 0.2);
+        border-color: rgba(110, 91, 255, 0.5);
+        color: white;
+        transform: translateX(-3px);
+    }
+
+    .back-button::before {
+        content: '←';
+        font-size: 18px;
     }
 
     .logo {
@@ -512,38 +476,6 @@
         border-left: 4px solid rgba(110, 91, 255, 0.4);
     }
 
-    .dev-note {
-        background: rgba(20, 15, 40, 0.5);
-        border: 2px solid rgba(110, 91, 255, 0.25);
-        border-radius: 16px;
-        padding: 35px;
-        margin: 40px 0 60px;
-        backdrop-filter: blur(10px);
-    }
-
-    .dev-note h3 {
-        color: #b8a8ff;
-        font-size: 24px;
-        margin-bottom: 20px;
-        font-weight: 600;
-    }
-
-    .dev-note p {
-        font-size: 17px;
-        line-height: 1.8;
-        color: #d4d0e6;
-        margin-bottom: 20px;
-    }
-
-    .dev-note p:last-child {
-        margin-bottom: 0;
-    }
-
-    .dev-note em {
-        color: #c7baff;
-        font-style: italic;
-    }
-
     .about-text strong {
         color: #b8a8ff;
         font-weight: 600;
@@ -655,6 +587,11 @@
             gap: 15px;
         }
 
+        .nav-left {
+            width: 100%;
+            justify-content: space-between;
+        }
+
         .logo {
             height: 45px;
         }
@@ -701,7 +638,10 @@
     <!-- NAVBAR -->
     <nav id="navbar">
         <div class="nav-container">
-            <img src="title.png" alt="Shadewalker" class="logo" onclick="scrollToSection('home')">
+            <div class="nav-left">
+                <a href="../index.html" class="back-button">Back to Home</a>
+                <img src="title.png" alt="Shadewalker" class="logo" onclick="scrollToSection('home')">
+            </div>
             <div class="nav-links">
                 <a href="#home" onclick="scrollToSection('home'); return false;">Home</a>
                 <a href="#about" onclick="scrollToSection('about'); return false;">About</a>
@@ -788,6 +728,7 @@
     <!-- FOOTER -->
     <footer>
         <div class="footer-links">
+            <a href="../index.html">Home</a>
             <a href="eula.html">EULA</a>
             <a href="terms.html">Terms of Service</a>
             <a href="privacy.html">Privacy Policy</a>
@@ -910,70 +851,4 @@
     const iconModal = document.getElementById('icon-modal');
     const modalIcon = document.getElementById('modal-icon');
 
-    heroIcon.addEventListener('click', () => {
-        iconModal.classList.add('active');
-        document.body.style.overflow = 'hidden';
-    });
-
-    iconModal.addEventListener('click', () => {
-        iconModal.classList.remove('active');
-        document.body.style.overflow = 'auto';
-    });
-
-    // Prevent modal from closing when clicking the image
-    modalIcon.addEventListener('click', (e) => {
-        e.stopPropagation();
-    });
-
-    // Close modal with ESC key
-    document.addEventListener('keydown', (e) => {
-        if (e.key === 'Escape' && iconModal.classList.contains('active')) {
-            iconModal.classList.remove('active');
-            document.body.style.overflow = 'auto';
-        }
-    });
-
-    // Resize canvas on window resize
-    window.addEventListener('resize', () => {
-        canvas.width = window.innerWidth;
-        canvas.height = window.innerHeight;
-    });
-
-    // Parallax effect on mouse move
-    document.addEventListener('mousemove', (e) => {
-        const moveX = (e.clientX - window.innerWidth / 2) * 0.01;
-        const moveY = (e.clientY - window.innerHeight / 2) * 0.01;
-        
-        const heroGlow = document.querySelector('.hero-glow');
-        if (heroGlow) {
-            heroGlow.style.transform = `translate(calc(-50% + ${moveX}px), calc(-50% + ${moveY}px))`;
-        }
-    });
-
-    // Smooth page transitions for external links
-    document.querySelectorAll('a[href$=".html"]').forEach(link => {
-        link.addEventListener('click', (e) => {
-            e.preventDefault();
-            const href = link.getAttribute('href');
-            
-            document.body.style.opacity = '0';
-            document.body.style.transition = 'opacity 0.3s ease';
-            
-            setTimeout(() => {
-                window.location.href = href;
-            }, 300);
-        });
-    });
-
-    // Fade in on page load
-    window.addEventListener('load', () => {
-        document.body.style.opacity = '0';
-        document.body.style.transition = 'opacity 0.5s ease';
-        setTimeout(() => {
-            document.body.style.opacity = '1';
-        }, 100);
-    });
-</script>
-
-</body>
-</html>
+    heroIcon.addEventListener('click', ()
