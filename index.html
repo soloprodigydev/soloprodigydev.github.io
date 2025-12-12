@@ -1,29 +1,4 @@
-.about-text {
-        font-size: 18px;
-        line-height: 1.8;
-        color: #d4d0e6;
-        margin-bottom: 25px;
-    }
-
-    .about-text.about-tagline {
-        font-size: 22px;
-        text-align: center;
-        color: #b8a8ff;
-        font-style: italic;
-        margin-bottom: 40px;
-        padding: 20px;
-        background: rgba(110, 91, 255, 0.05);
-        border-radius: 12px;
-        border-left: 4px solid rgba(110, 91, 255, 0.4);
-    }
-
-    .dev-note {
-        background: rgba(20, 15, 40, 0.5);
-        border: 2px solid rgba(110, 91, 255, 0.25);
-        border-radius: 16px;
-        padding: 35px;
-        margin: 40px 0 60px;
-        backdrop<!DOCTYPE html>
+<!DOCTYPE html>
 <html lang="en">
 <head>
     <meta charset="UTF-8">
@@ -49,7 +24,6 @@
         position: relative;
     }
 
-    /* Canvas for particles */
     #particle-canvas {
         position: fixed;
         top: 0;
@@ -60,7 +34,6 @@
         pointer-events: none;
     }
 
-    /* Animated gradient background */
     .bg-gradient {
         position: fixed;
         top: 0;
@@ -81,13 +54,11 @@
         66% { opacity: 0.9; transform: scale(0.95) rotate(-2deg); }
     }
 
-    /* Content wrapper */
     .content {
         position: relative;
         z-index: 1;
     }
 
-    /* NAVBAR */
     nav {
         background: rgba(5, 5, 10, 0.85);
         backdrop-filter: blur(20px) saturate(180%);
@@ -176,7 +147,6 @@
         background: rgba(110, 91, 255, 0.15);
     }
 
-    /* Sections */
     section {
         min-height: 100vh;
         display: flex;
@@ -186,7 +156,6 @@
         position: relative;
     }
 
-    /* HERO SECTION */
     #home {
         position: relative;
         overflow: hidden;
@@ -243,7 +212,6 @@
         transform: scale(1.3) rotate(8deg);
     }
 
-    /* Icon zoom modal */
     .icon-modal {
         position: fixed;
         top: 0;
@@ -413,7 +381,6 @@
         60% { transform: translateX(-50%) translateY(-5px); }
     }
 
-    /* ABOUT SECTION */
     #about {
         background: linear-gradient(180deg, rgba(0, 0, 0, 0) 0%, rgba(20, 10, 40, 0.3) 100%);
     }
@@ -456,9 +423,26 @@
         margin-bottom: 25px;
     }
 
+    .about-text.about-tagline {
+        font-size: 22px;
+        text-align: center;
+        color: #b8a8ff;
+        font-style: italic;
+        margin-bottom: 40px;
+        padding: 20px;
+        background: rgba(110, 91, 255, 0.05);
+        border-radius: 12px;
+        border-left: 4px solid rgba(110, 91, 255, 0.4);
+    }
+
     .about-text strong {
         color: #b8a8ff;
         font-weight: 600;
+    }
+
+    .about-text em {
+        color: #c7baff;
+        font-style: italic;
     }
 
     .features-grid {
@@ -522,7 +506,6 @@
         opacity: 0.9;
     }
 
-    /* FOOTER */
     footer {
         background: rgba(10, 5, 20, 0.9);
         border-top: 1px solid rgba(110, 91, 255, 0.2);
@@ -559,7 +542,6 @@
         margin-top: 20px;
     }
 
-    /* Responsive */
     @media (max-width: 768px) {
         .nav-container {
             padding: 0 20px;
@@ -610,10 +592,9 @@
 <div class="bg-gradient"></div>
 
 <div class="content">
-    <!-- NAVBAR -->
     <nav id="navbar">
         <div class="nav-container">
-            <img src="title.png" alt="Shadewalker" class="logo" onclick="scrollToSection('home')">
+            <img src="Shadewalker/title.png" alt="Shadewalker" class="logo" onclick="scrollToSection('home')">
             <div class="nav-links">
                 <a href="#home" onclick="scrollToSection('home'); return false;">Home</a>
                 <a href="#about" onclick="scrollToSection('about'); return false;">About</a>
@@ -626,12 +607,11 @@
         </div>
     </nav>
 
-    <!-- HERO SECTION -->
     <section id="home">
         <div class="hero-glow"></div>
         <div class="hero-content">
-            <img src="icon.png" alt="Shadewalker" class="hero-icon" id="hero-icon">
-            <img src="title.png" alt="Shadewalker" class="hero-title">
+            <img src="Shadewalker/icon.png" alt="Shadewalker" class="hero-icon" id="hero-icon">
+            <img src="Shadewalker/title.png" alt="Shadewalker" class="hero-title">
             <p class="hero-subtitle">A dark fantasy action-platformer about splitting your shadow and mastering the night.</p>
             <div class="hero-buttons">
                 <a href="#" class="btn btn-primary">Steam Page (Coming Soon)</a>
@@ -643,13 +623,11 @@
         </div>
     </section>
 
-    <!-- Icon Modal -->
     <div class="icon-modal" id="icon-modal">
-        <img src="icon.png" alt="Shadewalker Icon" id="modal-icon">
+        <img src="Shadewalker/icon.png" alt="Shadewalker Icon" id="modal-icon">
         <div class="close-hint">Click anywhere to close</div>
     </div>
 
-    <!-- ABOUT SECTION -->
     <section id="about">
         <div class="about-content">
             <h2 class="section-title">About the Game</h2>
@@ -660,16 +638,7 @@
 
             <p class="about-text">This ability, known as the <strong>Shadow Split</strong>, is the heart of the game: a fast, mind-bending mechanic that lets players control both body and shadow to outmaneuver enemies, solve dual-perspective puzzles, and perform impossible assassinations. Shadewalker blends stealth, action, and atmospheric exploration into a world where every ray of light is a threat — and mastering your own shadow is the only way to survive.</p>
 
-            <div class="dev-note">
-                <h3>🎮 Development Story</h3>
-                <p>Shadewalker is a 2D platformer developed by <strong>Solo.Prodigy</strong> using the Godot game engine. This project draws inspiration from two legendary titles: <em>Undertale</em> by Toby Fox and <em>Hollow Knight</em> by Team Cherry. Taking the best of both worlds — tight platforming, memorable NPC interactions, and atmospheric storytelling — Shadewalker weaves them together with its own dark, original twist.</p>
-                
-                <p>Before Shadewalker, Solo.Prodigy built a couple of legendary school projects: <em>Serein</em> and <em>OverStory</em> (definitely NOT an Undertale ripoff), both on itch.io, both 3D, and both powered by an unhealthy amount of copyrighted assets because he was too lazy to make his own at the time (still is). Those projects won't be going professional anytime soon, but they taught him a lot about game dev and how not to get sued.</p>
-                
-                <p>Shadewalker is his first real professional game (probably... maybe?). It's built from scratch, properly licensed, fully original, and genuinely something he's proud of. Every system, animation, and idea comes from learning, improving, and wanting to make something players will actually enjoy.</p>
-                
-                <p>He might be young, but Solo.Prodigy is aiming to grow as a developer, keep making creative games, and prove that anyone can build something awesome if they just start and don't stop.</p>
-            </div>
+            <p class="about-text">Shadewalker is a 2D platformer developed by <strong>Solo.Prodigy</strong> using the Godot game engine. This project draws inspiration from two legendary titles: <em>Undertale</em> by Toby Fox and <em>Hollow Knight</em> by Team Cherry. Taking the best of both worlds — tight platforming, memorable NPC interactions, and atmospheric storytelling — Shadewalker weaves them together with its own dark, original twist.</p>
 
             <div class="features-grid">
                 <div class="feature-card">
@@ -706,7 +675,6 @@
         </div>
     </section>
 
-    <!-- FOOTER -->
     <footer>
         <div class="footer-links">
             <a href="eula.html">EULA</a>
@@ -721,7 +689,6 @@
 </div>
 
 <script>
-    // Particle system
     const canvas = document.getElementById('particle-canvas');
     const ctx = canvas.getContext('2d');
     canvas.width = window.innerWidth;
@@ -783,7 +750,6 @@
 
     animate();
 
-    // Smooth scroll function
     function scrollToSection(sectionId) {
         const element = document.getElementById(sectionId);
         if (element) {
@@ -794,7 +760,6 @@
         }
     }
 
-    // Navbar scroll effect & active state
     let lastScroll = 0;
     window.addEventListener('scroll', () => {
         const nav = document.getElementById('navbar');
@@ -806,7 +771,6 @@
             nav.classList.remove('scrolled');
         }
         
-        // Update active nav link based on scroll position
         const sections = document.querySelectorAll('section[id]');
         sections.forEach(section => {
             const sectionTop = section.offsetTop - 150;
@@ -826,7 +790,6 @@
         lastScroll = currentScroll;
     });
 
-    // Icon zoom functionality
     const heroIcon = document.getElementById('hero-icon');
     const iconModal = document.getElementById('icon-modal');
     const modalIcon = document.getElementById('modal-icon');
@@ -841,12 +804,10 @@
         document.body.style.overflow = 'auto';
     });
 
-    // Prevent modal from closing when clicking the image
     modalIcon.addEventListener('click', (e) => {
         e.stopPropagation();
     });
 
-    // Close modal with ESC key
     document.addEventListener('keydown', (e) => {
         if (e.key === 'Escape' && iconModal.classList.contains('active')) {
             iconModal.classList.remove('active');
@@ -854,13 +815,11 @@
         }
     });
 
-    // Resize canvas on window resize
     window.addEventListener('resize', () => {
         canvas.width = window.innerWidth;
         canvas.height = window.innerHeight;
     });
 
-    // Parallax effect on mouse move
     document.addEventListener('mousemove', (e) => {
         const moveX = (e.clientX - window.innerWidth / 2) * 0.01;
         const moveY = (e.clientY - window.innerHeight / 2) * 0.01;
@@ -871,7 +830,6 @@
         }
     });
 
-    // Smooth page transitions for external links
     document.querySelectorAll('a[href$=".html"]').forEach(link => {
         link.addEventListener('click', (e) => {
             e.preventDefault();
@@ -886,15 +844,14 @@
         });
     });
 
-    // Fade in on page load
     window.addEventListener('load', () => {
-        document.body.style.opacity = '0';
+        document.body.style.opacity =
         document.body.style.transition = 'opacity 0.5s ease';
         setTimeout(() => {
-            document.body.style.opacity = '1';
+                document.body.style.opacity = '1';
         }, 100);
     });
 </script>
 
 </body>
-</html>
+</html>        
