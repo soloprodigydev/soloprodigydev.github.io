@@ -3,855 +3,1103 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Shadewalker – Master the Shadows</title>
-
-<style>
-    * {
-        margin: 0;
-        padding: 0;
-        box-sizing: border-box;
-    }
-
-    html {
-        scroll-behavior: smooth;
-    }
-
-    body {
-        background: #000000;
-        color: #e4e4f0;
-        font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Arial, sans-serif;
-        overflow-x: hidden;
-        position: relative;
-    }
-
-    #particle-canvas {
-        position: fixed;
-        top: 0;
-        left: 0;
-        width: 100%;
-        height: 100%;
-        z-index: 0;
-        pointer-events: none;
-    }
-
-    .bg-gradient {
-        position: fixed;
-        top: 0;
-        left: 0;
-        width: 100%;
-        height: 100%;
-        background: 
-            radial-gradient(ellipse at 20% 10%, rgba(100, 60, 200, 0.15), transparent 50%),
-            radial-gradient(ellipse at 80% 80%, rgba(120, 80, 255, 0.12), transparent 50%),
-            radial-gradient(ellipse at 50% 50%, rgba(80, 50, 180, 0.08), transparent 60%);
-        z-index: -1;
-        animation: gradientShift 20s ease infinite;
-    }
-
-    @keyframes gradientShift {
-        0%, 100% { opacity: 1; transform: scale(1) rotate(0deg); }
-        33% { opacity: 0.8; transform: scale(1.1) rotate(2deg); }
-        66% { opacity: 0.9; transform: scale(0.95) rotate(-2deg); }
-    }
-
-    .content {
-        position: relative;
-        z-index: 1;
-    }
-
-    nav {
-        background: rgba(5, 5, 10, 0.85);
-        backdrop-filter: blur(20px) saturate(180%);
-        -webkit-backdrop-filter: blur(20px) saturate(180%);
-        padding: 20px 0;
-        position: fixed;
-        top: 0;
-        left: 0;
-        right: 0;
-        z-index: 1000;
-        border-bottom: 1px solid rgba(120, 80, 255, 0.15);
-        transition: all 0.4s cubic-bezier(0.4, 0, 0.2, 1);
-    }
-
-    nav.scrolled {
-        padding: 12px 0;
-        background: rgba(5, 5, 10, 0.95);
-        border-bottom: 1px solid rgba(120, 80, 255, 0.25);
-        box-shadow: 0 8px 32px rgba(0, 0, 0, 0.6);
-    }
-
-    .nav-container {
-        max-width: 1400px;
-        margin: 0 auto;
-        padding: 0 40px;
-        display: flex;
-        justify-content: space-between;
-        align-items: center;
-    }
-
-    .logo {
-        height: 60px;
-        filter: drop-shadow(0 0 30px rgba(126, 93, 255, 0.8));
-        cursor: pointer;
-        transition: all 0.3s ease;
-        user-select: none;
-    }
-
-    .logo:hover {
-        filter: drop-shadow(0 0 40px rgba(126, 93, 255, 1)) drop-shadow(0 0 60px rgba(126, 93, 255, 0.5));
-        transform: scale(1.05);
-    }
-
-    .nav-links {
-        display: flex;
-        gap: 4px;
-        align-items: center;
-    }
-
-    .nav-links a {
-        color: #b8b0d4;
-        padding: 10px 20px;
-        text-decoration: none;
-        font-size: 15px;
-        font-weight: 500;
-        transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
-        border-radius: 8px;
-        position: relative;
-        letter-spacing: 0.5px;
-    }
-
-    .nav-links a::before {
-        content: '';
-        position: absolute;
-        top: 0;
-        left: 0;
-        right: 0;
-        bottom: 0;
-        background: linear-gradient(135deg, rgba(110, 91, 255, 0.1), rgba(140, 100, 255, 0.1));
-        border-radius: 8px;
-        opacity: 0;
-        transition: opacity 0.3s ease;
-    }
-
-    .nav-links a:hover::before {
-        opacity: 1;
-    }
-
-    .nav-links a:hover {
-        color: white;
-        transform: translateY(-1px);
-    }
-
-    .nav-links a.active {
-        color: white;
-        background: rgba(110, 91, 255, 0.15);
-    }
-
-    section {
-        min-height: 100vh;
-        display: flex;
-        align-items: center;
-        justify-content: center;
-        padding: 100px 40px;
-        position: relative;
-    }
-
-    #home {
-        position: relative;
-        overflow: hidden;
-    }
-
-    .hero-glow {
-        position: absolute;
-        top: 50%;
-        left: 50%;
-        width: 800px;
-        height: 800px;
-        background: radial-gradient(circle, rgba(110, 91, 255, 0.2), transparent 70%);
-        transform: translate(-50%, -50%);
-        animation: heroGlow 6s ease-in-out infinite;
-        pointer-events: none;
-    }
-
-    @keyframes heroGlow {
-        0%, 100% { 
-            transform: translate(-50%, -50%) scale(1);
-            opacity: 0.4;
+    <title>Solo Prodigy Dev | Indie Game Developer</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
         }
-        50% { 
-            transform: translate(-50%, -50%) scale(1.3);
-            opacity: 0.6;
+
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Arial, sans-serif;
+            background: #000000;
+            color: #e0e0e0;
+            overflow-x: hidden;
         }
-    }
 
-    .hero-content {
-        text-align: center;
-        max-width: 900px;
-        position: relative;
-        z-index: 2;
-    }
-
-    .hero-icon {
-        width: 200px;
-        height: 200px;
-        margin: 60px auto 30px;
-        filter: drop-shadow(0 0 40px rgba(126, 93, 255, 0.8));
-        animation: float 4s ease-in-out infinite;
-        transition: transform 0.5s cubic-bezier(0.34, 1.56, 0.64, 1), filter 0.3s ease;
-        cursor: pointer;
-        position: relative;
-    }
-
-    .hero-icon:hover {
-        transform: scale(1.15) rotate(5deg);
-        filter: drop-shadow(0 0 60px rgba(126, 93, 255, 1)) drop-shadow(0 0 100px rgba(126, 93, 255, 0.5));
-        animation-play-state: paused;
-    }
-
-    .hero-icon:active {
-        transform: scale(1.3) rotate(8deg);
-    }
-
-    .icon-modal {
-        position: fixed;
-        top: 0;
-        left: 0;
-        width: 100%;
-        height: 100%;
-        background: rgba(0, 0, 0, 0.95);
-        display: none;
-        align-items: center;
-        justify-content: center;
-        z-index: 10000;
-        backdrop-filter: blur(10px);
-        opacity: 0;
-        transition: opacity 0.4s ease;
-    }
-
-    .icon-modal.active {
-        display: flex;
-        opacity: 1;
-    }
-
-    .icon-modal img {
-        max-width: 90%;
-        max-height: 90vh;
-        filter: drop-shadow(0 0 80px rgba(126, 93, 255, 1)) drop-shadow(0 0 120px rgba(126, 93, 255, 0.6));
-        animation: modalFloat 3s ease-in-out infinite;
-        cursor: zoom-out;
-        transform: scale(0.8);
-        transition: transform 0.4s cubic-bezier(0.34, 1.56, 0.64, 1);
-    }
-
-    .icon-modal.active img {
-        transform: scale(1);
-    }
-
-    @keyframes modalFloat {
-        0%, 100% { transform: scale(1) translateY(0px); }
-        50% { transform: scale(1.02) translateY(-10px); }
-    }
-
-    .icon-modal .close-hint {
-        position: absolute;
-        bottom: 40px;
-        color: rgba(199, 186, 255, 0.6);
-        font-size: 14px;
-        animation: fadeInOut 2s ease-in-out infinite;
-    }
-
-    @keyframes fadeInOut {
-        0%, 100% { opacity: 0.4; }
-        50% { opacity: 1; }
-    }
-
-    @keyframes float {
-        0%, 100% { transform: translateY(0px) rotate(0deg); }
-        50% { transform: translateY(-20px) rotate(2deg); }
-    }
-
-    .hero-title {
-        max-width: 700px;
-        width: 100%;
-        height: auto;
-        margin: 0 auto 20px;
-        filter: drop-shadow(0 0 30px rgba(110, 91, 255, 0.6));
-        animation: titleShine 4s ease-in-out infinite;
-    }
-
-    @keyframes titleShine {
-        0%, 100% { 
-            filter: drop-shadow(0 0 30px rgba(110, 91, 255, 0.6));
+        /* Animated particle background */
+        #particle-canvas {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            z-index: 0;
+            pointer-events: none;
         }
-        50% { 
-            filter: drop-shadow(0 0 50px rgba(142, 123, 255, 0.9));
+
+        /* Gradient overlay */
+        .bg-gradient {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: 
+                radial-gradient(ellipse at 20% 30%, rgba(102, 126, 234, 0.15) 0%, transparent 50%),
+                radial-gradient(ellipse at 80% 70%, rgba(118, 75, 162, 0.15) 0%, transparent 50%);
+            z-index: 0;
+            animation: gradientPulse 15s ease-in-out infinite;
         }
-    }
 
-    .hero-subtitle {
-        font-size: 24px;
-        color: #c7baff;
-        margin-bottom: 40px;
-        line-height: 1.6;
-        font-weight: 400;
-        opacity: 0.9;
-    }
+        @keyframes gradientPulse {
+            0%, 100% { opacity: 1; }
+            50% { opacity: 0.7; }
+        }
 
-    .hero-buttons {
-        display: flex;
-        gap: 20px;
-        justify-content: center;
-        flex-wrap: wrap;
-    }
+        .content {
+            position: relative;
+            z-index: 1;
+        }
 
-    .btn {
-        padding: 18px 40px;
-        font-size: 17px;
-        font-weight: 600;
-        text-decoration: none;
-        border-radius: 12px;
-        transition: all 0.4s cubic-bezier(0.34, 1.56, 0.64, 1);
-        position: relative;
-        overflow: hidden;
-        letter-spacing: 0.5px;
-    }
+        /* Header */
+        .header {
+            padding: 2rem 4rem;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            position: fixed;
+            top: 0;
+            left: 0;
+            right: 0;
+            z-index: 1000;
+            background: rgba(10, 10, 10, 0.8);
+            backdrop-filter: blur(20px);
+            border-bottom: 1px solid rgba(102, 126, 234, 0.1);
+            transition: all 0.4s ease;
+        }
 
-    .btn-primary {
-        background: linear-gradient(135deg, #6e5bff 0%, #8a74ff 100%);
-        color: white;
-        box-shadow: 0 10px 40px rgba(110, 91, 255, 0.4);
-    }
-
-    .btn-primary::before {
-        content: '';
-        position: absolute;
-        top: 0;
-        left: -100%;
-        width: 100%;
-        height: 100%;
-        background: linear-gradient(90deg, transparent, rgba(255, 255, 255, 0.3), transparent);
-        transition: left 0.6s ease;
-    }
-
-    .btn-primary:hover::before {
-        left: 100%;
-    }
-
-    .btn-primary:hover {
-        transform: translateY(-4px);
-        box-shadow: 0 15px 50px rgba(110, 91, 255, 0.6);
-    }
-
-    .btn-secondary {
-        background: rgba(110, 91, 255, 0.1);
-        color: #c7baff;
-        border: 2px solid rgba(110, 91, 255, 0.4);
-    }
-
-    .btn-secondary:hover {
-        background: rgba(110, 91, 255, 0.2);
-        border-color: rgba(110, 91, 255, 0.6);
-        transform: translateY(-4px);
-        color: white;
-    }
-
-    .scroll-indicator {
-        position: absolute;
-        bottom: 40px;
-        left: 50%;
-        transform: translateX(-50%);
-        color: rgba(199, 186, 255, 0.6);
-        font-size: 14px;
-        text-align: center;
-        animation: bounce 2s infinite;
-        cursor: pointer;
-        user-select: none;
-    }
-
-    .scroll-indicator::after {
-        content: '↓';
-        display: block;
-        font-size: 24px;
-        margin-top: 5px;
-    }
-
-    @keyframes bounce {
-        0%, 20%, 50%, 80%, 100% { transform: translateX(-50%) translateY(0); }
-        40% { transform: translateX(-50%) translateY(-10px); }
-        60% { transform: translateX(-50%) translateY(-5px); }
-    }
-
-    #about {
-        background: linear-gradient(180deg, rgba(0, 0, 0, 0) 0%, rgba(20, 10, 40, 0.3) 100%);
-    }
-
-    .about-content {
-        max-width: 1100px;
-        width: 100%;
-    }
-
-    .section-title {
-        font-size: 48px;
-        font-weight: 700;
-        margin-bottom: 50px;
-        text-align: center;
-        background: linear-gradient(135deg, #ffffff, #b8b0d4);
-        -webkit-background-clip: text;
-        -webkit-text-fill-color: transparent;
-        background-clip: text;
-        position: relative;
-        display: inline-block;
-        width: 100%;
-    }
-
-    .section-title::after {
-        content: '';
-        position: absolute;
-        bottom: -15px;
-        left: 50%;
-        transform: translateX(-50%);
-        width: 100px;
-        height: 3px;
-        background: linear-gradient(90deg, transparent, #6e5bff, transparent);
-        border-radius: 2px;
-    }
-
-    .about-text {
-        font-size: 18px;
-        line-height: 1.8;
-        color: #d4d0e6;
-        margin-bottom: 25px;
-    }
-
-    .about-text.about-tagline {
-        font-size: 22px;
-        text-align: center;
-        color: #b8a8ff;
-        font-style: italic;
-        margin-bottom: 40px;
-        padding: 20px;
-        background: rgba(110, 91, 255, 0.05);
-        border-radius: 12px;
-        border-left: 4px solid rgba(110, 91, 255, 0.4);
-    }
-
-    .about-text strong {
-        color: #b8a8ff;
-        font-weight: 600;
-    }
-
-    .about-text em {
-        color: #c7baff;
-        font-style: italic;
-    }
-
-    .features-grid {
-        display: grid;
-        grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
-        gap: 30px;
-        margin-top: 60px;
-    }
-
-    .feature-card {
-        background: rgba(20, 15, 40, 0.4);
-        border: 1px solid rgba(110, 91, 255, 0.2);
-        border-radius: 16px;
-        padding: 35px;
-        transition: all 0.4s cubic-bezier(0.34, 1.56, 0.64, 1);
-        backdrop-filter: blur(10px);
-        position: relative;
-        overflow: hidden;
-    }
-
-    .feature-card::before {
-        content: '';
-        position: absolute;
-        top: 0;
-        left: 0;
-        right: 0;
-        height: 3px;
-        background: linear-gradient(90deg, transparent, #6e5bff, transparent);
-        opacity: 0;
-        transition: opacity 0.4s ease;
-    }
-
-    .feature-card:hover::before {
-        opacity: 1;
-    }
-
-    .feature-card:hover {
-        transform: translateY(-8px);
-        border-color: rgba(110, 91, 255, 0.5);
-        box-shadow: 0 20px 60px rgba(110, 91, 255, 0.3);
-        background: rgba(30, 20, 50, 0.5);
-    }
-
-    .feature-icon {
-        font-size: 40px;
-        margin-bottom: 20px;
-        display: block;
-    }
-
-    .feature-card h3 {
-        font-size: 22px;
-        color: #b8a8ff;
-        margin-bottom: 15px;
-        font-weight: 600;
-    }
-
-    .feature-card p {
-        font-size: 16px;
-        line-height: 1.6;
-        color: #c7baff;
-        opacity: 0.9;
-    }
-
-    footer {
-        background: rgba(10, 5, 20, 0.9);
-        border-top: 1px solid rgba(110, 91, 255, 0.2);
-        padding: 40px 40px 30px;
-        text-align: center;
-        backdrop-filter: blur(20px);
-    }
-
-    .footer-links {
-        display: flex;
-        justify-content: center;
-        gap: 30px;
-        margin-bottom: 20px;
-        flex-wrap: wrap;
-    }
-
-    .footer-links a {
-        color: #b8b0d4;
-        text-decoration: none;
-        font-size: 15px;
-        transition: all 0.3s ease;
-        padding: 5px 10px;
-        border-radius: 6px;
-    }
-
-    .footer-links a:hover {
-        color: white;
-        background: rgba(110, 91, 255, 0.1);
-    }
-
-    .copyright {
-        color: #8a8099;
-        font-size: 14px;
-        margin-top: 20px;
-    }
-
-    @media (max-width: 768px) {
-        .nav-container {
-            padding: 0 20px;
-            flex-direction: column;
-            gap: 15px;
+        .header.scrolled {
+            padding: 1rem 4rem;
+            background: rgba(10, 10, 10, 0.95);
+            box-shadow: 0 8px 32px rgba(0, 0, 0, 0.4);
         }
 
         .logo {
-            height: 45px;
+            font-size: 1.5rem;
+            font-weight: 700;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+            cursor: pointer;
+            transition: all 0.3s ease;
+        }
+
+        .logo:hover {
+            filter: drop-shadow(0 0 20px rgba(102, 126, 234, 0.6));
+            transform: scale(1.05);
         }
 
         .nav-links {
-            flex-wrap: wrap;
+            display: flex;
+            gap: 2rem;
+        }
+
+        .nav-links a {
+            color: #999;
+            text-decoration: none;
+            font-size: 0.95rem;
+            font-weight: 500;
+            transition: all 0.3s ease;
+            position: relative;
+            padding: 0.5rem 1rem;
+            border-radius: 8px;
+        }
+
+        .nav-links a::before {
+            content: '';
+            position: absolute;
+            bottom: 0;
+            left: 50%;
+            transform: translateX(-50%);
+            width: 0;
+            height: 2px;
+            background: linear-gradient(90deg, #667eea, #764ba2);
+            transition: width 0.3s ease;
+        }
+
+        .nav-links a:hover {
+            color: #fff;
+            background: rgba(102, 126, 234, 0.1);
+        }
+
+        .nav-links a:hover::before {
+            width: 80%;
+        }
+
+        /* Hero Section */
+        .hero {
+            min-height: 100vh;
+            display: flex;
+            align-items: center;
             justify-content: center;
+            position: relative;
+            padding: 8rem 2rem 4rem;
+        }
+
+        .hero-glow {
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            width: 1000px;
+            height: 1000px;
+            background: radial-gradient(circle, rgba(102, 126, 234, 0.2), transparent 70%);
+            transform: translate(-50%, -50%);
+            animation: heroGlow 8s ease-in-out infinite;
+            pointer-events: none;
+        }
+
+        @keyframes heroGlow {
+            0%, 100% { 
+                transform: translate(-50%, -50%) scale(1);
+                opacity: 0.3;
+            }
+            50% { 
+                transform: translate(-50%, -50%) scale(1.2);
+                opacity: 0.5;
+            }
+        }
+
+        .hero-content {
+            max-width: 1400px;
+            width: 100%;
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 4rem;
+            align-items: center;
+            position: relative;
+            z-index: 2;
+        }
+
+        .hero-text {
+            animation: fadeInLeft 1s ease;
+        }
+
+        .game-tag {
+            display: inline-flex;
+            align-items: center;
+            gap: 0.5rem;
+            padding: 0.6rem 1.5rem;
+            background: rgba(102, 126, 234, 0.15);
+            border: 1px solid rgba(102, 126, 234, 0.4);
+            border-radius: 30px;
+            font-size: 0.85rem;
+            color: #667eea;
+            margin-bottom: 2rem;
+            font-weight: 600;
+            letter-spacing: 1px;
+            animation: tagPulse 2s ease-in-out infinite;
+        }
+
+        @keyframes tagPulse {
+            0%, 100% { transform: scale(1); }
+            50% { transform: scale(1.05); }
         }
 
         .hero-title {
-            max-width: 90%;
+            max-width: 700px;
+            width: 100%;
+            height: auto;
+            margin: 0 auto 1.5rem;
+            filter: drop-shadow(0 0 40px rgba(102, 126, 234, 0.8));
+            animation: titleShine 3s ease-in-out infinite;
+        }
+
+        @keyframes titleShine {
+            0%, 100% { 
+                filter: drop-shadow(0 0 40px rgba(102, 126, 234, 0.8));
+            }
+            50% { 
+                filter: drop-shadow(0 0 60px rgba(102, 126, 234, 1));
+            }
         }
 
         .hero-subtitle {
-            font-size: 18px;
+            font-size: 1.5rem;
+            color: #999;
+            margin-bottom: 1rem;
+            font-weight: 300;
         }
 
-        .hero-icon {
-            width: 150px;
-            height: 150px;
+        .hero-description {
+            font-size: 1.1rem;
+            color: #888;
+            line-height: 1.8;
+            margin-bottom: 3rem;
+            max-width: 500px;
+        }
+
+        .cta-buttons {
+            display: flex;
+            gap: 1.5rem;
+            flex-wrap: wrap;
+        }
+
+        .btn-primary {
+            padding: 1.2rem 3rem;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: white;
+            text-decoration: none;
+            border-radius: 50px;
+            font-weight: 600;
+            font-size: 1.1rem;
+            transition: all 0.4s cubic-bezier(0.34, 1.56, 0.64, 1);
+            display: inline-block;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .btn-primary::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: -100%;
+            width: 100%;
+            height: 100%;
+            background: linear-gradient(90deg, transparent, rgba(255, 255, 255, 0.3), transparent);
+            transition: left 0.6s;
+        }
+
+        .btn-primary:hover::before {
+            left: 100%;
+        }
+
+        .btn-primary:hover {
+            transform: translateY(-4px);
+            box-shadow: 0 20px 50px rgba(102, 126, 234, 0.6);
+        }
+
+        .btn-secondary {
+            padding: 1.2rem 3rem;
+            background: transparent;
+            color: white;
+            text-decoration: none;
+            border-radius: 50px;
+            font-weight: 600;
+            font-size: 1.1rem;
+            border: 2px solid rgba(255, 255, 255, 0.2);
+            transition: all 0.4s ease;
+            display: inline-block;
+        }
+
+        .btn-secondary:hover {
+            border-color: #667eea;
+            background: rgba(102, 126, 234, 0.1);
+            transform: translateY(-4px);
+        }
+
+        /* Interactive Game Showcase */
+        .hero-visual {
+            position: relative;
+            animation: fadeInRight 1s ease;
+        }
+
+        .game-showcase {
+            position: relative;
+            width: 100%;
+            aspect-ratio: 16/9;
+            background: linear-gradient(135deg, #1a1a2e 0%, #0f0f1e 100%);
+            border-radius: 20px;
+            overflow: hidden;
+            box-shadow: 
+                0 30px 80px rgba(102, 126, 234, 0.3),
+                inset 0 0 100px rgba(102, 126, 234, 0.1);
+            transition: all 0.4s cubic-bezier(0.34, 1.56, 0.64, 1);
+            cursor: pointer;
+            border: 2px solid rgba(102, 126, 234, 0.2);
+        }
+
+        .game-showcase:hover {
+            transform: scale(1.02) translateY(-10px);
+            box-shadow: 
+                0 40px 100px rgba(102, 126, 234, 0.5),
+                inset 0 0 100px rgba(102, 126, 234, 0.2);
+            border-color: rgba(102, 126, 234, 0.5);
+        }
+
+        .showcase-inner {
+            position: relative;
+            width: 100%;
+            height: 100%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            flex-direction: column;
+            gap: 1rem;
+            padding: 2rem;
+        }
+
+        .showcase-particles {
+            position: absolute;
+            width: 100%;
+            height: 100%;
+            overflow: hidden;
+        }
+
+        .particle {
+            position: absolute;
+            width: 4px;
+            height: 4px;
+            background: rgba(102, 126, 234, 0.6);
+            border-radius: 50%;
+            animation: particleFloat 8s linear infinite;
+        }
+
+        @keyframes particleFloat {
+            0% {
+                transform: translateY(100%) translateX(0) scale(0);
+                opacity: 0;
+            }
+            10% {
+                opacity: 1;
+            }
+            90% {
+                opacity: 1;
+            }
+            100% {
+                transform: translateY(-100%) translateX(50px) scale(1);
+                opacity: 0;
+            }
+        }
+
+        .showcase-icon {
+            width: 180px;
+            height: 180px;
+            filter: drop-shadow(0 0 30px rgba(102, 126, 234, 0.8));
+            animation: iconFloat 4s ease-in-out infinite;
+            transition: all 0.3s ease;
+            z-index: 2;
+        }
+
+        .game-showcase:hover .showcase-icon {
+            transform: scale(1.2) rotate(5deg);
+            filter: drop-shadow(0 0 50px rgba(102, 126, 234, 1));
+        }
+
+        @keyframes iconFloat {
+            0%, 100% { transform: translateY(0px) rotate(0deg); }
+            50% { transform: translateY(-15px) rotate(3deg); }
+        }
+
+        .showcase-title {
+            width: 250px;
+            max-width: 70%;
+            filter: drop-shadow(0 0 20px rgba(102, 126, 234, 0.8));
+            z-index: 2;
+            animation: titleFloat 4s ease-in-out infinite;
+            animation-delay: 0.2s;
+            margin: 0 auto;
+        }
+
+        @keyframes titleFloat {
+            0%, 100% { transform: translateY(0px); }
+            50% { transform: translateY(-10px); }
+        }
+
+        .showcase-subtitle {
+            font-size: 0.95rem;
+            color: #999;
+            z-index: 2;
+            opacity: 0.8;
+        }
+
+        .showcase-hover-hint {
+            position: absolute;
+            bottom: 20px;
+            right: 20px;
+            font-size: 0.85rem;
+            color: rgba(102, 126, 234, 0.6);
+            z-index: 2;
+            opacity: 0;
+            transition: opacity 0.3s ease;
+        }
+
+        .game-showcase:hover .showcase-hover-hint {
+            opacity: 1;
+        }
+
+        /* Floating elements around showcase */
+        .floating-elements {
+            position: absolute;
+            width: 100%;
+            height: 100%;
+            pointer-events: none;
+        }
+
+        .float-icon {
+            position: absolute;
+            font-size: 2rem;
+            opacity: 0.3;
+            animation: float 6s ease-in-out infinite;
+            filter: drop-shadow(0 0 10px rgba(102, 126, 234, 0.5));
+        }
+
+        .float-icon:nth-child(1) {
+            top: 10%;
+            left: -5%;
+            animation-delay: 0s;
+        }
+
+        .float-icon:nth-child(2) {
+            top: 50%;
+            right: -5%;
+            animation-delay: 2s;
+        }
+
+        .float-icon:nth-child(3) {
+            bottom: 10%;
+            left: -5%;
+            animation-delay: 4s;
+        }
+
+        @keyframes float {
+            0%, 100% { transform: translateY(0px) rotate(0deg); }
+            50% { transform: translateY(-30px) rotate(10deg); }
+        }
+
+        /* Features Section */
+        .features {
+            padding: 8rem 4rem;
+            max-width: 1400px;
+            margin: 0 auto;
+            position: relative;
+        }
+
+        /* About Section */
+        .about {
+            padding: 8rem 4rem;
+            max-width: 1400px;
+            margin: 0 auto;
+            position: relative;
+            background: linear-gradient(180deg, rgba(0, 0, 0, 0) 0%, rgba(20, 10, 40, 0.2) 100%);
+        }
+
+        .about-content {
+            max-width: 1200px;
+            margin: 0 auto;
+        }
+
+        .about-text-container {
+            margin: 3rem 0 4rem;
+        }
+
+        .about-text {
+            font-size: 1.1rem;
+            line-height: 1.8;
+            color: #d4d0e6;
+            margin-bottom: 1.5rem;
+        }
+
+        .about-text strong {
+            color: #b8a8ff;
+            font-weight: 600;
         }
 
         .section-title {
-            font-size: 36px;
+            text-align: center;
+            font-size: 3rem;
+            margin-bottom: 1rem;
+            color: #fff;
+            position: relative;
+            font-weight: 700;
+            background: linear-gradient(135deg, #ffffff, #b8b0d4);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
         }
 
-        section {
-            padding: 80px 20px;
+        .section-subtitle {
+            text-align: center;
+            font-size: 1.2rem;
+            color: #888;
+            margin-bottom: 4rem;
+        }
+
+        .section-title::after {
+            content: '';
+            position: absolute;
+            bottom: -15px;
+            left: 50%;
+            transform: translateX(-50%);
+            width: 100px;
+            height: 4px;
+            background: linear-gradient(90deg, transparent, #667eea, transparent);
         }
 
         .features-grid {
-            grid-template-columns: 1fr;
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(320px, 1fr));
+            gap: 3rem;
+            margin-top: 4rem;
         }
-    }
-</style>
+
+        .feature-card {
+            background: rgba(255, 255, 255, 0.03);
+            padding: 3rem;
+            border-radius: 20px;
+            border: 1px solid rgba(255, 255, 255, 0.05);
+            transition: all 0.4s cubic-bezier(0.34, 1.56, 0.64, 1);
+            backdrop-filter: blur(10px);
+            position: relative;
+            overflow: hidden;
+        }
+
+        .feature-card::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            height: 3px;
+            background: linear-gradient(90deg, transparent, #667eea, transparent);
+            opacity: 0;
+            transition: opacity 0.4s ease;
+        }
+
+        .feature-card:hover::before {
+            opacity: 1;
+        }
+
+        .feature-card:hover {
+            transform: translateY(-10px);
+            border-color: rgba(102, 126, 234, 0.3);
+            box-shadow: 0 20px 60px rgba(102, 126, 234, 0.2);
+            background: rgba(255, 255, 255, 0.05);
+        }
+
+        .feature-icon {
+            font-size: 3rem;
+            margin-bottom: 1.5rem;
+            display: block;
+            filter: drop-shadow(0 0 20px rgba(102, 126, 234, 0.5));
+            animation: iconPulse 3s ease-in-out infinite;
+        }
+
+        @keyframes iconPulse {
+            0%, 100% { transform: scale(1); }
+            50% { transform: scale(1.1); }
+        }
+
+        .feature-title {
+            font-size: 1.5rem;
+            margin-bottom: 1rem;
+            color: #fff;
+            font-weight: 600;
+        }
+
+        .feature-description {
+            color: #999;
+            line-height: 1.8;
+        }
+
+        /* Footer */
+        footer {
+            padding: 4rem;
+            text-align: center;
+            border-top: 1px solid rgba(255, 255, 255, 0.05);
+            margin-top: 4rem;
+            background: rgba(10, 10, 10, 0.5);
+            backdrop-filter: blur(20px);
+        }
+
+        .social-links {
+            display: flex;
+            justify-content: center;
+            gap: 2rem;
+            margin-bottom: 2rem;
+            flex-wrap: wrap;
+        }
+
+        .social-links a {
+            color: #667eea;
+            text-decoration: none;
+            font-size: 1.1rem;
+            padding: 0.8rem 1.5rem;
+            background: rgba(102, 126, 234, 0.1);
+            border-radius: 10px;
+            transition: all 0.4s cubic-bezier(0.34, 1.56, 0.64, 1);
+            border: 1px solid rgba(102, 126, 234, 0.2);
+        }
+
+        .social-links a:hover {
+            background: linear-gradient(135deg, #667eea, #764ba2);
+            color: white;
+            transform: translateY(-5px);
+            box-shadow: 0 10px 30px rgba(102, 126, 234, 0.4);
+        }
+
+        .copyright {
+            color: #666;
+            font-size: 0.9rem;
+        }
+
+        /* Page Transition Overlay */
+        .page-transition {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: #000000;
+            z-index: 9999;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            pointer-events: none;
+            opacity: 0;
+            transition: opacity 0.6s ease;
+        }
+
+        .page-transition.active {
+            opacity: 1;
+            pointer-events: all;
+        }
+
+        .transition-content {
+            text-align: center;
+            transform: scale(0.8);
+            transition: transform 0.6s cubic-bezier(0.34, 1.56, 0.64, 1);
+        }
+
+        .page-transition.active .transition-content {
+            transform: scale(1);
+        }
+
+        .transition-icon {
+            width: 150px;
+            height: 150px;
+            margin: 0 auto 2rem;
+            filter: drop-shadow(0 0 60px rgba(102, 126, 234, 1));
+            animation: transitionSpin 1s ease-in-out;
+        }
+
+        @keyframes transitionSpin {
+            0% { 
+                transform: scale(0) rotate(0deg);
+                opacity: 0;
+            }
+            50% {
+                transform: scale(1.2) rotate(180deg);
+                opacity: 1;
+            }
+            100% { 
+                transform: scale(1) rotate(360deg);
+                opacity: 1;
+            }
+        }
+
+        .transition-title {
+            width: 400px;
+            max-width: 90%;
+            margin: 0 auto;
+            filter: drop-shadow(0 0 40px rgba(102, 126, 234, 0.8));
+            animation: fadeInUp 0.6s ease 0.3s backwards;
+        }
+
+        @keyframes fadeInUp {
+            from {
+                opacity: 0;
+                transform: translateY(30px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        .transition-particles {
+            position: absolute;
+            width: 100%;
+            height: 100%;
+            overflow: hidden;
+        }
+
+        .transition-particle {
+            position: absolute;
+            width: 4px;
+            height: 4px;
+            background: rgba(102, 126, 234, 0.8);
+            border-radius: 50%;
+            animation: particleExplode 1s ease-out forwards;
+        }
+
+        @keyframes particleExplode {
+            0% {
+                transform: translate(0, 0) scale(1);
+                opacity: 1;
+            }
+            100% {
+                transform: translate(var(--tx), var(--ty)) scale(0);
+                opacity: 0;
+            }
+        }
+
+        @keyframes fadeInLeft {
+            from {
+                opacity: 0;
+                transform: translateX(-50px);
+            }
+            to {
+                opacity: 1;
+                transform: translateX(0);
+            }
+        }
+
+        @keyframes fadeInRight {
+            from {
+                opacity: 0;
+                transform: translateX(50px);
+            }
+            to {
+                opacity: 1;
+                transform: translateX(0);
+            }
+        }
+
+        @media (max-width: 1024px) {
+            .hero-content {
+                grid-template-columns: 1fr;
+                gap: 3rem;
+            }
+
+            .hero-title {
+                font-size: 3.5rem;
+            }
+
+            .header {
+                padding: 2rem;
+            }
+
+            .features {
+                padding: 4rem 2rem;
+            }
+        }
+
+                    @media (max-width: 768px) {
+            .hero-title {
+                font-size: 2.5rem;
+            }
+
+            .nav-links {
+                display: none;
+            }
+
+            .showcase-icon {
+                width: 120px;
+                height: 120px;
+            }
+
+            .showcase-title {
+                font-size: 1.5rem;
+            }
+
+            .about-text {
+                font-size: 1rem;
+            }
+        }
+    </style>
 </head>
-
 <body>
+    <canvas id="particle-canvas"></canvas>
+    <div class="bg-gradient"></div>
 
-<canvas id="particle-canvas"></canvas>
-<div class="bg-gradient"></div>
-
-<div class="content">
-    <nav id="navbar">
-        <div class="nav-container">
-            <img src="Shadewalker/title.png" alt="Shadewalker" class="logo" onclick="scrollToSection('home')">
-            <div class="nav-links">
-                <a href="#home" onclick="scrollToSection('home'); return false;">Home</a>
-                <a href="#about" onclick="scrollToSection('about'); return false;">About</a>
-                <a href="mods.html">Mods</a>
-                <a href="eula.html">EULA</a>
-                <a href="terms.html">Terms</a>
-                <a href="privacy.html">Privacy</a>
-                <a href="contact.html">Contact</a>
-            </div>
+    <!-- Page Transition Overlay -->
+    <div class="page-transition" id="page-transition">
+        <div class="transition-particles" id="transition-particles"></div>
+        <div class="transition-content">
+            <img src="./shadewalker/icon.png" alt="Shadewalker" class="transition-icon">
+            <img src="./shadewalker/title.png" alt="Shadewalker" class="transition-title">
         </div>
-    </nav>
-
-    <section id="home">
-        <div class="hero-glow"></div>
-        <div class="hero-content">
-            <img src="Shadewalker/icon.png" alt="Shadewalker" class="hero-icon" id="hero-icon">
-            <img src="Shadewalker/title.png" alt="Shadewalker" class="hero-title">
-            <p class="hero-subtitle">A dark fantasy action-platformer about splitting your shadow and mastering the night.</p>
-            <div class="hero-buttons">
-                <a href="#" class="btn btn-primary">Steam Page (Coming Soon)</a>
-                <a href="eula.html" class="btn btn-secondary">Read the EULA</a>
-            </div>
-        </div>
-        <div class="scroll-indicator" onclick="scrollToSection('about')">
-            Scroll to explore
-        </div>
-    </section>
-
-    <div class="icon-modal" id="icon-modal">
-        <img src="Shadewalker/icon.png" alt="Shadewalker Icon" id="modal-icon">
-        <div class="close-hint">Click anywhere to close</div>
     </div>
 
-    <section id="about">
-        <div class="about-content">
-            <h2 class="section-title">About the Game</h2>
+    <div class="content">
+        <header class="header" id="header">
+            <div class="logo">Solo Prodigy Dev</div>
+            <nav class="nav-links">
+                <a href="#games">Games</a>
+                <a href="#about">About</a>
+                <a href="https://soloprodigydev.carrd.co/" target="_blank">Contact</a>
+                <a href="https://github.com/soloprodigydev" target="_blank">GitHub</a>
+            </nav>
+        </header>
 
-            <p class="about-text about-tagline"><em>"In a world where light is lethal, only the shadows offer refuge."</em></p>
+        <section class="hero">
+            <div class="hero-glow"></div>
+            <div class="hero-content">
+                <div class="hero-text">
+                    <span class="game-tag">
+                        <span style="animation: pulse 2s ease-in-out infinite;">🎮</span>
+                        NOW IN DEVELOPMENT
+                    </span>
+                    <img src="./shadewalker/title.png" alt="Shadewalker" class="hero-title">
+                    <p class="hero-subtitle">A Dark Fantasy Action-Adventure</p>
+                    <p class="hero-description">
+                        Venture into a world consumed by shadows. Master fluid combat, uncover ancient mysteries, 
+                        and explore hauntingly beautiful environments where every step could be your last.
+                    </p>
+                    <div class="cta-buttons">
+                        <a href="#" onclick="event.preventDefault(); transitionToShadewalker();" class="btn-primary">Explore the Game →</a>
+                        <a href="#" onclick="event.preventDefault(); transitionToShadewalker();" class="btn-secondary">Learn More</a>
+                    </div>
+                </div>
 
-            <p class="about-text">You play as <strong>Draxis Veylor</strong>, a man feared and mythologized as the Shadewalker — a figure who moves with the darkness, hunts in silence, and survives where others burn. Draxis carries a rare curse that lets him separate from his own shadow, creating a living double born from pure darkness.</p>
+                <div class="hero-visual">
+                    <div class="game-showcase" onclick="transitionToShadewalker()">
+                        <div class="showcase-particles" id="showcase-particles"></div>
+                        <div class="showcase-inner">
+                            <img src="./shadewalker/icon.png" alt="Shadewalker" class="showcase-icon">
+                            <img src="./shadewalker/title.png" alt="Shadewalker" class="showcase-title">
+                        </div>
+                        <div class="showcase-hover-hint">Click to explore →</div>
+                    </div>
+                    <div class="floating-elements">
+                        <span class="float-icon">⚔️</span>
+                        <span class="float-icon">🌙</span>
+                        <span class="float-icon">✨</span>
+                    </div>
+                </div>
+            </div>
+        </section>
 
-            <p class="about-text">This ability, known as the <strong>Shadow Split</strong>, is the heart of the game: a fast, mind-bending mechanic that lets players control both body and shadow to outmaneuver enemies, solve dual-perspective puzzles, and perform impossible assassinations. Shadewalker blends stealth, action, and atmospheric exploration into a world where every ray of light is a threat — and mastering your own shadow is the only way to survive.</p>
-
-            <p class="about-text">Shadewalker is a 2D platformer developed by <strong>Solo.Prodigy</strong> using the Godot game engine. This project draws inspiration from two legendary titles: <em>Undertale</em> by Toby Fox and <em>Hollow Knight</em> by Team Cherry. Taking the best of both worlds — tight platforming, memorable NPC interactions, and atmospheric storytelling — Shadewalker weaves them together with its own dark, original twist.</p>
-
+        <section class="features" id="games">
+            <h2 class="section-title">What Awaits You</h2>
+            <p class="section-subtitle">Experience the next generation of indie action-adventure</p>
             <div class="features-grid">
                 <div class="feature-card">
                     <span class="feature-icon">⚔️</span>
-                    <h3>Shadow Split Mechanic</h3>
-                    <p>Control both Draxis and his shadow simultaneously. Solve puzzles, flank enemies, and pull off impossible stealth kills by mastering dual perspectives.</p>
+                    <h3 class="feature-title">Visceral Combat</h3>
+                    <p class="feature-description">
+                        Master a deep, responsive combat system where every strike, parry, and dodge matters. 
+                        Chain attacks and unleash devastating combinations.
+                    </p>
                 </div>
+
                 <div class="feature-card">
-                    <span class="feature-icon">🌑</span>
-                    <h3>Light is Death</h3>
-                    <p>In a world where sunlight burns flesh, every illuminated space is a deadly trap. Move through shadows, manipulate darkness, and fear the dawn.</p>
+                    <span class="feature-icon">🌙</span>
+                    <h3 class="feature-title">Dark Atmosphere</h3>
+                    <p class="feature-description">
+                        Explore a beautifully haunting world shrouded in mystery. Uncover secrets hidden in 
+                        the darkness and piece together a forgotten history.
+                    </p>
                 </div>
+
                 <div class="feature-card">
-                    <span class="feature-icon">🗡️</span>
-                    <h3>Stealth & Action</h3>
-                    <p>Hunt in silence or fight with ferocity. Shadewalker rewards both patient predators and aggressive strikers with tight, responsive combat.</p>
-                </div>
-                <div class="feature-card">
-                    <span class="feature-icon">🏛️</span>
-                    <h3>Atmospheric World</h3>
-                    <p>Explore a hauntingly beautiful realm filled with mysterious NPCs, ancient ruins, and secrets hidden in every shadow.</p>
-                </div>
-                <div class="feature-card">
-                    <span class="feature-icon">🎭</span>
-                    <h3>Myth & Legend</h3>
-                    <p>Draxis is no hero — he's a cursed wanderer, a ghost story whispered in fear. Uncover the truth behind the Shadewalker mythos.</p>
-                </div>
-                <div class="feature-card">
-                    <span class="feature-icon">🎨</span>
-                    <h3>Indie Craftsmanship</h3>
-                    <p>Built from scratch by Solo.Prodigy with passion, dedication, and an unhealthy amount of late-night coding sessions.</p>
+                    <span class="feature-icon">✨</span>
+                    <h3 class="feature-title">Epic Journey</h3>
+                    <p class="feature-description">
+                        Traverse interconnected environments filled with challenges, hidden paths, and 
+                        powerful adversaries. Your legend awaits.
+                    </p>
                 </div>
             </div>
-        </div>
-    </section>
+        </section>
 
-    <footer>
-        <div class="footer-links">
-            <a href="eula.html">EULA</a>
-            <a href="terms.html">Terms of Service</a>
-            <a href="privacy.html">Privacy Policy</a>
-            <a href="contact.html">Contact</a>
-        </div>
-        <div class="copyright">
-            © 2025 Shadewalker by Solo.Prodigy. All rights reserved.
-        </div>
-    </footer>
-</div>
+        <section class="about" id="about">
+            <div class="about-content">
+                <h2 class="section-title">About the Developer</h2>
+                <p class="section-subtitle">The story behind the games</p>
 
-<script>
-    const canvas = document.getElementById('particle-canvas');
-    const ctx = canvas.getContext('2d');
-    canvas.width = window.innerWidth;
-    canvas.height = window.innerHeight;
+                <div class="about-text-container">
+                    <p class="about-text"><strong>Solo.Prodigy</strong> is an independent game developer who just really likes making cool stuff for people to play. His goal is simple: create fun and enjoyable games that players actually feel are worth buying. Nothing fancy. Just good vibes and good gameplay.</p>
 
-    const particles = [];
-    const particleCount = 100;
+                    <p class="about-text">Before starting Shadewalker he made a couple of absolutely legendary school projects: Serein and OverStory (DEFINITELY NOT AN UNDERTALE RIPOFF), both on itch.io, both 3D, and both powered by an unhealthy amount of copyrighted assets because he was too lazy to make his own at the time (Still is). Those projects will not be going professional anytime soon, but they taught him a lot about game dev and how not to get sued.</p>
 
-    class Particle {
-        constructor() {
-            this.reset();
-        }
+                    <p class="about-text">Shadewalker is his first real professional game (I think?..). It is built from scratch, properly licensed, fully original, and genuinely something he is proud of. Every system, animation, and idea comes from learning, improving, and wanting to make something players will actually enjoy.</p>
 
-        reset() {
-            this.x = Math.random() * canvas.width;
-            this.y = Math.random() * canvas.height;
-            this.size = Math.random() * 2 + 0.5;
-            this.speedY = Math.random() * 0.5 + 0.1;
-            this.speedX = (Math.random() - 0.5) * 0.3;
-            this.opacity = Math.random() * 0.5 + 0.2;
-            this.color = `rgba(${140 + Math.random() * 40}, ${80 + Math.random() * 40}, 255, ${this.opacity})`;
-        }
+                    <p class="about-text">He might be young, but Solo.Prodigy is aiming to grow as a developer, keep making creative games, and prove that anyone can build something awesome if they just start and don't stop.</p>
+                </div>
 
-        update() {
-            this.y -= this.speedY;
-            this.x += this.speedX;
-            
-            if (this.y < -10) {
-                this.y = canvas.height + 10;
-                this.x = Math.random() * canvas.width;
-            }
-            if (this.x < -10 || this.x > canvas.width + 10) {
-                this.x = Math.random() * canvas.width;
-            }
-        }
+                <div class="features-grid">
+                    <div class="feature-card">
+                        <span class="feature-icon">🎮</span>
+                        <h3 class="feature-title">Gameplay First</h3>
+                        <p class="feature-description">
+                            Every mechanic is designed to be fun, responsive, and satisfying. No fluff, just pure gaming joy.
+                        </p>
+                    </div>
+                    <div class="feature-card">
+                        <span class="feature-icon">🌙</span>
+                        <h3 class="feature-title">Dark Fantasy</h3>
+                        <p class="feature-description">
+                            Immerse yourself in a shadowy world where light and darkness are your greatest allies.
+                        </p>
+                    </div>
+                    <div class="feature-card">
+                        <span class="feature-icon">✨</span>
+                        <h3 class="feature-title">Made with Passion</h3>
+                        <p class="feature-description">
+                            Built from the ground up by an indie dev who genuinely cares about creating quality experiences.
+                        </p>
+                    </div>
+                </div>
+            </div>
+        </section>
 
-        draw() {
-            ctx.fillStyle = this.color;
-            ctx.beginPath();
-            ctx.arc(this.x, this.y, this.size, 0, Math.PI * 2);
-            ctx.fill();
-        }
-    }
+        <footer>
+            <div class="social-links">
+                <a href="https://soloprodigydev.carrd.co/" target="_blank">📧 Contact</a>
+                <a href="https://github.com/soloprodigydev" target="_blank">💻 GitHub</a>
+            </div>
+            <p class="copyright">&copy; 2025 Solo Prodigy Dev. All rights reserved.</p>
+        </footer>
+    </div>
 
-    for (let i = 0; i < particleCount; i++) {
-        particles.push(new Particle());
-    }
-
-    function animate() {
-        ctx.clearRect(0, 0, canvas.width, canvas.height);
-        
-        particles.forEach(particle => {
-            particle.update();
-            particle.draw();
-        });
-
-        requestAnimationFrame(animate);
-    }
-
-    animate();
-
-    function scrollToSection(sectionId) {
-        const element = document.getElementById(sectionId);
-        if (element) {
-            element.scrollIntoView({ 
-                behavior: 'smooth',
-                block: 'start'
-            });
-        }
-    }
-
-    let lastScroll = 0;
-    window.addEventListener('scroll', () => {
-        const nav = document.getElementById('navbar');
-        const currentScroll = window.pageYOffset;
-        
-        if (currentScroll > 100) {
-            nav.classList.add('scrolled');
-        } else {
-            nav.classList.remove('scrolled');
-        }
-        
-        const sections = document.querySelectorAll('section[id]');
-        sections.forEach(section => {
-            const sectionTop = section.offsetTop - 150;
-            const sectionHeight = section.offsetHeight;
-            const sectionId = section.getAttribute('id');
-            
-            if (currentScroll >= sectionTop && currentScroll < sectionTop + sectionHeight) {
-                document.querySelectorAll('.nav-links a').forEach(link => {
-                    link.classList.remove('active');
-                    if (link.getAttribute('href') === `#${sectionId}`) {
-                        link.classList.add('active');
-                    }
-                });
-            }
-        });
-        
-        lastScroll = currentScroll;
-    });
-
-    const heroIcon = document.getElementById('hero-icon');
-    const iconModal = document.getElementById('icon-modal');
-    const modalIcon = document.getElementById('modal-icon');
-
-    heroIcon.addEventListener('click', () => {
-        iconModal.classList.add('active');
-        document.body.style.overflow = 'hidden';
-    });
-
-    iconModal.addEventListener('click', () => {
-        iconModal.classList.remove('active');
-        document.body.style.overflow = 'auto';
-    });
-
-    modalIcon.addEventListener('click', (e) => {
-        e.stopPropagation();
-    });
-
-    document.addEventListener('keydown', (e) => {
-        if (e.key === 'Escape' && iconModal.classList.contains('active')) {
-            iconModal.classList.remove('active');
-            document.body.style.overflow = 'auto';
-        }
-    });
-
-    window.addEventListener('resize', () => {
+    <script>
+        // Particle system
+        const canvas = document.getElementById('particle-canvas');
+        const ctx = canvas.getContext('2d');
         canvas.width = window.innerWidth;
         canvas.height = window.innerHeight;
-    });
 
-    document.addEventListener('mousemove', (e) => {
-        const moveX = (e.clientX - window.innerWidth / 2) * 0.01;
-        const moveY = (e.clientY - window.innerHeight / 2) * 0.01;
-        
-        const heroGlow = document.querySelector('.hero-glow');
-        if (heroGlow) {
-            heroGlow.style.transform = `translate(calc(-50% + ${moveX}px), calc(-50% + ${moveY}px))`;
+        const particles = [];
+        const particleCount = 80;
+
+        class Particle {
+            constructor() {
+                this.reset();
+            }
+
+            reset() {
+                this.x = Math.random() * canvas.width;
+                this.y = Math.random() * canvas.height;
+                this.size = Math.random() * 2 + 0.5;
+                this.speedY = Math.random() * 0.5 + 0.1;
+                this.speedX = (Math.random() - 0.5) * 0.3;
+                this.opacity = Math.random() * 0.4 + 0.1;
+                this.color = `rgba(${102 + Math.random() * 30}, ${126 + Math.random() * 30}, ${234}, ${this.opacity})`;
+            }
+
+            update() {
+                this.y -= this.speedY;
+                this.x += this.speedX;
+                
+                if (this.y < -10) {
+                    this.y = canvas.height + 10;
+                    this.x = Math.random() * canvas.width;
+                }
+                if (this.x < -10 || this.x > canvas.width + 10) {
+                    this.x = Math.random() * canvas.width;
+                }
+            }
+
+            draw() {
+                ctx.fillStyle = this.color;
+                ctx.beginPath();
+                ctx.arc(this.x, this.y, this.size, 0, Math.PI * 2);
+                ctx.fill();
+            }
         }
-    });
 
-    document.querySelectorAll('a[href$=".html"]').forEach(link => {
-        link.addEventListener('click', (e) => {
-            e.preventDefault();
-            const href = link.getAttribute('href');
+        for (let i = 0; i < particleCount; i++) {
+            particles.push(new Particle());
+        }
+
+        function animate() {
+            ctx.clearRect(0, 0, canvas.width, canvas.height);
             
-            document.body.style.opacity = '0';
-            document.body.style.transition = 'opacity 0.3s ease';
-            
-            setTimeout(() => {
-                window.location.href = href;
-            }, 300);
+            particles.forEach(particle => {
+                particle.update();
+                particle.draw();
+            });
+
+            requestAnimationFrame(animate);
+        }
+
+        animate();
+
+        // Showcase particles
+        const showcaseParticles = document.getElementById('showcase-particles');
+        for (let i = 0; i < 20; i++) {
+            const particle = document.createElement('div');
+            particle.className = 'particle';
+            particle.style.left = Math.random() * 100 + '%';
+            particle.style.animationDelay = Math.random() * 8 + 's';
+            particle.style.animationDuration = (Math.random() * 4 + 6) + 's';
+            showcaseParticles.appendChild(particle);
+        }
+
+        // Header scroll effect
+        window.addEventListener('scroll', () => {
+            const header = document.getElementById('header');
+            if (window.scrollY > 100) {
+                header.classList.add('scrolled');
+            } else {
+                header.classList.remove('scrolled');
+            }
         });
-    });
 
-    window.addEventListener('load', () => {
-        document.body.style.opacity =
-        document.body.style.transition = 'opacity 0.5s ease';
-        setTimeout(() => {
-                document.body.style.opacity = '1';
-        }, 100);
-    });
-</script>
+        // Parallax effect
+        document.addEventListener('mousemove', (e) => {
+            const moveX = (e.clientX - window.innerWidth / 2) * 0.01;
+            const moveY = (e.clientY - window.innerHeight / 2) * 0.01;
+            
+            const heroGlow = document.querySelector('.hero-glow');
+            if (heroGlow) {
+                heroGlow.style.transform = `translate(calc(-50% + ${moveX}px), calc(-50% + ${moveY}px))`;
+            }
 
+            // Parallax for floating icons
+            const floatIcons = document.querySelectorAll('.float-icon');
+            floatIcons.forEach((icon, index) => {
+                const speed = (index + 1) * 0.02;
+                icon.style.transform = `translate(${moveX * speed}px, ${moveY * speed}px)`;
+            });
+        });
+
+        // Resize canvas
+        window.addEventListener('resize', () => {
+            canvas.width = window.innerWidth;
+            canvas.height = window.innerHeight;
+        });
+
+        // Page Transition Function
+        function transitionToShadewalker() {
+            const transition = document.getElementById('page-transition');
+            const particlesContainer = document.getElementById('transition-particles');
+            
+            // Create explosion particles
+            for (let i = 0; i < 30; i++) {
+                const particle = document.createElement('div');
+                particle.className = 'transition-particle';
+                
+                const angle = (Math.PI * 2 * i) / 30;
+                const distance = 300 + Math.random() * 200;
+                const tx = Math.cos(angle) * distance;
+                const ty = Math.sin(angle) * distance;
+                
+                particle.style.left = '50%';
+                particle.style.top = '50%';
+                particle.style.setProperty('--tx', tx + 'px');
+                particle.style.setProperty('--ty', ty + 'px');
+                particle.style.animationDelay = (Math.random() * 0.2) + 's';
+                
+                particlesContainer.appendChild(particle);
+            }
+            
+            // Activate transition
+            transition.classList.add('active');
+            
+            // Navigate after animation
+            setTimeout(() => {
+                window.location.href = './shadewalker';
+            }, 1200);
+        }
+
+        // Smooth scroll
+        document.querySelectorAll('a[href^="#"]').forEach(anchor => {
+            anchor.addEventListener('click', function (e) {
+                e.preventDefault();
+                const target = document.querySelector(this.getAttribute('href'));
+                if (target) {
+                    target.scrollIntoView({
+                        behavior: 'smooth',
+                        block: 'start'
+                    });
+                }
+            });
+        });
+    </script>
 </body>
-</html>        
+</html>
