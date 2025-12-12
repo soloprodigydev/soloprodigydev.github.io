@@ -1,4 +1,73 @@
-<!DOCTYPE html>
+.about-text {
+        font-size: 18px;
+        line-height: 1.8;
+        color: #d4d0e6;
+        margin-bottom: 25px;
+    }
+
+    .about-text.about-tagline {
+        font-size: 22px;
+        text-align: center;
+        color: #b8a8ff;
+        font-style: italic;
+        margin-bottom: 40px;
+        padding: 20px;
+        background: rgba(110, 91, 255, 0.05);
+        border-radius: 12px;
+        border-left: 4px solid rgba(110, 91, 255, 0.4);
+    }
+
+    .dev-note {
+        background: rgba(20, 15, 40, 0.5);
+        border: 2px solid rgba(110, 91, 255, 0.25);
+        border-radius: 16px;
+        padding: 35px;
+        margin: 40px 0 60px;
+        backdrop-filter: blur(10px);
+    }
+
+    .dev-note h3 {
+        color: #b8a8ff;
+        font-size: 24px;
+        margin-bottom: 20px;
+        font-weight: 600;
+    }
+
+    .dev-note p {
+        font-size: 17px;
+        line-height: 1.8;
+        color: #d4d0e6;
+        margin-bottom: 20px;
+    }
+
+    .dev-note p:last-child {
+        margin-bottom: 0;
+    }
+
+    .dev-note em {
+        color: #c7baff;
+        font-style: italic;
+    }
+
+    .about-text.about-tagline {
+        font-size: 22px;
+        text-align: center;
+        color: #b8a8ff;
+        font-style: italic;
+        margin-bottom: 40px;
+        padding: 20px;
+        background: rgba(110, 91, 255, 0.05);
+        border-radius: 12px;
+        border-left: 4px solid rgba(110, 91, 255, 0.4);
+    }
+
+    .dev-note {
+        background: rgba(20, 15, 40, 0.5);
+        border: 2px solid rgba(110, 91, 255, 0.25);
+        border-radius: 16px;
+        padding: 35px;
+        margin: 40px 0 60px;
+        backdrop<!DOCTYPE html>
 <html lang="en">
 <head>
     <meta charset="UTF-8">
@@ -431,6 +500,50 @@
         margin-bottom: 25px;
     }
 
+    .about-text.about-tagline {
+        font-size: 22px;
+        text-align: center;
+        color: #b8a8ff;
+        font-style: italic;
+        margin-bottom: 40px;
+        padding: 20px;
+        background: rgba(110, 91, 255, 0.05);
+        border-radius: 12px;
+        border-left: 4px solid rgba(110, 91, 255, 0.4);
+    }
+
+    .dev-note {
+        background: rgba(20, 15, 40, 0.5);
+        border: 2px solid rgba(110, 91, 255, 0.25);
+        border-radius: 16px;
+        padding: 35px;
+        margin: 40px 0 60px;
+        backdrop-filter: blur(10px);
+    }
+
+    .dev-note h3 {
+        color: #b8a8ff;
+        font-size: 24px;
+        margin-bottom: 20px;
+        font-weight: 600;
+    }
+
+    .dev-note p {
+        font-size: 17px;
+        line-height: 1.8;
+        color: #d4d0e6;
+        margin-bottom: 20px;
+    }
+
+    .dev-note p:last-child {
+        margin-bottom: 0;
+    }
+
+    .dev-note em {
+        color: #c7baff;
+        font-style: italic;
+    }
+
     .about-text strong {
         color: #b8a8ff;
         font-weight: 600;
@@ -627,31 +740,46 @@
     <!-- ABOUT SECTION -->
     <section id="about">
         <div class="about-content">
-            <h2 class="section-title">About the Developer</h2>
+            <h2 class="section-title">About the Game</h2>
 
-            <p class="about-text"><strong>Solo.Prodigy</strong> is an independent game developer who just really likes making cool stuff for people to play. His goal is simple: create fun and enjoyable games that players actually feel are worth buying. Nothing fancy. Just good vibes and good gameplay.</p>
+            <p class="about-text about-tagline"><em>"In a world where light is lethal, only the shadows offer refuge."</em></p>
 
-            <p class="about-text">Before starting Shadewalker he made a couple of absolutely legendary school projects: Serein and OverStory (DEFINITELY NOT AN UNDERTALE RIPOFF), both on itch.io, both 3D, and both powered by an unhealthy amount of copyrighted assets because he was too lazy to make his own at the time (Still is). Those projects will not be going professional anytime soon, but they taught him a lot about game dev and how not to get sued.</p>
+            <p class="about-text">You play as <strong>Draxis Veylor</strong>, a man feared and mythologized as the Shadewalker — a figure who moves with the darkness, hunts in silence, and survives where others burn. Draxis carries a rare curse that lets him separate from his own shadow, creating a living double born from pure darkness.</p>
 
-            <p class="about-text">Shadewalker is his first real professional game (I think?..). It is built from scratch, properly licensed, fully original, and genuinely something he is proud of. Every system, animation, and idea comes from learning, improving, and wanting to make something players will actually enjoy.</p>
+            <p class="about-text">This ability, known as the <strong>Shadow Split</strong>, is the heart of the game: a fast, mind-bending mechanic that lets players control both body and shadow to outmaneuver enemies, solve dual-perspective puzzles, and perform impossible assassinations. Shadewalker blends stealth, action, and atmospheric exploration into a world where every ray of light is a threat — and mastering your own shadow is the only way to survive.</p>
 
-            <p class="about-text">He might be young, but Solo.Prodigy is aiming to grow as a developer, keep making creative games, and prove that anyone can build something awesome if they just start and don't stop.</p>
+            <p class="about-text">Shadewalker is a 2D platformer developed by <strong>Solo.Prodigy</strong> using the Godot game engine. This project draws inspiration from two legendary titles: <em>Undertale</em> by Toby Fox and <em>Hollow Knight</em> by Team Cherry. Taking the best of both worlds — tight platforming, memorable NPC interactions, and atmospheric storytelling — Shadewalker weaves them together with its own dark, original twist.</p>
 
             <div class="features-grid">
                 <div class="feature-card">
-                    <span class="feature-icon">🎮</span>
-                    <h3>Gameplay First</h3>
-                    <p>Every mechanic is designed to be fun, responsive, and satisfying. No fluff, just pure gaming joy.</p>
+                    <span class="feature-icon">⚔️</span>
+                    <h3>Shadow Split Mechanic</h3>
+                    <p>Control both Draxis and his shadow simultaneously. Solve puzzles, flank enemies, and pull off impossible stealth kills by mastering dual perspectives.</p>
                 </div>
                 <div class="feature-card">
-                    <span class="feature-icon">🌙</span>
-                    <h3>Dark Fantasy</h3>
-                    <p>Immerse yourself in a shadowy world where light and darkness are your greatest allies.</p>
+                    <span class="feature-icon">🌑</span>
+                    <h3>Light is Death</h3>
+                    <p>In a world where sunlight burns flesh, every illuminated space is a deadly trap. Move through shadows, manipulate darkness, and fear the dawn.</p>
                 </div>
                 <div class="feature-card">
-                    <span class="feature-icon">✨</span>
-                    <h3>Made with Passion</h3>
-                    <p>Built from the ground up by an indie dev who genuinely cares about creating quality experiences.</p>
+                    <span class="feature-icon">🗡️</span>
+                    <h3>Stealth & Action</h3>
+                    <p>Hunt in silence or fight with ferocity. Shadewalker rewards both patient predators and aggressive strikers with tight, responsive combat.</p>
+                </div>
+                <div class="feature-card">
+                    <span class="feature-icon">🏛️</span>
+                    <h3>Atmospheric World</h3>
+                    <p>Explore a hauntingly beautiful realm filled with mysterious NPCs, ancient ruins, and secrets hidden in every shadow.</p>
+                </div>
+                <div class="feature-card">
+                    <span class="feature-icon">🎭</span>
+                    <h3>Myth & Legend</h3>
+                    <p>Draxis is no hero — he's a cursed wanderer, a ghost story whispered in fear. Uncover the truth behind the Shadewalker mythos.</p>
+                </div>
+                <div class="feature-card">
+                    <span class="feature-icon">🎨</span>
+                    <h3>Indie Craftsmanship</h3>
+                    <p>Built from scratch by Solo.Prodigy with passion, dedication, and an unhealthy amount of late-night coding sessions.</p>
                 </div>
             </div>
         </div>
