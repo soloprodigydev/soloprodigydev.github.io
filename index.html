@@ -4,9 +4,10 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Solo.Prodigy | Indie Game Developer</title>
+    <link rel="icon" type="image/png" href="./good day sir.png">
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-    <link href="https://fonts.googleapis.com/css2?family=Handjet&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=IBM+Plex+Mono:wght@400;600&family=Orbitron:wght@400;700;900&display=swap" rel="stylesheet">
     <style>
         * {
             margin: 0;
@@ -15,9 +16,9 @@
         }
 
         body {
-            font-family: 'Handjet', -apple-system, BlinkMacSystemFont, 'Segoe UI', Arial, sans-serif;
-            background: #000000;
-            color: #e0e0e0;
+            font-family: 'IBM Plex Mono', monospace;
+            background: #0a0a0a;
+            color: #ffffff;
             overflow-x: hidden;
         }
 
@@ -38,15 +39,15 @@
             width: 100%;
             height: 100%;
             background: 
-                radial-gradient(ellipse at 20% 30%, rgba(102, 126, 234, 0.15) 0%, transparent 50%),
-                radial-gradient(ellipse at 80% 70%, rgba(118, 75, 162, 0.15) 0%, transparent 50%);
+                radial-gradient(ellipse at 20% 30%, rgba(220, 38, 38, 0.1) 0%, transparent 50%),
+                radial-gradient(ellipse at 80% 70%, rgba(37, 99, 235, 0.1) 0%, transparent 50%);
             z-index: 0;
-            animation: gradientPulse 15s ease-in-out infinite;
+            animation: gradientShift 20s ease-in-out infinite;
         }
 
-        @keyframes gradientPulse {
+        @keyframes gradientShift {
             0%, 100% { opacity: 1; }
-            50% { opacity: 0.7; }
+            50% { opacity: 0.6; }
         }
 
         .content {
@@ -64,69 +65,66 @@
             left: 0;
             right: 0;
             z-index: 1000;
-            background: rgba(10, 10, 10, 0.8);
-            backdrop-filter: blur(20px);
-            border-bottom: 1px solid rgba(102, 126, 234, 0.1);
-            transition: all 0.4s ease;
-        }
-
-        .header.scrolled {
-            padding: 1rem 4rem;
             background: rgba(10, 10, 10, 0.95);
-            box-shadow: 0 8px 32px rgba(0, 0, 0, 0.4);
-        }
-
-        .logo {
-            font-size: 1.5rem;
-            font-weight: 700;
-            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
-            -webkit-background-clip: text;
-            -webkit-text-fill-color: transparent;
-            background-clip: text;
-            cursor: pointer;
+            backdrop-filter: blur(20px);
+            border-bottom: 1px solid rgba(255, 255, 255, 0.1);
             transition: all 0.3s ease;
         }
 
+        .header.scrolled {
+            background: rgba(10, 10, 10, 0.98);
+            box-shadow: 0 4px 30px rgba(0, 0, 0, 0.5);
+        }
+
+        .logo {
+            font-family: 'Orbitron', sans-serif;
+            font-size: 1.8rem;
+            font-weight: 900;
+            color: #dc2626;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            letter-spacing: 2px;
+            text-shadow: 0 0 20px rgba(220, 38, 38, 0.5);
+        }
+
         .logo:hover {
-            filter: drop-shadow(0 0 20px rgba(102, 126, 234, 0.6));
+            color: #ff3333;
             transform: scale(1.05);
+            text-shadow: 0 0 30px rgba(220, 38, 38, 0.8);
         }
 
         .nav-links {
             display: flex;
-            gap: 2rem;
+            gap: 2.5rem;
         }
 
         .nav-links a {
-            color: #999;
+            color: #a0a0a0;
             text-decoration: none;
             font-size: 0.95rem;
-            font-weight: 500;
+            font-weight: 600;
             transition: all 0.3s ease;
             position: relative;
-            padding: 0.5rem 1rem;
-            border-radius: 8px;
+            padding: 0.5rem 0;
         }
 
-        .nav-links a::before {
+        .nav-links a::after {
             content: '';
             position: absolute;
             bottom: 0;
-            left: 50%;
-            transform: translateX(-50%);
+            left: 0;
             width: 0;
             height: 2px;
-            background: linear-gradient(90deg, #667eea, #764ba2);
+            background: linear-gradient(90deg, #dc2626, #2563eb);
             transition: width 0.3s ease;
         }
 
         .nav-links a:hover {
-            color: #fff;
-            background: rgba(102, 126, 234, 0.1);
+            color: #ffffff;
         }
 
-        .nav-links a:hover::before {
-            width: 80%;
+        .nav-links a:hover::after {
+            width: 100%;
         }
 
         .hero {
@@ -142,22 +140,22 @@
             position: absolute;
             top: 50%;
             left: 50%;
-            width: 1000px;
-            height: 1000px;
-            background: radial-gradient(circle, rgba(102, 126, 234, 0.2), transparent 70%);
+            width: 1200px;
+            height: 1200px;
+            background: radial-gradient(circle, rgba(220, 38, 38, 0.15), transparent 70%);
             transform: translate(-50%, -50%);
-            animation: heroGlow 8s ease-in-out infinite;
+            animation: pulseGlow 8s ease-in-out infinite;
             pointer-events: none;
         }
 
-        @keyframes heroGlow {
+        @keyframes pulseGlow {
             0%, 100% { 
                 transform: translate(-50%, -50%) scale(1);
-                opacity: 0.3;
+                opacity: 0.4;
             }
             50% { 
-                transform: translate(-50%, -50%) scale(1.2);
-                opacity: 0.5;
+                transform: translate(-50%, -50%) scale(1.1);
+                opacity: 0.6;
             }
         }
 
@@ -168,22 +166,37 @@
             z-index: 2;
         }
 
+        .hero-label {
+            font-size: 0.9rem;
+            color: #dc2626;
+            letter-spacing: 3px;
+            margin-bottom: 2rem;
+            text-transform: uppercase;
+            font-weight: 600;
+            text-shadow: 0 0 10px rgba(220, 38, 38, 0.6);
+        }
+
         .hero-title {
-            font-size: 4.5rem;
-            font-weight: 700;
-            background: linear-gradient(135deg, #ffffff, #b8b0d4);
+            font-family: 'Orbitron', sans-serif;
+            font-size: 6rem;
+            font-weight: 900;
+            background: linear-gradient(135deg, #ffffff 0%, #dc2626 50%, #ffffff 100%);
             -webkit-background-clip: text;
             -webkit-text-fill-color: transparent;
             background-clip: text;
             margin-bottom: 1.5rem;
+            letter-spacing: 8px;
             animation: fadeInUp 1s ease;
+            line-height: 1.1;
+            filter: drop-shadow(0 0 30px rgba(220, 38, 38, 0.3));
         }
 
         .hero-subtitle {
-            font-size: 1.5rem;
-            color: #999;
+            font-size: 1.4rem;
+            color: #a0a0a0;
             margin-bottom: 3rem;
             animation: fadeInUp 1s ease 0.2s backwards;
+            font-weight: 400;
         }
 
         @keyframes fadeInUp {
@@ -199,54 +212,58 @@
 
         .games-section {
             padding: 8rem 4rem;
-            max-width: 1400px;
+            max-width: 1600px;
             margin: 0 auto;
         }
 
-        .section-title {
+        .section-header {
             text-align: center;
-            font-size: 3rem;
+            margin-bottom: 6rem;
+        }
+
+        .section-label {
+            font-size: 0.85rem;
+            color: #dc2626;
+            letter-spacing: 3px;
             margin-bottom: 1rem;
-            color: #fff;
-            position: relative;
+            text-transform: uppercase;
+            font-weight: 600;
+            text-shadow: 0 0 10px rgba(220, 38, 38, 0.6);
+        }
+
+        .section-title {
+            font-family: 'Orbitron', sans-serif;
+            font-size: 4rem;
+            margin-bottom: 1rem;
+            color: #ffffff;
             font-weight: 700;
-            background: linear-gradient(135deg, #ffffff, #b8b0d4);
-            -webkit-background-clip: text;
-            -webkit-text-fill-color: transparent;
-            background-clip: text;
+            letter-spacing: 4px;
+        }
+
+        .section-title::before {
+            content: '>';
+            color: #dc2626;
+            margin-right: 1rem;
+            text-shadow: 0 0 20px rgba(220, 38, 38, 0.8);
         }
 
         .section-subtitle {
-            text-align: center;
             font-size: 1.2rem;
-            color: #888;
-            margin-bottom: 4rem;
-        }
-
-        .section-title::after {
-            content: '';
-            position: absolute;
-            bottom: -15px;
-            left: 50%;
-            transform: translateX(-50%);
-            width: 100px;
-            height: 4px;
-            background: linear-gradient(90deg, transparent, #667eea, transparent);
+            color: #707070;
+            font-weight: 400;
         }
 
         .games-grid {
             display: grid;
-            grid-template-columns: repeat(auto-fit, minmax(350px, 1fr));
+            grid-template-columns: repeat(auto-fit, minmax(400px, 1fr));
             gap: 3rem;
-            margin-top: 4rem;
         }
 
         .game-card {
-            background: rgba(255, 255, 255, 0.03);
-            border-radius: 20px;
-            border: 1px solid rgba(255, 255, 255, 0.05);
+            background: rgba(20, 20, 20, 0.8);
+            border: 1px solid rgba(255, 255, 255, 0.1);
             overflow: hidden;
-            transition: all 0.4s cubic-bezier(0.34, 1.56, 0.64, 1);
+            transition: all 0.4s ease;
             cursor: pointer;
             position: relative;
         }
@@ -257,10 +274,11 @@
             top: 0;
             left: 0;
             right: 0;
-            height: 3px;
-            background: linear-gradient(90deg, transparent, #667eea, transparent);
+            bottom: 0;
+            background: linear-gradient(135deg, rgba(220, 38, 38, 0.15), rgba(37, 99, 235, 0.05));
             opacity: 0;
             transition: opacity 0.4s ease;
+            z-index: 0;
         }
 
         .game-card:hover::before {
@@ -269,138 +287,71 @@
 
         .game-card:hover {
             transform: translateY(-10px);
-            border-color: rgba(102, 126, 234, 0.3);
-            box-shadow: 0 20px 60px rgba(102, 126, 234, 0.2);
-            background: rgba(255, 255, 255, 0.05);
+            border-color: rgba(220, 38, 38, 0.6);
+            box-shadow: 
+                0 20px 60px rgba(0, 0, 0, 0.6),
+                0 0 40px rgba(220, 38, 38, 0.4);
         }
 
         .game-card.locked {
+            opacity: 0.5;
             cursor: not-allowed;
-            opacity: 0.6;
         }
 
         .game-card.locked:hover {
             transform: translateY(-5px);
+            box-shadow: 0 10px 40px rgba(0, 0, 0, 0.4);
         }
 
         .game-showcase {
             position: relative;
             width: 100%;
             aspect-ratio: 16/9;
-            background: linear-gradient(135deg, #1a1a2e 0%, #0f0f1e 100%);
+            background: #0a0a0a;
             display: flex;
             align-items: center;
             justify-content: center;
             overflow: hidden;
+            border-bottom: 1px solid rgba(255, 255, 255, 0.1);
         }
 
         .game-showcase.medieval {
-            background: linear-gradient(135deg, #2e1a1a 0%, #1e0f0f 100%);
+            background: linear-gradient(135deg, #1a0f0f 0%, #0f0505 100%);
         }
 
-        .showcase-particles {
+        .showcase-overlay {
             position: absolute;
             width: 100%;
             height: 100%;
-            overflow: hidden;
-        }
-
-        .particle {
-            position: absolute;
-            width: 4px;
-            height: 4px;
-            background: rgba(102, 126, 234, 0.6);
-            border-radius: 50%;
-            animation: particleFloat 8s linear infinite;
-        }
-
-        @keyframes particleFloat {
-            0% {
-                transform: translateY(100%) translateX(0) scale(0);
-                opacity: 0;
-            }
-            10% {
-                opacity: 1;
-            }
-            90% {
-                opacity: 1;
-            }
-            100% {
-                transform: translateY(-100%) translateX(50px) scale(1);
-                opacity: 0;
-            }
+            background: radial-gradient(circle at center, transparent 40%, rgba(10, 10, 10, 0.8) 100%);
+            z-index: 1;
         }
 
         .showcase-icon {
-            width: 120px;
-            height: 120px;
-            filter: drop-shadow(0 0 30px rgba(102, 126, 234, 0.8));
-            transition: all 0.3s ease;
+            width: 140px;
+            height: 140px;
+            transition: all 0.4s ease;
             z-index: 2;
+            position: relative;
         }
 
         .game-card:hover .showcase-icon {
             transform: scale(1.1);
-            filter: drop-shadow(0 0 50px rgba(102, 126, 234, 1));
         }
 
         .mystery-icon {
-            font-size: 6rem;
-            opacity: 0.3;
-            filter: drop-shadow(0 0 30px rgba(102, 126, 234, 0.5));
+            font-size: 8rem;
+            opacity: 0.2;
+            z-index: 2;
+            position: relative;
         }
 
-        .game-info {
-            padding: 2rem;
+        .game-card.locked .mystery-icon {
+            opacity: 0.15;
         }
 
-        .game-tag {
-            display: inline-block;
-            padding: 0.5rem 1rem;
-            background: rgba(102, 126, 234, 0.15);
-            border: 1px solid rgba(102, 126, 234, 0.4);
-            border-radius: 20px;
-            font-size: 0.75rem;
-            color: #667eea;
-            margin-bottom: 1rem;
-            font-weight: 600;
-            letter-spacing: 1px;
-        }
-
-        .game-tag.coming-soon {
-            background: rgba(118, 75, 162, 0.15);
-            border-color: rgba(118, 75, 162, 0.4);
-            color: #764ba2;
-        }
-
-        .game-tag.locked {
-            background: rgba(150, 150, 150, 0.15);
-            border-color: rgba(150, 150, 150, 0.4);
-            color: #999;
-        }
-
-        .game-title {
-            font-size: 1.8rem;
-            color: #fff;
-            margin-bottom: 0.5rem;
-            font-weight: 600;
-        }
-
-        .game-title.mystery {
-            color: #666;
-            font-style: italic;
-        }
-
-        .game-genre {
-            font-size: 0.9rem;
-            color: #888;
-            margin-bottom: 1rem;
-        }
-
-        .game-description {
-            color: #999;
-            line-height: 1.6;
-            font-size: 0.95rem;
+        .game-card.medieval .mystery-icon {
+            color: #dc2626;
         }
 
         .lock-icon {
@@ -413,11 +364,81 @@
             z-index: 3;
         }
 
+        .game-info {
+            padding: 2.5rem;
+            position: relative;
+            z-index: 1;
+        }
+
+        .game-tag {
+            display: inline-block;
+            padding: 0.4rem 1rem;
+            background: rgba(220, 38, 38, 0.3);
+            border: 1px solid rgba(220, 38, 38, 0.8);
+            font-size: 0.75rem;
+            color: #ff4444;
+            margin-bottom: 1rem;
+            font-weight: 600;
+            letter-spacing: 2px;
+            text-transform: uppercase;
+            text-shadow: 0 0 10px rgba(220, 38, 38, 0.8);
+            box-shadow: 0 0 15px rgba(220, 38, 38, 0.3);
+        }
+
+        .game-tag.locked {
+            background: rgba(100, 100, 100, 0.2);
+            border-color: rgba(100, 100, 100, 0.5);
+            color: #707070;
+        }
+
+        .game-tag.medieval {
+            background: rgba(255, 136, 0, 0.2);
+            border-color: rgba(255, 136, 0, 0.5);
+            color: #ff8800;
+        }
+
+        .game-tag.blue {
+            background: rgba(37, 99, 235, 0.2);
+            border-color: rgba(37, 99, 235, 0.5);
+            color: #2563eb;
+        }
+
+        .game-title {
+            font-family: 'Orbitron', sans-serif;
+            font-size: 2rem;
+            color: #ffffff;
+            margin-bottom: 0.5rem;
+            font-weight: 700;
+            letter-spacing: 2px;
+        }
+
+        .game-title.mystery {
+            color: #505050;
+        }
+
+        .game-genre {
+            font-size: 0.95rem;
+            color: #707070;
+            margin-bottom: 1rem;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+        }
+
+        .game-description {
+            color: #a0a0a0;
+            line-height: 1.8;
+            font-size: 1rem;
+        }
+
+        .game-description.locked {
+            color: #606060;
+        }
+
         .about {
             padding: 8rem 4rem;
             max-width: 1400px;
             margin: 0 auto;
-            background: linear-gradient(180deg, rgba(0, 0, 0, 0) 0%, rgba(20, 10, 40, 0.2) 100%);
+            position: relative;
         }
 
         .about-content {
@@ -426,88 +447,85 @@
         }
 
         .about-text-container {
-            margin: 3rem 0 4rem;
+            margin: 4rem 0;
         }
 
         .about-text {
             font-size: 1.1rem;
-            line-height: 1.8;
-            color: #d4d0e6;
+            line-height: 1.9;
+            color: #b0b0b0;
             margin-bottom: 1.5rem;
         }
 
         .about-text strong {
-            color: #b8a8ff;
+            color: #ffffff;
             font-weight: 600;
         }
 
         .features-grid {
             display: grid;
             grid-template-columns: repeat(auto-fit, minmax(320px, 1fr));
-            gap: 3rem;
+            gap: 2.5rem;
             margin-top: 4rem;
         }
 
         .feature-card {
-            background: rgba(255, 255, 255, 0.03);
+            background: rgba(20, 20, 20, 0.6);
             padding: 3rem;
-            border-radius: 20px;
-            border: 1px solid rgba(255, 255, 255, 0.05);
-            transition: all 0.4s cubic-bezier(0.34, 1.56, 0.64, 1);
-            backdrop-filter: blur(10px);
+            border: 1px solid rgba(255, 255, 255, 0.1);
+            transition: all 0.4s ease;
             position: relative;
-            overflow: hidden;
         }
 
-        .feature-card::before {
+        .feature-card::after {
             content: '';
             position: absolute;
             top: 0;
             left: 0;
-            right: 0;
-            height: 3px;
-            background: linear-gradient(90deg, transparent, #667eea, transparent);
-            opacity: 0;
-            transition: opacity 0.4s ease;
+            width: 3px;
+            height: 0;
+            background: linear-gradient(180deg, #dc2626, #2563eb);
+            transition: height 0.4s ease;
         }
 
-        .feature-card:hover::before {
-            opacity: 1;
+        .feature-card:hover::after {
+            height: 100%;
         }
 
         .feature-card:hover {
-            transform: translateY(-10px);
-            border-color: rgba(102, 126, 234, 0.3);
-            box-shadow: 0 20px 60px rgba(102, 126, 234, 0.2);
-            background: rgba(255, 255, 255, 0.05);
+            transform: translateY(-5px);
+            border-color: rgba(255, 255, 255, 0.2);
+            box-shadow: 0 10px 40px rgba(0, 0, 0, 0.4);
+            background: rgba(20, 20, 20, 0.8);
         }
 
         .feature-icon {
             font-size: 3rem;
             margin-bottom: 1.5rem;
             display: block;
-            filter: drop-shadow(0 0 20px rgba(102, 126, 234, 0.5));
         }
 
         .feature-title {
+            font-family: 'Orbitron', sans-serif;
             font-size: 1.5rem;
             margin-bottom: 1rem;
-            color: #fff;
-            font-weight: 600;
+            color: #ffffff;
+            font-weight: 700;
+            letter-spacing: 1px;
         }
 
         .feature-description {
-            color: #999;
+            color: #a0a0a0;
             line-height: 1.8;
+            font-size: 1rem;
         }
 
         footer {
             padding: 4rem;
             text-align: center;
-            border-top: 1px solid rgba(255, 255, 255, 0.05);
+            border-top: 1px solid rgba(255, 255, 255, 0.1);
             margin-top: 4rem;
-            background: rgba(10, 10, 10, 0.5);
-            backdrop-filter: blur(20px);
+            background: rgba(10, 10, 10, 0.8);
         }
 
         .social-links {
@@ -519,53 +537,147 @@
         }
 
         .social-links a {
-            color: #667eea;
+            color: #ffffff;
             text-decoration: none;
-            font-size: 1.1rem;
-            padding: 0.8rem 1.5rem;
-            background: rgba(102, 126, 234, 0.1);
-            border-radius: 10px;
-            transition: all 0.4s cubic-bezier(0.34, 1.56, 0.64, 1);
-            border: 1px solid rgba(102, 126, 234, 0.2);
+            font-size: 1rem;
+            padding: 0.9rem 2rem;
+            background: transparent;
+            border: 1px solid rgba(255, 255, 255, 0.2);
+            transition: all 0.3s ease;
+            font-weight: 600;
+            letter-spacing: 1px;
         }
 
         .social-links a:hover {
-            background: linear-gradient(135deg, #667eea, #764ba2);
-            color: white;
-            transform: translateY(-5px);
-            box-shadow: 0 10px 30px rgba(102, 126, 234, 0.4);
+            background: #dc2626;
+            border-color: #dc2626;
+            transform: translateY(-3px);
+            box-shadow: 0 10px 30px rgba(220, 38, 38, 0.6);
+            text-shadow: 0 0 10px rgba(255, 255, 255, 0.5);
+        }
+
+        /* Terminal Windows */
+        .terminal-window {
+            position: fixed;
+            background: rgba(0, 0, 0, 0.95);
+            border: 2px solid #dc2626;
+            box-shadow: 0 0 30px rgba(220, 38, 38, 0.5);
+            font-family: 'IBM Plex Mono', monospace;
+            z-index: 100;
+            animation: terminalFloat 6s ease-in-out infinite;
+            pointer-events: none;
+        }
+
+        .terminal-header {
+            background: #dc2626;
+            padding: 0.5rem 1rem;
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+        }
+
+        .terminal-dot {
+            width: 12px;
+            height: 12px;
+            border-radius: 50%;
+            background: #000;
+        }
+
+        .terminal-title {
+            color: #fff;
+            font-size: 0.8rem;
+            font-weight: 600;
+        }
+
+        .terminal-body {
+            padding: 1rem;
+            font-size: 0.85rem;
+            color: #00ff00;
+        }
+
+        .terminal-line {
+            margin: 0.3rem 0;
+            display: flex;
+            align-items: center;
+        }
+
+        .terminal-prompt {
+            color: #dc2626;
+            margin-right: 0.5rem;
+        }
+
+        .terminal-1 {
+            top: 15%;
+            right: 5%;
+            width: 280px;
+        }
+
+        .terminal-2 {
+            bottom: 20%;
+            left: 5%;
+            width: 300px;
+        }
+
+        .terminal-3 {
+            top: 60%;
+            right: 8%;
+            width: 250px;
+        }
+
+        @keyframes terminalFloat {
+            0%, 100% { transform: translateY(0px); }
+            50% { transform: translateY(-20px); }
+        }
+
+        .terminal-cursor {
+            display: inline-block;
+            width: 8px;
+            height: 14px;
+            background: #00ff00;
+            animation: blink 1s step-end infinite;
+            margin-left: 2px;
+        }
+
+        @keyframes blink {
+            0%, 50% { opacity: 1; }
+            51%, 100% { opacity: 0; }
         }
 
         .copyright {
-            color: #666;
+            color: #707070;
             font-size: 0.9rem;
         }
 
         @media (max-width: 1024px) {
             .hero-title {
-                font-size: 3.5rem;
+                font-size: 4rem;
             }
 
             .header {
-                padding: 2rem;
+                padding: 1.5rem 2rem;
             }
 
             .games-section, .about {
                 padding: 4rem 2rem;
             }
+
+            .games-grid {
+                grid-template-columns: 1fr;
+            }
         }
 
         @media (max-width: 768px) {
             .hero-title {
-                font-size: 2.5rem;
+                font-size: 3rem;
+                letter-spacing: 4px;
             }
 
             .nav-links {
                 display: none;
             }
 
-            .games-grid {
-                grid-template-columns: 1fr;
+            .section-title {
+                font-size: 3rem;
             }
         }
     </style>
@@ -574,59 +686,134 @@
     <canvas id="particle-canvas"></canvas>
     <div class="bg-gradient"></div>
 
+    <!-- Floating Terminal Windows -->
+    <div class="terminal-window terminal-1">
+        <div class="terminal-header">
+            <div class="terminal-dot"></div>
+            <div class="terminal-dot"></div>
+            <div class="terminal-dot"></div>
+            <div class="terminal-title">system.log</div>
+        </div>
+        <div class="terminal-body">
+            <div class="terminal-line">
+                <span class="terminal-prompt">&gt;</span>
+                <span>loading_world.exe</span>
+            </div>
+            <div class="terminal-line">
+                <span class="terminal-prompt">&gt;</span>
+                <span>status: active</span>
+            </div>
+            <div class="terminal-line">
+                <span class="terminal-prompt">&gt;</span>
+                <span>shadows_detected<span class="terminal-cursor"></span></span>
+            </div>
+        </div>
+    </div>
+
+    <div class="terminal-window terminal-2">
+        <div class="terminal-header">
+            <div class="terminal-dot"></div>
+            <div class="terminal-dot"></div>
+            <div class="terminal-dot"></div>
+            <div class="terminal-title">dev_console</div>
+        </div>
+        <div class="terminal-body">
+            <div class="terminal-line">
+                <span class="terminal-prompt">&gt;</span>
+                <span style="color: #dc2626;">ERROR: sleep.not_found</span>
+            </div>
+            <div class="terminal-line">
+                <span class="terminal-prompt">&gt;</span>
+                <span>compile_dreams()</span>
+            </div>
+            <div class="terminal-line">
+                <span class="terminal-prompt">&gt;</span>
+                <span style="color: #fff;">building_worlds...</span>
+            </div>
+        </div>
+    </div>
+
+    <div class="terminal-window terminal-3">
+        <div class="terminal-header">
+            <div class="terminal-dot"></div>
+            <div class="terminal-dot"></div>
+            <div class="terminal-dot"></div>
+            <div class="terminal-title">runtime.exe</div>
+        </div>
+        <div class="terminal-body">
+            <div class="terminal-line">
+                <span class="terminal-prompt">&gt;</span>
+                <span style="color: #2563eb;">init_story()</span>
+            </div>
+            <div class="terminal-line">
+                <span class="terminal-prompt">&gt;</span>
+                <span style="color: #fff;">player: ready</span>
+            </div>
+            <div class="terminal-line">
+                <span class="terminal-prompt">&gt;</span>
+                <span>begin_journey<span class="terminal-cursor"></span></span>
+            </div>
+        </div>
+    </div>
+
     <div class="content">
         <header class="header" id="header">
             <div class="logo">SOLO.PRODIGY</div>
             <nav class="nav-links">
-                <a href="#games">Games</a>
-                <a href="#about">About</a>
-                <a href="https://soloprodigydev.carrd.co/" target="_blank">Contact</a>
-                <a href="https://github.com/soloprodigydev" target="_blank">GitHub</a>
+                <a href="#games">GAMES</a>
+                <a href="#about">ABOUT</a>
+                <a href="https://soloprodigydev.carrd.co/" target="_blank">CONTACT</a>
+                <a href="https://github.com/soloprodigydev" target="_blank">GITHUB</a>
             </nav>
         </header>
 
         <section class="hero">
             <div class="hero-glow"></div>
             <div class="hero-content">
+                <div class="hero-label">INDEPENDENT GAME DEVELOPER</div>
                 <h1 class="hero-title">SOLO.PRODIGY</h1>
-                <p class="hero-subtitle">Independent Game Developer • Creating Immersive Experiences</p>
+                <p class="hero-subtitle">Crafting immersive story-driven experiences, one world at a time.</p>
             </div>
         </section>
 
         <section class="games-section" id="games">
-            <h2 class="section-title">Games</h2>
-            <p class="section-subtitle">Current and upcoming projects</p>
+            <div class="section-header">
+                <div class="section-label">PORTFOLIO</div>
+                <h2 class="section-title">PROJECTS</h2>
+                <p class="section-subtitle">Current and upcoming narrative experiences</p>
+            </div>
             
             <div class="games-grid">
                 <!-- Shadewalker -->
                 <div class="game-card" onclick="window.location.href='./shadewalker'">
                     <div class="game-showcase">
-                        <div class="showcase-particles"></div>
+                        <div class="showcase-overlay"></div>
                         <img src="./shadewalker/icon.png" alt="Shadewalker" class="showcase-icon">
                     </div>
                     <div class="game-info">
                         <span class="game-tag">IN DEVELOPMENT</span>
-                        <h3 class="game-title">Shadewalker</h3>
-                        <p class="game-genre">Dark Fantasy • Exploration Adventure</p>
+                        <h3 class="game-title">SHADEWALKER</h3>
+                        <p class="game-genre">Dark Fantasy • Story Exploration</p>
                         <p class="game-description">
                             Venture into a world consumed by shadows. Explore hauntingly beautiful environments, 
-                            uncover ancient mysteries, and navigate through darkness where every step reveals new secrets.
+                            uncover ancient mysteries, and immerse yourself in a narrative-driven adventure where 
+                            every step reveals new secrets.
                         </p>
                     </div>
                 </div>
 
                 <!-- Medieval Knight Game -->
-                <div class="game-card locked">
+                <div class="game-card locked medieval-card">
                     <div class="game-showcase medieval">
-                        <div class="showcase-particles"></div>
+                        <div class="showcase-overlay"></div>
                         <div class="mystery-icon">⚔️</div>
                         <div class="lock-icon">🔒</div>
                     </div>
                     <div class="game-info">
-                        <span class="game-tag locked">COMING SOON</span>
-                        <h3 class="game-title mystery">Untitled Knight Project</h3>
-                        <p class="game-genre">Medieval Fantasy • TBA</p>
-                        <p class="game-description">
+                        <span class="game-tag medieval">COMING SOON</span>
+                        <h3 class="game-title">UNTITLED KNIGHT PROJECT</h3>
+                        <p class="game-genre">Medieval Fantasy • Story Driven</p>
+                        <p class="game-description locked">
                             A new medieval adventure is being forged. Details to be revealed soon...
                         </p>
                     </div>
@@ -635,15 +822,15 @@
                 <!-- Mystery Game 3 -->
                 <div class="game-card locked">
                     <div class="game-showcase">
-                        <div class="showcase-particles"></div>
-                        <div class="mystery-icon">❓</div>
+                        <div class="showcase-overlay"></div>
+                        <div class="mystery-icon">?</div>
                         <div class="lock-icon">🔒</div>
                     </div>
                     <div class="game-info">
-                        <span class="game-tag locked">UPCOMING</span>
-                        <h3 class="game-title mystery">Mystery Project</h3>
-                        <p class="game-genre">Genre Unknown • TBA</p>
-                        <p class="game-description">
+                        <span class="game-tag blue">UPCOMING</span>
+                        <h3 class="game-title mystery">MYSTERY PROJECT</h3>
+                        <p class="game-genre">Genre Unknown • Story Driven</p>
+                        <p class="game-description locked">
                             Something new is in the works. Stay tuned for announcements...
                         </p>
                     </div>
@@ -653,11 +840,14 @@
 
         <section class="about" id="about">
             <div class="about-content">
-                <h2 class="section-title">About the Developer</h2>
-                <p class="section-subtitle">The story behind the games</p>
+                <div class="section-header">
+                    <div class="section-label">BACKGROUND</div>
+                    <h2 class="section-title">ABOUT</h2>
+                    <p class="section-subtitle">The story behind the games</p>
+                </div>
 
                 <div class="about-text-container">
-                    <p class="about-text"><strong>Solo.Prodigy</strong> is an independent game developer who just really likes making cool stuff for people to play. His goal is simple: create fun and enjoyable games that players actually feel are worth buying. Nothing fancy. Just good vibes and good gameplay.</p>
+                    <p class="about-text"><strong>Solo.Prodigy</strong> is an independent game developer who just really likes making cool stuff for people to play. His goal is simple: create fun and enjoyable story-driven experiences that players actually feel are worth buying. Nothing fancy. Just good vibes and immersive narratives.</p>
 
                     <p class="about-text">Before starting Shadewalker he made a couple of absolutely legendary school projects: Serein and OverStory (DEFINITELY NOT AN UNDERTALE RIPOFF), both on itch.io, both 3D, and both powered by an unhealthy amount of copyrighted assets because he was too lazy to make his own at the time (Still is). Those projects will not be going professional anytime soon, but they taught him a lot about game dev and how not to get sued.</p>
 
@@ -668,22 +858,22 @@
 
                 <div class="features-grid">
                     <div class="feature-card">
-                        <span class="feature-icon">🎮</span>
-                        <h3 class="feature-title">Player Experience First</h3>
+                        <span class="feature-icon">📖</span>
+                        <h3 class="feature-title">STORY FIRST</h3>
                         <p class="feature-description">
-                            Every mechanic is designed to be fun, responsive, and satisfying. No fluff, just pure gaming joy.
+                            Every game is built around deep, immersive narratives that pull you into their world and refuse to let go.
                         </p>
                     </div>
                     <div class="feature-card">
-                        <span class="feature-icon">🌙</span>
-                        <h3 class="feature-title">Atmospheric Worlds</h3>
+                        <span class="feature-icon">🌌</span>
+                        <h3 class="feature-title">WORLD BUILDING</h3>
                         <p class="feature-description">
-                            Immerse yourself in carefully crafted environments that tell stories through exploration and discovery.
+                            Meticulously crafted environments where every corner tells a story and atmosphere is everything.
                         </p>
                     </div>
                     <div class="feature-card">
-                        <span class="feature-icon">✨</span>
-                        <h3 class="feature-title">Made with Passion</h3>
+                        <span class="feature-icon">💚</span>
+                        <h3 class="feature-title">PASSION DRIVEN</h3>
                         <p class="feature-description">
                             Built from the ground up by an indie dev who genuinely cares about creating quality experiences.
                         </p>
@@ -694,10 +884,10 @@
 
         <footer>
             <div class="social-links">
-                <a href="https://soloprodigydev.carrd.co/" target="_blank">📧 Contact</a>
-                <a href="https://github.com/soloprodigydev" target="_blank">💻 GitHub</a>
+                <a href="https://soloprodigydev.carrd.co/" target="_blank">CONTACT</a>
+                <a href="https://github.com/soloprodigydev" target="_blank">GITHUB</a>
             </div>
-            <p class="copyright">&copy; 2025 Solo Prodigy Dev. All rights reserved.</p>
+            <p class="copyright">© 2025 Solo Prodigy Dev. All rights reserved.</p>
         </footer>
     </div>
 
@@ -708,7 +898,7 @@
         canvas.height = window.innerHeight;
 
         const particles = [];
-        const particleCount = 80;
+        const particleCount = 60;
 
         class Particle {
             constructor() {
@@ -721,8 +911,15 @@
                 this.size = Math.random() * 2 + 0.5;
                 this.speedY = Math.random() * 0.5 + 0.1;
                 this.speedX = (Math.random() - 0.5) * 0.3;
-                this.opacity = Math.random() * 0.4 + 0.1;
-                this.color = `rgba(${102 + Math.random() * 30}, ${126 + Math.random() * 30}, ${234}, ${this.opacity})`;
+                this.opacity = Math.random() * 0.3 + 0.1;
+                
+                const colors = [
+                    [220, 38, 38],
+                    [37, 99, 235],
+                    [255, 255, 255]
+                ];
+                const color = colors[Math.floor(Math.random() * colors.length)];
+                this.color = `rgba(${color[0]}, ${color[1]}, ${color[2]}, ${this.opacity})`;
             }
 
             update() {
@@ -772,16 +969,6 @@
             }
         });
 
-        document.addEventListener('mousemove', (e) => {
-            const moveX = (e.clientX - window.innerWidth / 2) * 0.01;
-            const moveY = (e.clientY - window.innerHeight / 2) * 0.01;
-            
-            const heroGlow = document.querySelector('.hero-glow');
-            if (heroGlow) {
-                heroGlow.style.transform = `translate(calc(-50% + ${moveX}px), calc(-50% + ${moveY}px))`;
-            }
-        });
-
         window.addEventListener('resize', () => {
             canvas.width = window.innerWidth;
             canvas.height = window.innerHeight;
@@ -798,6 +985,13 @@
                     });
                 }
             });
+        });
+
+        document.querySelectorAll('.game-card.locked').forEach(card => {
+            card.onclick = (e) => {
+                e.preventDefault();
+                e.stopPropagation();
+            };
         });
     </script>
 </body>
