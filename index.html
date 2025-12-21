@@ -21,7 +21,6 @@
             overflow-x: hidden;
         }
 
-        /* Animated particle background */
         #particle-canvas {
             position: fixed;
             top: 0;
@@ -32,7 +31,6 @@
             pointer-events: none;
         }
 
-        /* Gradient overlay */
         .bg-gradient {
             position: fixed;
             top: 0;
@@ -56,7 +54,6 @@
             z-index: 1;
         }
 
-        /* Header */
         .header {
             padding: 2rem 4rem;
             display: flex;
@@ -132,7 +129,6 @@
             width: 80%;
         }
 
-        /* Hero Section */
         .hero {
             min-height: 100vh;
             display: flex;
@@ -166,137 +162,125 @@
         }
 
         .hero-content {
-            max-width: 1400px;
-            width: 100%;
-            display: grid;
-            grid-template-columns: 1fr 1fr;
-            gap: 4rem;
-            align-items: center;
+            max-width: 1200px;
+            text-align: center;
             position: relative;
             z-index: 2;
         }
 
-        .hero-text {
-            animation: fadeInLeft 1s ease;
-        }
-
-        .game-tag {
-            display: inline-flex;
-            align-items: center;
-            gap: 0.5rem;
-            padding: 0.6rem 1.5rem;
-            background: rgba(102, 126, 234, 0.15);
-            border: 1px solid rgba(102, 126, 234, 0.4);
-            border-radius: 30px;
-            font-size: 0.85rem;
-            color: #667eea;
-            margin-bottom: 2rem;
-            font-weight: 600;
-            letter-spacing: 1px;
-            animation: tagPulse 2s ease-in-out infinite;
-        }
-
-        @keyframes tagPulse {
-            0%, 100% { transform: scale(1); }
-            50% { transform: scale(1.05); }
-        }
-
         .hero-title {
-            max-width: 700px;
-            width: 100%;
-            height: auto;
-            margin: 0 auto 1.5rem;
-            filter: drop-shadow(0 0 40px rgba(102, 126, 234, 0.8));
-            animation: titleShine 3s ease-in-out infinite;
-        }
-
-        @keyframes titleShine {
-            0%, 100% { 
-                filter: drop-shadow(0 0 40px rgba(102, 126, 234, 0.8));
-            }
-            50% { 
-                filter: drop-shadow(0 0 60px rgba(102, 126, 234, 1));
-            }
+            font-size: 4.5rem;
+            font-weight: 700;
+            background: linear-gradient(135deg, #ffffff, #b8b0d4);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+            margin-bottom: 1.5rem;
+            animation: fadeInUp 1s ease;
         }
 
         .hero-subtitle {
             font-size: 1.5rem;
             color: #999;
-            margin-bottom: 1rem;
-            font-weight: 300;
-        }
-
-        .hero-description {
-            font-size: 1.1rem;
-            color: #888;
-            line-height: 1.8;
             margin-bottom: 3rem;
-            max-width: 500px;
+            animation: fadeInUp 1s ease 0.2s backwards;
         }
 
-        .cta-buttons {
-            display: flex;
-            gap: 1.5rem;
-            flex-wrap: wrap;
+        @keyframes fadeInUp {
+            from {
+                opacity: 0;
+                transform: translateY(30px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
         }
 
-        .btn-primary {
-            padding: 1.2rem 3rem;
-            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
-            color: white;
-            text-decoration: none;
-            border-radius: 50px;
-            font-weight: 600;
-            font-size: 1.1rem;
-            transition: all 0.4s cubic-bezier(0.34, 1.56, 0.64, 1);
-            display: inline-block;
+        .games-section {
+            padding: 8rem 4rem;
+            max-width: 1400px;
+            margin: 0 auto;
+        }
+
+        .section-title {
+            text-align: center;
+            font-size: 3rem;
+            margin-bottom: 1rem;
+            color: #fff;
             position: relative;
-            overflow: hidden;
+            font-weight: 700;
+            background: linear-gradient(135deg, #ffffff, #b8b0d4);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
         }
 
-        .btn-primary::before {
+        .section-subtitle {
+            text-align: center;
+            font-size: 1.2rem;
+            color: #888;
+            margin-bottom: 4rem;
+        }
+
+        .section-title::after {
+            content: '';
+            position: absolute;
+            bottom: -15px;
+            left: 50%;
+            transform: translateX(-50%);
+            width: 100px;
+            height: 4px;
+            background: linear-gradient(90deg, transparent, #667eea, transparent);
+        }
+
+        .games-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(350px, 1fr));
+            gap: 3rem;
+            margin-top: 4rem;
+        }
+
+        .game-card {
+            background: rgba(255, 255, 255, 0.03);
+            border-radius: 20px;
+            border: 1px solid rgba(255, 255, 255, 0.05);
+            overflow: hidden;
+            transition: all 0.4s cubic-bezier(0.34, 1.56, 0.64, 1);
+            cursor: pointer;
+            position: relative;
+        }
+
+        .game-card::before {
             content: '';
             position: absolute;
             top: 0;
-            left: -100%;
-            width: 100%;
-            height: 100%;
-            background: linear-gradient(90deg, transparent, rgba(255, 255, 255, 0.3), transparent);
-            transition: left 0.6s;
+            left: 0;
+            right: 0;
+            height: 3px;
+            background: linear-gradient(90deg, transparent, #667eea, transparent);
+            opacity: 0;
+            transition: opacity 0.4s ease;
         }
 
-        .btn-primary:hover::before {
-            left: 100%;
+        .game-card:hover::before {
+            opacity: 1;
         }
 
-        .btn-primary:hover {
-            transform: translateY(-4px);
-            box-shadow: 0 20px 50px rgba(102, 126, 234, 0.6);
+        .game-card:hover {
+            transform: translateY(-10px);
+            border-color: rgba(102, 126, 234, 0.3);
+            box-shadow: 0 20px 60px rgba(102, 126, 234, 0.2);
+            background: rgba(255, 255, 255, 0.05);
         }
 
-        .btn-secondary {
-            padding: 1.2rem 3rem;
-            background: transparent;
-            color: white;
-            text-decoration: none;
-            border-radius: 50px;
-            font-weight: 600;
-            font-size: 1.1rem;
-            border: 2px solid rgba(255, 255, 255, 0.2);
-            transition: all 0.4s ease;
-            display: inline-block;
+        .game-card.locked {
+            cursor: not-allowed;
+            opacity: 0.6;
         }
 
-        .btn-secondary:hover {
-            border-color: #667eea;
-            background: rgba(102, 126, 234, 0.1);
-            transform: translateY(-4px);
-        }
-
-        /* Interactive Game Showcase */
-        .hero-visual {
-            position: relative;
-            animation: fadeInRight 1s ease;
+        .game-card.locked:hover {
+            transform: translateY(-5px);
         }
 
         .game-showcase {
@@ -304,34 +288,14 @@
             width: 100%;
             aspect-ratio: 16/9;
             background: linear-gradient(135deg, #1a1a2e 0%, #0f0f1e 100%);
-            border-radius: 20px;
-            overflow: hidden;
-            box-shadow: 
-                0 30px 80px rgba(102, 126, 234, 0.3),
-                inset 0 0 100px rgba(102, 126, 234, 0.1);
-            transition: all 0.4s cubic-bezier(0.34, 1.56, 0.64, 1);
-            cursor: pointer;
-            border: 2px solid rgba(102, 126, 234, 0.2);
-        }
-
-        .game-showcase:hover {
-            transform: scale(1.02) translateY(-10px);
-            box-shadow: 
-                0 40px 100px rgba(102, 126, 234, 0.5),
-                inset 0 0 100px rgba(102, 126, 234, 0.2);
-            border-color: rgba(102, 126, 234, 0.5);
-        }
-
-        .showcase-inner {
-            position: relative;
-            width: 100%;
-            height: 100%;
             display: flex;
             align-items: center;
             justify-content: center;
-            flex-direction: column;
-            gap: 1rem;
-            padding: 2rem;
+            overflow: hidden;
+        }
+
+        .game-showcase.medieval {
+            background: linear-gradient(135deg, #2e1a1a 0%, #1e0f0f 100%);
         }
 
         .showcase-particles {
@@ -368,114 +332,91 @@
         }
 
         .showcase-icon {
-            width: 180px;
-            height: 180px;
+            width: 120px;
+            height: 120px;
             filter: drop-shadow(0 0 30px rgba(102, 126, 234, 0.8));
-            animation: iconFloat 4s ease-in-out infinite;
             transition: all 0.3s ease;
             z-index: 2;
         }
 
-        .game-showcase:hover .showcase-icon {
-            transform: scale(1.2) rotate(5deg);
+        .game-card:hover .showcase-icon {
+            transform: scale(1.1);
             filter: drop-shadow(0 0 50px rgba(102, 126, 234, 1));
         }
 
-        @keyframes iconFloat {
-            0%, 100% { transform: translateY(0px) rotate(0deg); }
-            50% { transform: translateY(-15px) rotate(3deg); }
-        }
-
-        .showcase-title {
-            width: 250px;
-            max-width: 70%;
-            filter: drop-shadow(0 0 20px rgba(102, 126, 234, 0.8));
-            z-index: 2;
-            animation: titleFloat 4s ease-in-out infinite;
-            animation-delay: 0.2s;
-            margin: 0 auto;
-        }
-
-        @keyframes titleFloat {
-            0%, 100% { transform: translateY(0px); }
-            50% { transform: translateY(-10px); }
-        }
-
-        .showcase-subtitle {
-            font-size: 0.95rem;
-            color: #999;
-            z-index: 2;
-            opacity: 0.8;
-        }
-
-        .showcase-hover-hint {
-            position: absolute;
-            bottom: 20px;
-            right: 20px;
-            font-size: 0.85rem;
-            color: rgba(102, 126, 234, 0.6);
-            z-index: 2;
-            opacity: 0;
-            transition: opacity 0.3s ease;
-        }
-
-        .game-showcase:hover .showcase-hover-hint {
-            opacity: 1;
-        }
-
-        /* Floating elements around showcase */
-        .floating-elements {
-            position: absolute;
-            width: 100%;
-            height: 100%;
-            pointer-events: none;
-        }
-
-        .float-icon {
-            position: absolute;
-            font-size: 2rem;
+        .mystery-icon {
+            font-size: 6rem;
             opacity: 0.3;
-            animation: float 6s ease-in-out infinite;
-            filter: drop-shadow(0 0 10px rgba(102, 126, 234, 0.5));
+            filter: drop-shadow(0 0 30px rgba(102, 126, 234, 0.5));
         }
 
-        .float-icon:nth-child(1) {
-            top: 10%;
-            left: -5%;
-            animation-delay: 0s;
+        .game-info {
+            padding: 2rem;
         }
 
-        .float-icon:nth-child(2) {
+        .game-tag {
+            display: inline-block;
+            padding: 0.5rem 1rem;
+            background: rgba(102, 126, 234, 0.15);
+            border: 1px solid rgba(102, 126, 234, 0.4);
+            border-radius: 20px;
+            font-size: 0.75rem;
+            color: #667eea;
+            margin-bottom: 1rem;
+            font-weight: 600;
+            letter-spacing: 1px;
+        }
+
+        .game-tag.coming-soon {
+            background: rgba(118, 75, 162, 0.15);
+            border-color: rgba(118, 75, 162, 0.4);
+            color: #764ba2;
+        }
+
+        .game-tag.locked {
+            background: rgba(150, 150, 150, 0.15);
+            border-color: rgba(150, 150, 150, 0.4);
+            color: #999;
+        }
+
+        .game-title {
+            font-size: 1.8rem;
+            color: #fff;
+            margin-bottom: 0.5rem;
+            font-weight: 600;
+        }
+
+        .game-title.mystery {
+            color: #666;
+            font-style: italic;
+        }
+
+        .game-genre {
+            font-size: 0.9rem;
+            color: #888;
+            margin-bottom: 1rem;
+        }
+
+        .game-description {
+            color: #999;
+            line-height: 1.6;
+            font-size: 0.95rem;
+        }
+
+        .lock-icon {
+            position: absolute;
             top: 50%;
-            right: -5%;
-            animation-delay: 2s;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            font-size: 4rem;
+            opacity: 0.2;
+            z-index: 3;
         }
 
-        .float-icon:nth-child(3) {
-            bottom: 10%;
-            left: -5%;
-            animation-delay: 4s;
-        }
-
-        @keyframes float {
-            0%, 100% { transform: translateY(0px) rotate(0deg); }
-            50% { transform: translateY(-30px) rotate(10deg); }
-        }
-
-        /* Features Section */
-        .features {
-            padding: 8rem 4rem;
-            max-width: 1400px;
-            margin: 0 auto;
-            position: relative;
-        }
-
-        /* About Section */
         .about {
             padding: 8rem 4rem;
             max-width: 1400px;
             margin: 0 auto;
-            position: relative;
             background: linear-gradient(180deg, rgba(0, 0, 0, 0) 0%, rgba(20, 10, 40, 0.2) 100%);
         }
 
@@ -498,37 +439,6 @@
         .about-text strong {
             color: #b8a8ff;
             font-weight: 600;
-        }
-
-        .section-title {
-            text-align: center;
-            font-size: 3rem;
-            margin-bottom: 1rem;
-            color: #fff;
-            position: relative;
-            font-weight: 700;
-            background: linear-gradient(135deg, #ffffff, #b8b0d4);
-            -webkit-background-clip: text;
-            -webkit-text-fill-color: transparent;
-            background-clip: text;
-        }
-
-        .section-subtitle {
-            text-align: center;
-            font-size: 1.2rem;
-            color: #888;
-            margin-bottom: 4rem;
-        }
-
-        .section-title::after {
-            content: '';
-            position: absolute;
-            bottom: -15px;
-            left: 50%;
-            transform: translateX(-50%);
-            width: 100px;
-            height: 4px;
-            background: linear-gradient(90deg, transparent, #667eea, transparent);
         }
 
         .features-grid {
@@ -577,12 +487,6 @@
             margin-bottom: 1.5rem;
             display: block;
             filter: drop-shadow(0 0 20px rgba(102, 126, 234, 0.5));
-            animation: iconPulse 3s ease-in-out infinite;
-        }
-
-        @keyframes iconPulse {
-            0%, 100% { transform: scale(1); }
-            50% { transform: scale(1.1); }
         }
 
         .feature-title {
@@ -597,7 +501,6 @@
             line-height: 1.8;
         }
 
-        /* Footer */
         footer {
             padding: 4rem;
             text-align: center;
@@ -638,135 +541,7 @@
             font-size: 0.9rem;
         }
 
-        /* Page Transition Overlay */
-        .page-transition {
-            position: fixed;
-            top: 0;
-            left: 0;
-            width: 100%;
-            height: 100%;
-            background: #000000;
-            z-index: 9999;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            pointer-events: none;
-            opacity: 0;
-            transition: opacity 0.6s ease;
-        }
-
-        .page-transition.active {
-            opacity: 1;
-            pointer-events: all;
-        }
-
-        .transition-content {
-            text-align: center;
-            transform: scale(0.8);
-            transition: transform 0.6s cubic-bezier(0.34, 1.56, 0.64, 1);
-        }
-
-        .page-transition.active .transition-content {
-            transform: scale(1);
-        }
-
-        .transition-icon {
-            width: 150px;
-            height: 150px;
-            margin: 0 auto 2rem;
-            filter: drop-shadow(0 0 60px rgba(102, 126, 234, 1));
-            animation: transitionSpin 1s ease-in-out;
-        }
-
-        @keyframes transitionSpin {
-            0% { 
-                transform: scale(0) rotate(0deg);
-                opacity: 0;
-            }
-            50% {
-                transform: scale(1.2) rotate(180deg);
-                opacity: 1;
-            }
-            100% { 
-                transform: scale(1) rotate(360deg);
-                opacity: 1;
-            }
-        }
-
-        .transition-title {
-            width: 400px;
-            max-width: 90%;
-            margin: 0 auto;
-            filter: drop-shadow(0 0 40px rgba(102, 126, 234, 0.8));
-            animation: fadeInUp 0.6s ease 0.3s backwards;
-        }
-
-        @keyframes fadeInUp {
-            from {
-                opacity: 0;
-                transform: translateY(30px);
-            }
-            to {
-                opacity: 1;
-                transform: translateY(0);
-            }
-        }
-
-        .transition-particles {
-            position: absolute;
-            width: 100%;
-            height: 100%;
-            overflow: hidden;
-        }
-
-        .transition-particle {
-            position: absolute;
-            width: 4px;
-            height: 4px;
-            background: rgba(102, 126, 234, 0.8);
-            border-radius: 50%;
-            animation: particleExplode 1s ease-out forwards;
-        }
-
-        @keyframes particleExplode {
-            0% {
-                transform: translate(0, 0) scale(1);
-                opacity: 1;
-            }
-            100% {
-                transform: translate(var(--tx), var(--ty)) scale(0);
-                opacity: 0;
-            }
-        }
-
-        @keyframes fadeInLeft {
-            from {
-                opacity: 0;
-                transform: translateX(-50px);
-            }
-            to {
-                opacity: 1;
-                transform: translateX(0);
-            }
-        }
-
-        @keyframes fadeInRight {
-            from {
-                opacity: 0;
-                transform: translateX(50px);
-            }
-            to {
-                opacity: 1;
-                transform: translateX(0);
-            }
-        }
-
         @media (max-width: 1024px) {
-            .hero-content {
-                grid-template-columns: 1fr;
-                gap: 3rem;
-            }
-
             .hero-title {
                 font-size: 3.5rem;
             }
@@ -775,12 +550,12 @@
                 padding: 2rem;
             }
 
-            .features {
+            .games-section, .about {
                 padding: 4rem 2rem;
             }
         }
 
-                    @media (max-width: 768px) {
+        @media (max-width: 768px) {
             .hero-title {
                 font-size: 2.5rem;
             }
@@ -789,17 +564,8 @@
                 display: none;
             }
 
-            .showcase-icon {
-                width: 120px;
-                height: 120px;
-            }
-
-            .showcase-title {
-                font-size: 1.5rem;
-            }
-
-            .about-text {
-                font-size: 1rem;
+            .games-grid {
+                grid-template-columns: 1fr;
             }
         }
     </style>
@@ -807,15 +573,6 @@
 <body>
     <canvas id="particle-canvas"></canvas>
     <div class="bg-gradient"></div>
-
-    <!-- Page Transition Overlay -->
-    <div class="page-transition" id="page-transition">
-        <div class="transition-particles" id="transition-particles"></div>
-        <div class="transition-content">
-            <img src="./shadewalker/icon.png" alt="Shadewalker" class="transition-icon">
-            <img src="./shadewalker/title.png" alt="Shadewalker" class="transition-title">
-        </div>
-    </div>
 
     <div class="content">
         <header class="header" id="header">
@@ -831,70 +588,65 @@
         <section class="hero">
             <div class="hero-glow"></div>
             <div class="hero-content">
-                <div class="hero-text">
-                    <span class="game-tag">
-                        <span style="animation: pulse 2s ease-in-out infinite;">🎮</span>
-                        NOW IN DEVELOPMENT
-                    </span>
-                    <img src="./shadewalker/title.png" alt="Shadewalker" class="hero-title">
-                    <p class="hero-subtitle">A Dark Fantasy Action-Adventure</p>
-                    <p class="hero-description">
-                        Venture into a world consumed by shadows. Master fluid combat, uncover ancient mysteries, 
-                        and explore hauntingly beautiful environments where every step could be your last.
-                    </p>
-                    <div class="cta-buttons">
-                        <a href="#" onclick="event.preventDefault(); transitionToShadewalker();" class="btn-primary">Explore the Game →</a>
-                        <a href="#" onclick="event.preventDefault(); transitionToShadewalker();" class="btn-secondary">Learn More</a>
-                    </div>
-                </div>
-
-                <div class="hero-visual">
-                    <div class="game-showcase" onclick="transitionToShadewalker()">
-                        <div class="showcase-particles" id="showcase-particles"></div>
-                        <div class="showcase-inner">
-                            <img src="./shadewalker/icon.png" alt="Shadewalker" class="showcase-icon">
-                            <img src="./shadewalker/title.png" alt="Shadewalker" class="showcase-title">
-                        </div>
-                        <div class="showcase-hover-hint">Click to explore →</div>
-                    </div>
-                    <div class="floating-elements">
-                        <span class="float-icon">⚔️</span>
-                        <span class="float-icon">🌙</span>
-                        <span class="float-icon">✨</span>
-                    </div>
-                </div>
+                <h1 class="hero-title">SOLO.PRODIGY</h1>
+                <p class="hero-subtitle">Independent Game Developer • Creating Immersive Experiences</p>
             </div>
         </section>
 
-        <section class="features" id="games">
-            <h2 class="section-title">What Awaits You</h2>
-            <p class="section-subtitle">Experience the next generation of indie action-adventure</p>
-            <div class="features-grid">
-                <div class="feature-card">
-                    <span class="feature-icon">⚔️</span>
-                    <h3 class="feature-title">Visceral Combat</h3>
-                    <p class="feature-description">
-                        Master a deep, responsive combat system where every strike, parry, and dodge matters. 
-                        Chain attacks and unleash devastating combinations.
-                    </p>
+        <section class="games-section" id="games">
+            <h2 class="section-title">Games</h2>
+            <p class="section-subtitle">Current and upcoming projects</p>
+            
+            <div class="games-grid">
+                <!-- Shadewalker -->
+                <div class="game-card" onclick="window.location.href='./shadewalker'">
+                    <div class="game-showcase">
+                        <div class="showcase-particles"></div>
+                        <img src="./shadewalker/icon.png" alt="Shadewalker" class="showcase-icon">
+                    </div>
+                    <div class="game-info">
+                        <span class="game-tag">IN DEVELOPMENT</span>
+                        <h3 class="game-title">Shadewalker</h3>
+                        <p class="game-genre">Dark Fantasy • Exploration Adventure</p>
+                        <p class="game-description">
+                            Venture into a world consumed by shadows. Explore hauntingly beautiful environments, 
+                            uncover ancient mysteries, and navigate through darkness where every step reveals new secrets.
+                        </p>
+                    </div>
                 </div>
 
-                <div class="feature-card">
-                    <span class="feature-icon">🌙</span>
-                    <h3 class="feature-title">Dark Atmosphere</h3>
-                    <p class="feature-description">
-                        Explore a beautifully haunting world shrouded in mystery. Uncover secrets hidden in 
-                        the darkness and piece together a forgotten history.
-                    </p>
+                <!-- Medieval Knight Game -->
+                <div class="game-card locked">
+                    <div class="game-showcase medieval">
+                        <div class="showcase-particles"></div>
+                        <div class="mystery-icon">⚔️</div>
+                        <div class="lock-icon">🔒</div>
+                    </div>
+                    <div class="game-info">
+                        <span class="game-tag locked">COMING SOON</span>
+                        <h3 class="game-title mystery">Untitled Knight Project</h3>
+                        <p class="game-genre">Medieval Fantasy • TBA</p>
+                        <p class="game-description">
+                            A new medieval adventure is being forged. Details to be revealed soon...
+                        </p>
+                    </div>
                 </div>
 
-                <div class="feature-card">
-                    <span class="feature-icon">✨</span>
-                    <h3 class="feature-title">Epic Journey</h3>
-                    <p class="feature-description">
-                        Traverse interconnected environments filled with challenges, hidden paths, and 
-                        powerful adversaries. Your legend awaits.
-                    </p>
+                <!-- Mystery Game 3 -->
+                <div class="game-card locked">
+                    <div class="game-showcase">
+                        <div class="showcase-particles"></div>
+                        <div class="mystery-icon">❓</div>
+                        <div class="lock-icon">🔒</div>
+                    </div>
+                    <div class="game-info">
+                        <span class="game-tag locked">UPCOMING</span>
+                        <h3 class="game-title mystery">Mystery Project</h3>
+                        <p class="game-genre">Genre Unknown • TBA</p>
+                        <p class="game-description">
+                            Something new is in the works. Stay tuned for announcements...
+                        </p>
+                    </div>
                 </div>
             </div>
         </section>
@@ -917,16 +669,16 @@
                 <div class="features-grid">
                     <div class="feature-card">
                         <span class="feature-icon">🎮</span>
-                        <h3 class="feature-title">Gameplay First</h3>
+                        <h3 class="feature-title">Player Experience First</h3>
                         <p class="feature-description">
                             Every mechanic is designed to be fun, responsive, and satisfying. No fluff, just pure gaming joy.
                         </p>
                     </div>
                     <div class="feature-card">
                         <span class="feature-icon">🌙</span>
-                        <h3 class="feature-title">Dark Fantasy</h3>
+                        <h3 class="feature-title">Atmospheric Worlds</h3>
                         <p class="feature-description">
-                            Immerse yourself in a shadowy world where light and darkness are your greatest allies.
+                            Immerse yourself in carefully crafted environments that tell stories through exploration and discovery.
                         </p>
                     </div>
                     <div class="feature-card">
@@ -950,7 +702,6 @@
     </div>
 
     <script>
-        // Particle system
         const canvas = document.getElementById('particle-canvas');
         const ctx = canvas.getContext('2d');
         canvas.width = window.innerWidth;
@@ -1012,18 +763,6 @@
 
         animate();
 
-        // Showcase particles
-        const showcaseParticles = document.getElementById('showcase-particles');
-        for (let i = 0; i < 20; i++) {
-            const particle = document.createElement('div');
-            particle.className = 'particle';
-            particle.style.left = Math.random() * 100 + '%';
-            particle.style.animationDelay = Math.random() * 8 + 's';
-            particle.style.animationDuration = (Math.random() * 4 + 6) + 's';
-            showcaseParticles.appendChild(particle);
-        }
-
-        // Header scroll effect
         window.addEventListener('scroll', () => {
             const header = document.getElementById('header');
             if (window.scrollY > 100) {
@@ -1033,7 +772,6 @@
             }
         });
 
-        // Parallax effect
         document.addEventListener('mousemove', (e) => {
             const moveX = (e.clientX - window.innerWidth / 2) * 0.01;
             const moveY = (e.clientY - window.innerHeight / 2) * 0.01;
@@ -1042,55 +780,13 @@
             if (heroGlow) {
                 heroGlow.style.transform = `translate(calc(-50% + ${moveX}px), calc(-50% + ${moveY}px))`;
             }
-
-            // Parallax for floating icons
-            const floatIcons = document.querySelectorAll('.float-icon');
-            floatIcons.forEach((icon, index) => {
-                const speed = (index + 1) * 0.02;
-                icon.style.transform = `translate(${moveX * speed}px, ${moveY * speed}px)`;
-            });
         });
 
-        // Resize canvas
         window.addEventListener('resize', () => {
             canvas.width = window.innerWidth;
             canvas.height = window.innerHeight;
         });
 
-        // Page Transition Function
-        function transitionToShadewalker() {
-            const transition = document.getElementById('page-transition');
-            const particlesContainer = document.getElementById('transition-particles');
-            
-            // Create explosion particles
-            for (let i = 0; i < 30; i++) {
-                const particle = document.createElement('div');
-                particle.className = 'transition-particle';
-                
-                const angle = (Math.PI * 2 * i) / 30;
-                const distance = 300 + Math.random() * 200;
-                const tx = Math.cos(angle) * distance;
-                const ty = Math.sin(angle) * distance;
-                
-                particle.style.left = '50%';
-                particle.style.top = '50%';
-                particle.style.setProperty('--tx', tx + 'px');
-                particle.style.setProperty('--ty', ty + 'px');
-                particle.style.animationDelay = (Math.random() * 0.2) + 's';
-                
-                particlesContainer.appendChild(particle);
-            }
-            
-            // Activate transition
-            transition.classList.add('active');
-            
-            // Navigate after animation
-            setTimeout(() => {
-                window.location.href = './shadewalker';
-            }, 1200);
-        }
-
-        // Smooth scroll
         document.querySelectorAll('a[href^="#"]').forEach(anchor => {
             anchor.addEventListener('click', function (e) {
                 e.preventDefault();
