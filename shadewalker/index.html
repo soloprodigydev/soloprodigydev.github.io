@@ -4,6 +4,7 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Shadewalker – Master the Shadows</title>
+    <link rel="icon" type="image/png" href="icon.png">
 
 <style>
     * {
@@ -660,7 +661,7 @@
         <div class="hero-content">
             <img src="icon.png" alt="Shadewalker" class="hero-icon" id="hero-icon">
             <img src="title.png" alt="Shadewalker" class="hero-title">
-            <p class="hero-subtitle">A dark fantasy action-platformer about splitting your shadow and mastering the night.</p>
+            <p class="hero-subtitle">A dark fantasy story-driven platformer about splitting your shadow and mastering the night.</p>
             <div class="hero-buttons">
                 <a href="#" class="btn btn-primary">Steam Page (Coming Soon)</a>
                 <a href="eula.html" class="btn btn-secondary">Read the EULA</a>
@@ -686,25 +687,25 @@
 
             <p class="about-text">You play as <strong>Draxis Veylor</strong>, a man feared and mythologized as the Shadewalker — a figure who moves with the darkness, hunts in silence, and survives where others burn. Draxis carries a rare curse that lets him separate from his own shadow, creating a living double born from pure darkness.</p>
 
-            <p class="about-text">This ability, known as the <strong>Shadow Split</strong>, is the heart of the game: a fast, mind-bending mechanic that lets players control both body and shadow to outmaneuver enemies, solve dual-perspective puzzles, and perform impossible assassinations. Shadewalker blends stealth, action, and atmospheric exploration into a world where every ray of light is a threat — and mastering your own shadow is the only way to survive.</p>
+            <p class="about-text">This ability, known as the <strong>Shadow Split</strong>, is the heart of the game: a fast, mind-bending mechanic that lets players control both body and shadow to outmaneuver enemies, solve dual-perspective puzzles, and navigate impossible challenges. Shadewalker blends stealth, exploration, and atmospheric storytelling into a world where every ray of light is a threat — and mastering your own shadow is the only way to survive.</p>
 
             <p class="about-text">Shadewalker is a 2D platformer developed by <strong>Solo.Prodigy</strong> using the Godot game engine. This project draws inspiration from two legendary titles: <em>Undertale</em> by Toby Fox and <em>Hollow Knight</em> by Team Cherry. Taking the best of both worlds — tight platforming, memorable NPC interactions, and atmospheric storytelling — Shadewalker weaves them together with its own dark, original twist.</p>
 
             <div class="features-grid">
                 <div class="feature-card">
-                    <span class="feature-icon">⚔️</span>
+                    <span class="feature-icon">🌑</span>
                     <h3>Shadow Split Mechanic</h3>
-                    <p>Control both Draxis and his shadow simultaneously. Solve puzzles, flank enemies, and pull off impossible stealth kills by mastering dual perspectives.</p>
+                    <p>Control both Draxis and his shadow simultaneously. Solve puzzles, outmaneuver enemies, and navigate impossible challenges by mastering dual perspectives.</p>
                 </div>
                 <div class="feature-card">
-                    <span class="feature-icon">🌑</span>
+                    <span class="feature-icon">☀️</span>
                     <h3>Light is Death</h3>
                     <p>In a world where sunlight burns flesh, every illuminated space is a deadly trap. Move through shadows, manipulate darkness, and fear the dawn.</p>
                 </div>
                 <div class="feature-card">
-                    <span class="feature-icon">🗡️</span>
-                    <h3>Stealth & Action</h3>
-                    <p>Hunt in silence or fight with ferocity. Shadewalker rewards both patient predators and aggressive strikers with tight, responsive combat.</p>
+                    <span class="feature-icon">🗝️</span>
+                    <h3>Stealth & Strategy</h3>
+                    <p>Navigate environments with careful timing and precision. Shadewalker rewards patient players who think before they move.</p>
                 </div>
                 <div class="feature-card">
                     <span class="feature-icon">🏛️</span>
@@ -712,9 +713,9 @@
                     <p>Explore a hauntingly beautiful realm filled with mysterious NPCs, ancient ruins, and secrets hidden in every shadow.</p>
                 </div>
                 <div class="feature-card">
-                    <span class="feature-icon">🎭</span>
-                    <h3>Myth & Legend</h3>
-                    <p>Draxis is no hero — he's a cursed wanderer, a ghost story whispered in fear. Uncover the truth behind the Shadewalker mythos.</p>
+                    <span class="feature-icon">📖</span>
+                    <h3>Story-Driven Experience</h3>
+                    <p>Draxis is no hero — he's a cursed wanderer, a ghost story whispered in fear. Uncover the truth behind the Shadewalker mythos through rich narrative.</p>
                 </div>
                 <div class="feature-card">
                     <span class="feature-icon">🎨</span>
@@ -851,4 +852,9 @@
     const iconModal = document.getElementById('icon-modal');
     const modalIcon = document.getElementById('modal-icon');
 
-    heroIcon.addEventListener('click', ()
+    heroIcon.addEventListener('click', () => {
+        iconModal.classList.add('active');
+    });
+
+    iconModal.addEventListener('click', () => {
+        iconModal.classList.
