@@ -1,0 +1,468 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>PROLARIS – Set the Standard.</title>
+    <link rel="icon" type="image/png" href="splash.png">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Syne:wght@400;600;700;800&family=DM+Mono:ital,wght@0,400;0,500;1,400&display=swap" rel="stylesheet">
+    <style>
+        :root {
+            --void:     #020106;
+            --chrome:   #d4d4e8;
+            --chrome-2: #9898b8;
+            --purple:   #7c3aed;
+            --purple-hi:#a855f7;
+            --flare:    #c084fc;
+            --dim:      #4a4466;
+            --text:     #e8e4f4;
+            --muted:    #6b6488;
+        }
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+        html { scroll-behavior: smooth; }
+        body {
+            background: var(--void);
+            color: var(--text);
+            font-family: 'Syne', sans-serif;
+            overflow-x: hidden;
+            cursor: crosshair;
+        }
+        a, button { cursor: pointer; }
+
+        #bg-canvas { position: fixed; inset: 0; z-index: 0; pointer-events: none; }
+
+        .void-nebula {
+            position: fixed; inset: 0; z-index: 0; pointer-events: none;
+            background:
+                radial-gradient(ellipse 60% 50% at 20% 15%, rgba(90,20,180,0.18) 0%, transparent 100%),
+                radial-gradient(ellipse 40% 60% at 80% 80%, rgba(110,30,200,0.14) 0%, transparent 100%),
+                radial-gradient(ellipse 80% 40% at 50% 50%, rgba(40,10,100,0.08) 0%, transparent 100%),
+                radial-gradient(ellipse 50% 35% at 70% 20%, rgba(180,80,255,0.10) 0%, transparent 100%);
+            animation: voidShift 30s ease-in-out infinite alternate;
+        }
+        @keyframes voidShift {
+            0%   { opacity: 0.7; transform: scale(1); }
+            100% { opacity: 1;   transform: scale(1.04); }
+        }
+
+        .grain {
+            position: fixed; inset: 0; z-index: 0; pointer-events: none; opacity: 0.025;
+            background-image: repeating-linear-gradient(0deg, rgba(255,255,255,0.04) 0px, rgba(255,255,255,0.04) 1px, transparent 1px, transparent 3px);
+        }
+
+        .content { position: relative; z-index: 1; }
+
+        /* NAV */
+        nav {
+            position: fixed; top: 0; left: 0; right: 0; z-index: 1000;
+            border-bottom: 1px solid transparent;
+            transition: border-color 0.4s, background 0.4s;
+        }
+        nav.scrolled {
+            background: rgba(2,1,6,0.96);
+            border-color: rgba(124,58,237,0.2);
+            backdrop-filter: blur(20px);
+        }
+        .nav-inner {
+            max-width: 1400px; margin: 0 auto; padding: 22px 48px;
+            display: flex; justify-content: space-between; align-items: center;
+        }
+        .nav-back {
+            font-family: 'DM Mono', monospace; font-size: 11px;
+            letter-spacing: 2px; text-transform: uppercase;
+            color: var(--muted); text-decoration: none;
+            display: flex; align-items: center; gap: 10px; transition: color 0.3s;
+        }
+        .nav-back::before { content: ''; width: 28px; height: 1px; background: currentColor; transition: width 0.3s; }
+        .nav-back:hover { color: var(--chrome); }
+        .nav-back:hover::before { width: 40px; }
+        .nav-wordmark {
+            font-family: 'Syne', sans-serif; font-size: 0.95rem; font-weight: 800;
+            letter-spacing: 8px; text-transform: uppercase; color: var(--chrome-2);
+        }
+        .nav-links { display: flex; gap: 2rem; }
+        .nav-links a {
+            font-family: 'DM Mono', monospace; font-size: 11px; letter-spacing: 2px;
+            text-transform: uppercase; color: var(--muted); text-decoration: none; transition: color 0.3s;
+        }
+        .nav-links a:hover, .nav-links a.active { color: var(--flare); }
+
+        /* HERO */
+        #home {
+            min-height: 100vh; position: relative;
+            display: flex; flex-direction: column;
+            align-items: center; justify-content: flex-end;
+            overflow: hidden; padding-bottom: 7rem;
+        }
+        .hero-bg { position: absolute; inset: 0; z-index: 1; }
+        .hero-bg img {
+            width: 100%; height: 100%;
+            object-fit: cover; object-position: center 30%;
+            opacity: 0.88; animation: heroBreathe 10s ease-in-out infinite;
+        }
+        @keyframes heroBreathe {
+            0%, 100% { transform: scale(1); }
+            50%       { transform: scale(1.025); }
+        }
+        .hero-vignette {
+            position: absolute; inset: 0; z-index: 2;
+            background:
+                linear-gradient(to bottom, rgba(2,1,6,0.55) 0%, transparent 30%, transparent 55%, rgba(2,1,6,0.98) 100%),
+                linear-gradient(to right, rgba(2,1,6,0.3) 0%, transparent 40%, transparent 60%, rgba(2,1,6,0.3) 100%);
+        }
+        .hero-text {
+            position: relative; z-index: 3;
+            text-align: center; width: 100%; padding: 0 40px;
+        }
+        .hero-slogan {
+            font-size: clamp(3.5rem, 8vw, 7.5rem);
+            font-weight: 800; letter-spacing: -1px; line-height: 1;
+            color: #fff; margin-bottom: 0.5rem;
+            text-shadow: 0 0 80px rgba(160,80,255,0.5);
+        }
+        .hero-slogan .period { color: var(--purple-hi); }
+        .hero-sub {
+            font-family: 'DM Mono', monospace; font-size: 0.78rem;
+            letter-spacing: 6px; color: var(--flare); text-transform: uppercase;
+            margin-bottom: 2.5rem; opacity: 0.85;
+        }
+        .hero-cta-row { display: flex; gap: 14px; justify-content: center; }
+        .cta {
+            font-family: 'DM Mono', monospace; font-size: 11px;
+            letter-spacing: 3px; text-transform: uppercase; text-decoration: none;
+            padding: 14px 32px; border: 1px solid; transition: all 0.3s ease; display: inline-block;
+        }
+        .cta-primary { background: var(--purple); border-color: var(--purple); color: #fff; }
+        .cta-primary:hover {
+            background: var(--purple-hi); border-color: var(--purple-hi);
+            box-shadow: 0 0 40px rgba(168,85,247,0.5); transform: translateY(-2px);
+        }
+        .cta-ghost { background: transparent; border-color: rgba(255,255,255,0.2); color: var(--chrome-2); }
+        .cta-ghost:hover { border-color: var(--flare); color: var(--flare); transform: translateY(-2px); }
+
+        .scroll-hint {
+            position: absolute; bottom: 2.5rem; left: 50%; transform: translateX(-50%);
+            z-index: 3; display: flex; flex-direction: column; align-items: center; gap: 8px;
+            cursor: pointer; opacity: 0.5; transition: opacity 0.3s;
+        }
+        .scroll-hint:hover { opacity: 0.9; }
+        .scroll-hint span {
+            font-family: 'DM Mono', monospace; font-size: 10px;
+            letter-spacing: 3px; text-transform: uppercase; color: var(--chrome-2);
+        }
+        .scroll-line {
+            width: 1px; height: 40px;
+            background: linear-gradient(to bottom, var(--flare), transparent);
+            animation: scrollDrop 2s ease-in-out infinite;
+        }
+        @keyframes scrollDrop {
+            0%   { transform: scaleY(0); transform-origin: top; opacity: 1; }
+            50%  { transform: scaleY(1); transform-origin: top; opacity: 1; }
+            51%  { transform-origin: bottom; }
+            100% { transform: scaleY(0); transform-origin: bottom; opacity: 0; }
+        }
+
+        /* INTRO */
+        .intro-strip {
+            border-top: 1px solid rgba(124,58,237,0.2);
+            border-bottom: 1px solid rgba(124,58,237,0.2);
+            padding: 5rem 48px;
+            display: grid; grid-template-columns: 1fr 1fr; gap: 6rem;
+            max-width: 1400px; margin: 0 auto;
+        }
+        .intro-label {
+            font-family: 'DM Mono', monospace; font-size: 10px;
+            letter-spacing: 4px; text-transform: uppercase; color: var(--purple-hi); margin-bottom: 1.2rem;
+        }
+        .intro-heading { font-size: 2.4rem; font-weight: 800; line-height: 1.15; color: #fff; margin-bottom: 1.5rem; }
+        .intro-body { font-family: 'DM Mono', monospace; font-size: 0.88rem; line-height: 1.9; color: var(--chrome-2); }
+        .intro-body + .intro-body { margin-top: 1rem; }
+        .intro-body strong { color: var(--text); font-style: italic; }
+
+        /* ENGINES */
+        #engines { padding: 6rem 48px; max-width: 1400px; margin: 0 auto; }
+
+        .section-eyebrow {
+            font-family: 'DM Mono', monospace; font-size: 10px; letter-spacing: 5px;
+            text-transform: uppercase; color: var(--purple-hi); margin-bottom: 1rem;
+            display: flex; align-items: center; gap: 1rem;
+        }
+        .section-eyebrow::after {
+            content: ''; flex: 1; max-width: 60px; height: 1px; background: var(--purple-hi); opacity: 0.5;
+        }
+        .section-big-title {
+            font-size: clamp(2rem, 4vw, 3.5rem); font-weight: 800;
+            color: #fff; margin-bottom: 4rem; line-height: 1.1;
+        }
+
+        .engines-layout {
+            display: grid;
+            grid-template-columns: 1.5fr 1fr;
+            grid-template-rows: auto auto;
+            gap: 2px;
+        }
+        .engine-card {
+            background: rgba(10,5,22,0.6);
+            border: 1px solid rgba(124,58,237,0.12);
+            padding: 3rem 3.5rem; position: relative; overflow: hidden;
+            transition: border-color 0.4s, background 0.4s;
+        }
+        .engine-card::before {
+            content: ''; position: absolute; bottom: 0; left: 0;
+            width: 0; height: 2px;
+            background: linear-gradient(90deg, var(--purple), var(--flare));
+            transition: width 0.5s ease;
+        }
+        .engine-card:hover::before { width: 100%; }
+        .engine-card:hover { border-color: rgba(124,58,237,0.35); background: rgba(18,8,40,0.75); }
+        .engine-card.span-2 { grid-column: span 2; }
+        .engine-card.featured { grid-row: span 2; border-color: rgba(124,58,237,0.22); }
+        .engine-num {
+            font-family: 'DM Mono', monospace; font-size: 0.65rem; letter-spacing: 3px;
+            color: var(--purple-hi); margin-bottom: 2rem; opacity: 0.7;
+        }
+        .engine-name { font-size: 1.6rem; font-weight: 800; color: #fff; margin-bottom: 0.6rem; letter-spacing: 1px; }
+        .engine-type {
+            font-family: 'DM Mono', monospace; font-size: 0.72rem; letter-spacing: 3px;
+            text-transform: uppercase; color: var(--flare); margin-bottom: 1.5rem; opacity: 0.8;
+        }
+        .engine-desc { font-family: 'DM Mono', monospace; font-size: 0.85rem; line-height: 1.9; color: var(--chrome-2); }
+        .engine-big-num {
+            position: absolute; bottom: -1rem; right: 1.5rem;
+            font-size: 8rem; font-weight: 800; color: rgba(124,58,237,0.06);
+            line-height: 1; pointer-events: none; user-select: none;
+        }
+
+        /* SPECS */
+        .spec-section { padding: 0 48px 6rem; max-width: 1400px; margin: 0 auto; }
+        .spec-table { width: 100%; border-collapse: collapse; margin-top: 3rem; }
+        .spec-table tr {
+            border-bottom: 1px solid rgba(124,58,237,0.12);
+            transition: background 0.2s;
+        }
+        .spec-table tr:first-child { border-top: 1px solid rgba(124,58,237,0.12); }
+        .spec-table tr:hover { background: rgba(124,58,237,0.05); }
+        .spec-table td { padding: 1.4rem 0; vertical-align: middle; }
+        .spec-table td:first-child {
+            font-family: 'DM Mono', monospace; font-size: 0.72rem;
+            letter-spacing: 3px; text-transform: uppercase; color: var(--purple-hi); width: 220px;
+        }
+        .spec-table td:last-child { font-family: 'DM Mono', monospace; font-size: 0.88rem; color: var(--text); }
+        .status-badge { display: inline-flex; align-items: center; gap: 7px; font-family: 'DM Mono', monospace; font-size: 0.82rem; }
+        .status-dot {
+            width: 6px; height: 6px; border-radius: 50%; background: var(--purple-hi);
+            animation: statusPulse 2s ease-in-out infinite;
+        }
+        @keyframes statusPulse {
+            0%, 100% { opacity: 1; box-shadow: 0 0 0 0 rgba(168,85,247,0.6); }
+            50%       { opacity: 0.7; box-shadow: 0 0 0 5px rgba(168,85,247,0); }
+        }
+
+        /* FOOTER */
+        footer {
+            border-top: 1px solid rgba(124,58,237,0.15);
+            padding: 3.5rem 48px;
+            display: flex; justify-content: space-between; align-items: center;
+            flex-wrap: wrap; gap: 1.5rem;
+        }
+        .footer-left { font-size: 1.1rem; font-weight: 800; letter-spacing: 6px; color: var(--dim); }
+        .footer-links { display: flex; gap: 2rem; }
+        .footer-links a {
+            font-family: 'DM Mono', monospace; font-size: 11px; letter-spacing: 2px;
+            text-transform: uppercase; color: var(--muted); text-decoration: none; transition: color 0.3s;
+        }
+        .footer-links a:hover { color: var(--flare); }
+        .footer-copy { font-family: 'DM Mono', monospace; font-size: 10px; letter-spacing: 1px; color: var(--muted); width: 100%; opacity: 0.6; }
+
+        @media (max-width: 900px) {
+            .nav-inner { padding: 18px 24px; }
+            .intro-strip { grid-template-columns: 1fr; gap: 3rem; padding: 4rem 24px; }
+            #engines { padding: 4rem 24px; }
+            .engines-layout { grid-template-columns: 1fr; }
+            .engine-card.featured { grid-row: auto; }
+            .engine-card.span-2 { grid-column: auto; }
+            .spec-section { padding: 0 24px 4rem; }
+            footer { padding: 2.5rem 24px; flex-direction: column; align-items: flex-start; }
+            .hero-text { padding: 0 24px; }
+        }
+        @media (max-width: 600px) {
+            .nav-links { display: none; }
+            .hero-slogan { font-size: 2.8rem; }
+        }
+    </style>
+</head>
+<body>
+
+<canvas id="bg-canvas"></canvas>
+<div class="void-nebula"></div>
+<div class="grain"></div>
+
+<div class="content">
+
+    <nav id="nav">
+        <div class="nav-inner">
+            <a href="../index.html" class="nav-back">Portfolio</a>
+            <div class="nav-wordmark">Prolaris</div>
+            <div class="nav-links">
+                <a href="#home"    class="active" onclick="goTo('home');    return false;">Home</a>
+                <a href="#engines"              onclick="goTo('engines'); return false;">Engines</a>
+                <a href="#specs"                onclick="goTo('specs');   return false;">Specs</a>
+            </div>
+        </div>
+    </nav>
+
+    <section id="home">
+        <div class="hero-bg">
+            <img src="splash.png" alt="PROLARIS">
+        </div>
+        <div class="hero-vignette"></div>
+        <div class="hero-text">
+            <p class="hero-sub">VST Instrument &nbsp;&middot;&nbsp; In Development</p>
+            <h1 class="hero-slogan">Set the Standard<span class="period">.</span></h1>
+            <div class="hero-cta-row">
+                <a href="#engines" class="cta cta-primary" onclick="goTo('engines'); return false;">Explore</a>
+                <a href="../index.html" class="cta cta-ghost">Portfolio</a>
+            </div>
+        </div>
+        <div class="scroll-hint" onclick="goTo('about')">
+            <span>Scroll</span>
+            <div class="scroll-line"></div>
+        </div>
+    </section>
+
+    <div id="about">
+        <div class="intro-strip">
+            <div>
+                <div class="intro-label">What is PROLARIS</div>
+                <h2 class="intro-heading">One instrument.<br>Every dimension of sound.</h2>
+            </div>
+            <div>
+                <p class="intro-body">
+                    The best tools in music production each own a single domain. <strong>Serum</strong> owns wavetable. <strong>Pigments</strong> owns spectral color. <strong>Omnisphere</strong> owns depth and scale. Switching between them to build a single patch is the norm &mdash; and it shouldn't be.
+                </p>
+                <p class="intro-body">
+                    PROLARIS is built around a simple premise: synthesize without compromise. Wavetable, granular, spectral, and sampler engines running in parallel, governed by a single modulation architecture. Built from scratch. Built to last.
+                </p>
+            </div>
+        </div>
+    </div>
+
+    <section id="engines">
+        <div class="section-eyebrow">Architecture</div>
+        <h2 class="section-big-title">Four engines.<br>One signal path.</h2>
+        <div class="engines-layout">
+            <div class="engine-card featured">
+                <div class="engine-num">01 &mdash; Primary</div>
+                <div class="engine-name">Wavetable</div>
+                <div class="engine-type">Digital &middot; Surgical &middot; Precise</div>
+                <p class="engine-desc">The backbone. Wavetable synthesis gives PROLARIS its edge &mdash; every harmonic controllable, every morph deliberate. Whether you're carving a bass that cuts or a lead that defines the mix, the wavetable engine handles it with mathematical precision. Inspired by what Serum got right, built without its constraints.</p>
+                <div class="engine-big-num">01</div>
+            </div>
+            <div class="engine-card">
+                <div class="engine-num">02</div>
+                <div class="engine-name">Granular</div>
+                <div class="engine-type">Texture &middot; Time &middot; Cloud</div>
+                <p class="engine-desc">Dissolve audio into grains. Scatter them across time and pitch. Build pads that breathe, atmospheres that evolve, textures that don't exist anywhere else.</p>
+                <div class="engine-big-num">02</div>
+            </div>
+            <div class="engine-card">
+                <div class="engine-num">03</div>
+                <div class="engine-name">Spectral</div>
+                <div class="engine-type">Frequency Domain &middot; Reshape</div>
+                <p class="engine-desc">Operate where most synthesizers can't reach. Freeze, smear, and sculpt the frequency spectrum directly. Sounds that feel like they're from another physics.</p>
+                <div class="engine-big-num">03</div>
+            </div>
+            <div class="engine-card span-2">
+                <div class="engine-num">04 &mdash; Foundation</div>
+                <div class="engine-name">Sampler</div>
+                <div class="engine-type">Acoustic &middot; Real &middot; Grounded</div>
+                <p class="engine-desc">Every great synthesizer knows when to stop synthesizing. The sampler layer grounds PROLARIS in the physical &mdash; real recordings, real acoustics, layered beneath any synthetic sound. The thing that makes Omnisphere feel alive. PROLARIS brings that foundation without the price tag.</p>
+                <div class="engine-big-num">04</div>
+            </div>
+        </div>
+    </section>
+
+    <section id="specs">
+        <div class="spec-section">
+            <div class="section-eyebrow">Technical</div>
+            <h2 class="section-big-title">Specifications.</h2>
+            <table class="spec-table">
+                <tr><td>Status</td><td><div class="status-badge"><div class="status-dot"></div>In active development</div></td></tr>
+                <tr><td>Format</td><td>VST3 / AU</td></tr>
+                <tr><td>Engines</td><td>Wavetable &middot; Granular &middot; Spectral &middot; Sampler</td></tr>
+                <tr><td>Modulation</td><td>Unified &mdash; all parameters, all engines</td></tr>
+                <tr><td>Developer</td><td>Solo.Prodigy</td></tr>
+                <tr><td>Release</td><td>TBA &mdash; ships when it's ready</td></tr>
+                <tr><td>Price</td><td>TBA</td></tr>
+            </table>
+        </div>
+    </section>
+
+    <footer>
+        <div class="footer-left">PROLARIS</div>
+        <div class="footer-links">
+            <a href="../index.html">Portfolio</a>
+            <a href="../shadewalker">Shadewalker</a>
+            <a href="https://beacons.ai/soloprodigy" target="_blank">Contact</a>
+            <a href="https://github.com/soloprodigydev" target="_blank">GitHub</a>
+        </div>
+        <div class="footer-copy">&copy; 2025 Solo Prodigy Dev. All rights reserved.</div>
+    </footer>
+
+</div>
+
+<script>
+    const canvas = document.getElementById('bg-canvas');
+    const ctx = canvas.getContext('2d');
+    function resize() { canvas.width = window.innerWidth; canvas.height = window.innerHeight; }
+    resize();
+    window.addEventListener('resize', resize);
+
+    const STARS = Array.from({ length: 220 }, () => ({
+        x: Math.random(), y: Math.random(),
+        r: Math.random() * 1.2 + 0.15,
+        a: Math.random() * 0.6 + 0.05,
+        da: (Math.random() * 0.002 + 0.0008) * (Math.random() > 0.5 ? 1 : -1),
+        vy: Math.random() * 0.00006 + 0.00001,
+        tint: Math.random() > 0.8
+    }));
+
+    (function tick() {
+        ctx.clearRect(0, 0, canvas.width, canvas.height);
+        STARS.forEach(s => {
+            s.y -= s.vy;
+            s.a += s.da;
+            if (s.a > 0.75) s.da = -Math.abs(s.da);
+            if (s.a < 0.03) s.da =  Math.abs(s.da);
+            if (s.y < 0) { s.y = 1; s.x = Math.random(); }
+            ctx.beginPath();
+            ctx.arc(s.x * canvas.width, s.y * canvas.height, s.r, 0, Math.PI * 2);
+            ctx.fillStyle = s.tint ? `rgba(192,132,252,${s.a})` : `rgba(230,225,255,${s.a})`;
+            ctx.fill();
+        });
+        requestAnimationFrame(tick);
+    })();
+
+    window.addEventListener('scroll', () => {
+        document.getElementById('nav').classList.toggle('scrolled', window.scrollY > 60);
+        ['home','engines','specs'].forEach(id => {
+            const el = document.getElementById(id);
+            if (!el) return;
+            const top = el.offsetTop - 120;
+            if (window.scrollY >= top && window.scrollY < top + el.offsetHeight) {
+                document.querySelectorAll('.nav-links a').forEach(a => {
+                    a.classList.toggle('active', a.getAttribute('href') === '#' + id);
+                });
+            }
+        });
+    });
+
+    function goTo(id) {
+        const el = document.getElementById(id);
+        if (el) el.scrollIntoView({ behavior: 'smooth', block: 'start' });
+    }
+</script>
+</body>
+</html>
