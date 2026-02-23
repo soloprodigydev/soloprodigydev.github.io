@@ -570,7 +570,7 @@
         .game-description { color: var(--text-mid); line-height: 1.9; font-size: 0.95rem; }
         .game-description.locked-desc { color: #444444; }
 
-        /* ── VST / PROLARIS ── */
+        /* ── VST / ORISON ── */
         .vst-section {
             padding: 0 4rem 8rem;
             max-width: 1600px;
@@ -579,7 +579,7 @@
 
         .vst-section .section-label { color: #a855f7; }
 
-        .prolaris-card {
+        .orison-card {
             background: rgba(10,6,18,0.95);
             border: 1px solid rgba(160,80,255,0.25);
             overflow: hidden;
@@ -590,7 +590,7 @@
             cursor: pointer;
         }
 
-        .prolaris-card:hover {
+        .orison-card:hover {
             transform: translateY(-8px);
             border-color: rgba(180,100,255,0.55);
             box-shadow:
@@ -599,7 +599,7 @@
                 inset 0 0 80px rgba(100,30,200,0.05);
         }
 
-        .prolaris-visual {
+        .orison-visual {
             position: relative;
             min-height: 360px;
             background: #05020f;
@@ -642,7 +642,7 @@
             align-items: center; gap: 1.5rem;
         }
 
-        .prolaris-logo-text {
+        .orison-logo-text {
             font-family: 'Orbitron', sans-serif;
             font-size: 1rem;
             letter-spacing: 8px;
@@ -682,14 +682,14 @@
             box-shadow: 0 0 8px rgba(200,130,255,0.9);
         }
 
-        .prolaris-info {
+        .orison-info {
             padding: 3.5rem;
             position: relative; z-index: 1;
             background: linear-gradient(135deg, rgba(20,8,40,0.6) 0%, rgba(10,5,20,0.4) 100%);
             display: flex; flex-direction: column; justify-content: center;
         }
 
-        .prolaris-name {
+        .orison-name {
             font-family: 'Orbitron', sans-serif;
             font-size: 3.2rem;
             font-weight: 900;
@@ -702,7 +702,7 @@
             filter: drop-shadow(0 0 20px rgba(160,80,255,0.4));
         }
 
-        .prolaris-type {
+        .orison-type {
             font-size: 0.8rem;
             color: #aa66ee;
             letter-spacing: 4px;
@@ -711,7 +711,7 @@
             margin-bottom: 1.2rem;
         }
 
-        .prolaris-tagline {
+        .orison-tagline {
             font-size: 1.05rem;
             color: rgba(200,160,255,0.85);
             font-style: italic;
@@ -719,7 +719,7 @@
             letter-spacing: 0.5px;
         }
 
-        .prolaris-desc {
+        .orison-desc {
             color: var(--text-mid);
             line-height: 1.9;
             font-size: 0.92rem;
@@ -727,7 +727,7 @@
             max-width: 460px;
         }
 
-        .prolaris-specs {
+        .orison-specs {
             display: flex; flex-direction: column; gap: 0.5rem;
             border-left: 2px solid rgba(160,80,255,0.3);
             padding-left: 1.5rem;
@@ -738,8 +738,8 @@
         .spec-key { color: #aa66ee; font-weight: 600; width: 90px; flex-shrink: 0; }
         .spec-val { color: var(--text-mid); }
 
-        /* add to cart button inside prolaris card */
-        .prolaris-cart-btn {
+        /* add to cart button inside orison card */
+        .orison-cart-btn {
             display: inline-flex;
             align-items: center;
             gap: 10px;
@@ -756,14 +756,14 @@
             transition: all 0.3s;
             align-self: flex-start;
         }
-        .prolaris-cart-btn:hover {
+        .orison-cart-btn:hover {
             background: rgba(160,80,255,0.35);
             border-color: rgba(200,120,255,0.8);
             color: #fff;
             box-shadow: 0 0 25px rgba(160,80,255,0.4);
             transform: translateY(-2px);
         }
-        .prolaris-cart-btn.in-cart {
+        .orison-cart-btn.in-cart {
             background: rgba(100,200,100,0.15);
             border-color: rgba(100,200,100,0.4);
             color: #88dd88;
@@ -888,8 +888,8 @@
 
         /* ── Responsive ── */
         @media (max-width: 1100px) {
-            .prolaris-card { grid-template-columns: 1fr; }
-            .prolaris-visual { min-height: 260px; border-right: none; border-bottom: 1px solid rgba(160,80,255,0.15); }
+            .orison-card { grid-template-columns: 1fr; }
+            .orison-visual { min-height: 260px; border-right: none; border-bottom: 1px solid rgba(160,80,255,0.15); }
         }
         @media (max-width: 1024px) {
             .hero-title { font-size: 4rem; }
@@ -1021,34 +1021,34 @@
                 <p class="section-subtitle">Original VST instruments and effects</p>
             </div>
 
-            <div class="prolaris-card" id="prolaris-card">
-                <div class="prolaris-visual">
+            <div class="orison-card" id="orison-card">
+                <div class="orison-visual">
                     <div class="nebula-bg"></div>
                     <div class="stars" id="stars"></div>
                     <div class="orbit-ring" style="width:180px;height:180px;top:50%;left:50%;--os:18s;"><div class="orbit-dot"></div></div>
                     <div class="orbit-ring" style="width:260px;height:260px;top:50%;left:50%;--os:30s;animation-direction:reverse;opacity:0.6;"><div class="orbit-dot" style="background:rgba(255,160,255,0.6);box-shadow:0 0 8px rgba(255,160,255,0.8);"></div></div>
                     <div class="waveform-wrap">
-                        <div class="prolaris-logo-text">Prolaris</div>
+                        <div class="orison-logo-text">Orison</div>
                         <div class="waveform" id="waveform"></div>
                     </div>
                 </div>
-                <div class="prolaris-info">
+                <div class="orison-info">
                     <div style="margin-bottom:1.2rem;">
                         <span class="game-tag" style="background:rgba(140,50,255,0.2);border-color:rgba(160,80,255,0.6);color:#bb77ff;">IN DEVELOPMENT</span>
                     </div>
-                    <div class="prolaris-name">PROLARIS</div>
-                    <div class="prolaris-type">VST INSTRUMENT / EFFECT PLUGIN</div>
-                    <p class="prolaris-tagline">Set the Standard.</p>
-                    <p class="prolaris-desc">
-                        PROLARIS is an original VST plugin built to consolidate the best of what modern synthesis has to offer — spectral, wavetable, granular, and sampled sound design in a single instrument. Built for producers who don't want to context switch between five plugins to build one patch.
+                    <div class="orison-name">ORISON</div>
+                    <div class="orison-type">VST INSTRUMENT · SYNTHESIZER</div>
+                    <p class="orison-tagline">Set the Standard.</p>
+                    <p class="orison-desc">
+                        ORISON is an original VST instrument built for producers who demand depth without compromise. Wavetable, granular, spectral, and sampled synthesis unified in one instrument — sculpt sound from silence to something sacred.
                     </p>
-                    <div class="prolaris-specs">
+                    <div class="orison-specs">
                         <div class="spec-line"><span class="spec-key">STATUS</span><span class="spec-val">In active development</span></div>
                         <div class="spec-line"><span class="spec-key">FORMAT</span><span class="spec-val">VST3</span></div>
                         <div class="spec-line"><span class="spec-key">ENGINE</span><span class="spec-val">Wavetable · Granular · Spectral · Sampler</span></div>
                         <div class="spec-line"><span class="spec-key">PRICE</span><span class="spec-val">TBA</span></div>
                     </div>
-                    <button class="prolaris-cart-btn" id="prolaris-cart-btn" onclick="toggleProlaris(event)">
+                    <button class="orison-cart-btn" id="orison-cart-btn" onclick="toggleOrison(event)">
                         + ADD TO WISHLIST
                     </button>
                 </div>
@@ -1075,7 +1075,7 @@
                     <div class="terminal-line"><span class="terminal-prompt">&gt;</span><span class="terminal-text">init_developer_bio()</span></div>
                     <div class="terminal-line" style="margin-top:2rem;"><span class="terminal-prompt">&gt;</span><span class="terminal-info">Solo.Prodigy is an independent developer focused on story-driven games and original audio tools. The goal is straightforward: build things that are actually worth your time and money.</span></div>
                     <div class="terminal-line" style="margin-top:1.5rem;"><span class="terminal-prompt">&gt;</span><span class="terminal-info">Before Shadewalker there were two school projects — Serein and OverStory — both on itch.io, both 3D. They were learning exercises, not professional releases, and they served their purpose. Those taught the fundamentals of what not to do, which turned out to be more valuable than expected.</span></div>
-                    <div class="terminal-line" style="margin-top:1.5rem;"><span class="terminal-prompt">&gt;</span><span class="terminal-info">Shadewalker is the first fully original, properly licensed professional project. Every system, every animation, every design decision built from scratch with the intent to ship something players genuinely enjoy. PROLARIS follows the same standard in a different medium.</span></div>
+                    <div class="terminal-line" style="margin-top:1.5rem;"><span class="terminal-prompt">&gt;</span><span class="terminal-info">Shadewalker is the first fully original, properly licensed professional project. Every system, every animation, every design decision built from scratch with the intent to ship something players genuinely enjoy. ORISON follows the same standard — this time in sound.</span></div>
                     <div class="terminal-line" style="margin-top:1.5rem;"><span class="terminal-prompt">&gt;</span><span class="terminal-info">Still early in the journey. The work continues.</span></div>
                     <div class="terminal-line" style="margin-top:2rem;"><span class="terminal-prompt">&gt;</span><span class="terminal-text">status: building</span></div>
                     <div class="terminal-line"><span class="terminal-prompt">&gt;</span><span class="terminal-text">next_release: loading<span class="terminal-cursor"></span></span></div>
@@ -1275,12 +1275,12 @@
     });
 
     /* ═══════════════════════════════════════
-       PROLARIS CARD — navigate on click
+       ORISON CARD — navigate on click
        but NOT when clicking the cart button
     ═══════════════════════════════════════ */
-    document.getElementById('prolaris-card').addEventListener('click', function(e) {
-        if (e.target.closest('#prolaris-cart-btn')) return;
-        window.location.href = './prolaris';
+    document.getElementById('orison-card').addEventListener('click', function(e) {
+        if (e.target.closest('#orison-cart-btn')) return;
+        window.location.href = './orison';
     });
 
     /* ═══════════════════════════════════════
@@ -1320,13 +1320,13 @@
     const cart = [];
 
     const PRODUCTS = {
-        prolaris: {
-            id: 'prolaris',
-            name: 'PROLARIS',
+        orison: {
+            id: 'orison',
+            name: 'ORISON',
             type: 'VST Instrument · Wishlist',
             price: 'TBA',
             numericPrice: 0,
-            thumb: './prolaris/splash.png'
+            thumb: './orison/splash.png'
         }
     };
 
@@ -1387,7 +1387,7 @@
         if (hasWishlist) {
             const note = document.createElement('div');
             note.className = 'cart-note';
-            note.textContent = 'PROLARIS is in development. Price is TBA. Wishlisting notifies you at launch.';
+            note.textContent = 'ORISON is in development. Price TBA — wishlist now and you'll be the first to know at launch.';
             body.appendChild(note);
             totalEl.textContent = 'TBA';
             checkoutBtn.textContent = 'NOTIFY ME AT LAUNCH';
@@ -1408,12 +1408,12 @@
         if (idx > -1) cart.splice(idx, 1);
         renderCart();
         // sync button state
-        if (productId === 'prolaris') syncProlarisBtnState();
+        if (productId === 'orison') syncOrisonBtnState();
     }
 
-    function syncProlarisBtnState() {
-        const btn = document.getElementById('prolaris-cart-btn');
-        const inCart = !!cart.find(i => i.id === 'prolaris');
+    function syncOrisonBtnState() {
+        const btn = document.getElementById('orison-cart-btn');
+        const inCart = !!cart.find(i => i.id === 'orison');
         if (inCart) {
             btn.textContent = '✓ WISHLISTED';
             btn.classList.add('in-cart');
@@ -1423,25 +1423,25 @@
         }
     }
 
-    function toggleProlaris(e) {
+    function toggleOrison(e) {
         e.stopPropagation();
-        const inCart = !!cart.find(i => i.id === 'prolaris');
+        const inCart = !!cart.find(i => i.id === 'orison');
         if (inCart) {
-            removeFromCart('prolaris');
+            removeFromCart('orison');
         } else {
-            addToCart('prolaris');
+            addToCart('orison');
             openCart();
         }
-        syncProlarisBtnState();
+        syncOrisonBtnState();
     }
 
     function handleCheckout() {
         const hasWishlist = cart.some(i => i.numericPrice === 0);
         if (hasWishlist) {
-            alert('You\'ll be notified when PROLARIS launches. Thanks for your interest!');
+            alert('You're on the list. We'll notify you the moment ORISON launches.');
             cart.length = 0;
             renderCart();
-            syncProlarisBtnState();
+            syncOrisonBtnState();
             closeCart();
         }
     }
