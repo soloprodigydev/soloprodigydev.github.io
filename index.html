@@ -128,13 +128,8 @@
             transition: width 0.3s ease;
         }
 
-        .nav-links a:hover {
-            color: #ffffff;
-        }
-
-        .nav-links a:hover::after {
-            width: 100%;
-        }
+        .nav-links a:hover { color: #ffffff; }
+        .nav-links a:hover::after { width: 100%; }
 
         /* ── Hero ── */
         .hero {
@@ -327,11 +322,8 @@
             position: relative;
         }
 
-        .game-card:hover .showcase-icon {
-            transform: scale(1.08);
-        }
+        .game-card:hover .showcase-icon { transform: scale(1.08); }
 
-        /* placeholder shapes for locked cards */
         .showcase-shape {
             z-index: 2;
             position: relative;
@@ -344,14 +336,6 @@
             background: #dc2626;
             transform: rotate(45deg);
             box-shadow: 0 0 20px rgba(220, 38, 38, 0.4);
-        }
-
-        .shape-wave {
-            width: 80px;
-            height: 40px;
-            border: 2px solid #4488ff;
-            border-radius: 50%;
-            box-shadow: 0 0 20px rgba(68, 136, 255, 0.3);
         }
 
         .game-info {
@@ -385,12 +369,6 @@
             color: #cc7700;
         }
 
-        .game-tag.vst-tag {
-            background: rgba(68, 136, 255, 0.15);
-            border-color: rgba(68, 136, 255, 0.45);
-            color: #5599ff;
-        }
-
         .game-title {
             font-family: 'Orbitron', sans-serif;
             font-size: 1.9rem;
@@ -400,9 +378,7 @@
             letter-spacing: 2px;
         }
 
-        .game-title.locked-title {
-            color: #404040;
-        }
+        .game-title.locked-title { color: #404040; }
 
         .game-genre {
             font-size: 0.85rem;
@@ -418,11 +394,9 @@
             font-size: 0.95rem;
         }
 
-        .game-description.locked-desc {
-            color: #444444;
-        }
+        .game-description.locked-desc { color: #444444; }
 
-        /* ── VST Section ── */
+        /* ── VST / PROLARIS Section ── */
         .vst-section {
             padding: 0 4rem 8rem;
             max-width: 1600px;
@@ -433,13 +407,15 @@
             background: rgba(10, 6, 18, 0.95);
             border: 1px solid rgba(160, 80, 255, 0.25);
             overflow: hidden;
-            transition: all 0.5s ease;
+            transition: all 0.4s ease;
             position: relative;
             display: grid;
             grid-template-columns: 1.2fr 1fr;
+            cursor: pointer;
         }
 
         .prolaris-card:hover {
+            transform: translateY(-8px);
             border-color: rgba(180, 100, 255, 0.55);
             box-shadow:
                 0 30px 80px rgba(0, 0, 0, 0.7),
@@ -447,113 +423,39 @@
                 inset 0 0 80px rgba(100, 30, 200, 0.05);
         }
 
-        /* nebula bg */
+        /* splash image as the visual panel */
         .prolaris-visual {
             position: relative;
             min-height: 360px;
-            background: #05020f;
-            display: flex;
-            align-items: center;
-            justify-content: center;
             overflow: hidden;
             border-right: 1px solid rgba(160, 80, 255, 0.15);
         }
 
-        .nebula-bg {
+        .prolaris-splash-img {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+            object-position: center;
+            display: block;
+            transition: transform 0.5s ease, opacity 0.4s ease;
+            opacity: 0.88;
+        }
+
+        .prolaris-card:hover .prolaris-splash-img {
+            transform: scale(1.04);
+            opacity: 1;
+        }
+
+        /* gradient fade on the right edge so it blends into the info panel */
+        .prolaris-visual::after {
+            content: '';
             position: absolute;
             inset: 0;
             background:
-                radial-gradient(ellipse at 30% 40%, rgba(120, 40, 220, 0.35) 0%, transparent 55%),
-                radial-gradient(ellipse at 75% 65%, rgba(60, 10, 160, 0.3) 0%, transparent 50%),
-                radial-gradient(ellipse at 60% 20%, rgba(200, 80, 255, 0.15) 0%, transparent 45%);
-            animation: nebulaDrift 14s ease-in-out infinite alternate;
-        }
-
-        @keyframes nebulaDrift {
-            0%   { opacity: 0.7; transform: scale(1) rotate(0deg); }
-            100% { opacity: 1;   transform: scale(1.06) rotate(1.5deg); }
-        }
-
-        /* star field */
-        .stars {
-            position: absolute;
-            inset: 0;
+                linear-gradient(to right, transparent 55%, rgba(10, 6, 18, 0.85) 100%),
+                linear-gradient(to bottom, rgba(10, 6, 18, 0.25) 0%, transparent 25%, transparent 75%, rgba(10, 6, 18, 0.45) 100%);
+            pointer-events: none;
             z-index: 1;
-        }
-
-        .star {
-            position: absolute;
-            border-radius: 50%;
-            background: #fff;
-            animation: starTwinkle var(--sd) ease-in-out infinite;
-        }
-
-        @keyframes starTwinkle {
-            0%, 100% { opacity: var(--so); transform: scale(1); }
-            50%       { opacity: calc(var(--so) * 0.3); transform: scale(0.6); }
-        }
-
-        /* waveform */
-        .waveform-wrap {
-            position: relative;
-            z-index: 3;
-            display: flex;
-            flex-direction: column;
-            align-items: center;
-            gap: 1.5rem;
-        }
-
-        .prolaris-logo-text {
-            font-family: 'Orbitron', sans-serif;
-            font-size: 1rem;
-            letter-spacing: 8px;
-            font-weight: 700;
-            color: rgba(200, 150, 255, 0.5);
-            text-transform: uppercase;
-        }
-
-        .waveform {
-            display: flex;
-            align-items: center;
-            gap: 3px;
-        }
-
-        .waveform-bar {
-            width: 3px;
-            border-radius: 2px;
-            animation: wavePulse var(--dur) ease-in-out infinite;
-            transform-origin: bottom center;
-        }
-
-        @keyframes wavePulse {
-            0%, 100% { transform: scaleY(0.15); opacity: 0.4; }
-            50%       { transform: scaleY(1);    opacity: 1; }
-        }
-
-        /* orbiting ring */
-        .orbit-ring {
-            position: absolute;
-            border-radius: 50%;
-            border: 1px solid rgba(180, 100, 255, 0.18);
-            animation: orbitSpin var(--os) linear infinite;
-            z-index: 2;
-        }
-
-        @keyframes orbitSpin {
-            from { transform: translate(-50%, -50%) rotate(0deg); }
-            to   { transform: translate(-50%, -50%) rotate(360deg); }
-        }
-
-        .orbit-dot {
-            position: absolute;
-            width: 5px;
-            height: 5px;
-            border-radius: 50%;
-            background: rgba(200, 130, 255, 0.7);
-            top: -2.5px;
-            left: 50%;
-            margin-left: -2.5px;
-            box-shadow: 0 0 8px rgba(200, 130, 255, 0.9);
         }
 
         .prolaris-info {
@@ -561,6 +463,9 @@
             position: relative;
             z-index: 1;
             background: linear-gradient(135deg, rgba(20, 8, 40, 0.6) 0%, rgba(10, 5, 20, 0.4) 100%);
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
         }
 
         .prolaris-name {
@@ -582,14 +487,14 @@
             letter-spacing: 4px;
             text-transform: uppercase;
             font-weight: 600;
-            margin-bottom: 2rem;
+            margin-bottom: 1.2rem;
         }
 
         .prolaris-tagline {
             font-size: 1.05rem;
-            color: rgba(200, 160, 255, 0.8);
+            color: rgba(200, 160, 255, 0.85);
             font-style: italic;
-            margin-bottom: 1.5rem;
+            margin-bottom: 1.8rem;
             letter-spacing: 0.5px;
         }
 
@@ -622,9 +527,7 @@
             flex-shrink: 0;
         }
 
-        .spec-val {
-            color: var(--text-mid);
-        }
+        .spec-val { color: var(--text-mid); }
 
         /* ── About ── */
         .about {
@@ -664,9 +567,7 @@
             letter-spacing: 1px;
         }
 
-        .terminal-body {
-            padding: 2.5rem;
-        }
+        .terminal-body { padding: 2.5rem; }
 
         .terminal-line {
             margin: 0.75rem 0;
@@ -720,8 +621,7 @@
         .feature-card::before {
             content: '';
             position: absolute;
-            top: 0;
-            left: 0;
+            top: 0; left: 0;
             width: 2px;
             height: 0;
             background: var(--red);
@@ -804,13 +704,15 @@
 
         /* ── Responsive ── */
         @media (max-width: 1100px) {
-            .prolaris-card {
-                grid-template-columns: 1fr;
-            }
+            .prolaris-card { grid-template-columns: 1fr; }
             .prolaris-visual {
                 min-height: 260px;
                 border-right: none;
                 border-bottom: 1px solid rgba(160, 80, 255, 0.15);
+            }
+            .prolaris-visual::after {
+                background:
+                    linear-gradient(to bottom, transparent 60%, rgba(10, 6, 18, 0.85) 100%);
             }
         }
 
@@ -922,21 +824,10 @@
                 <p class="section-subtitle">Original VST instruments and effects</p>
             </div>
 
-            <div class="prolaris-card">
+            <!-- Full card is clickable — navigates to ./prolaris -->
+            <div class="prolaris-card" onclick="window.location.href='./prolaris'">
                 <div class="prolaris-visual">
-                    <div class="nebula-bg"></div>
-                    <div class="stars" id="stars"></div>
-                    <!-- orbit rings -->
-                    <div class="orbit-ring" style="width:180px;height:180px;top:50%;left:50%;--os:18s;">
-                        <div class="orbit-dot"></div>
-                    </div>
-                    <div class="orbit-ring" style="width:260px;height:260px;top:50%;left:50%;--os:30s;animation-direction:reverse;opacity:0.6;">
-                        <div class="orbit-dot" style="background:rgba(255,160,255,0.6);box-shadow:0 0 8px rgba(255,160,255,0.8);"></div>
-                    </div>
-                    <div class="waveform-wrap">
-                        <div class="prolaris-logo-text">Prolaris</div>
-                        <div class="waveform" id="waveform"></div>
-                    </div>
+                    <img src="./prolaris/splash.png" alt="PROLARIS" class="prolaris-splash-img">
                 </div>
                 <div class="prolaris-info">
                     <div style="margin-bottom:1.2rem;">
@@ -1055,12 +946,12 @@
                 <a href="https://beacons.ai/soloprodigy" target="_blank">CONTACT</a>
                 <a href="https://github.com/soloprodigydev" target="_blank">GITHUB</a>
             </div>
-            <p class="copyright">© 2025 Solo Prodigy Dev. All rights reserved.</p>
+            <p class="copyright">&copy; 2025 Solo Prodigy Dev. All rights reserved.</p>
         </footer>
     </div>
 
     <script>
-        /* Particle canvas */
+        /* ── Particle canvas ── */
         const canvas = document.getElementById('particle-canvas');
         const ctx = canvas.getContext('2d');
         canvas.width = window.innerWidth;
@@ -1109,44 +1000,12 @@
             canvas.height = window.innerHeight;
         });
 
-        /* Star field */
-        const starsEl = document.getElementById('stars');
-        for (let i = 0; i < 80; i++) {
-            const s = document.createElement('div');
-            s.className = 'star';
-            const size = Math.random() * 2 + 0.5;
-            const opacity = Math.random() * 0.6 + 0.1;
-            s.style.cssText = `
-                width:${size}px; height:${size}px;
-                top:${Math.random()*100}%; left:${Math.random()*100}%;
-                --so:${opacity}; --sd:${(1.5 + Math.random()*3).toFixed(1)}s;
-                animation-delay:${(Math.random()*3).toFixed(1)}s;
-            `;
-            starsEl.appendChild(s);
-        }
-
-        /* Waveform bars */
-        const wf = document.getElementById('waveform');
-        const heights = [18,30,50,68,88,78,62,42,72,92,82,58,38,52,68,48,28,44,62,78,58,34,48,68,52,38,22,36,54,72,60,40,56,74,50];
-        heights.forEach((h, i) => {
-            const bar = document.createElement('div');
-            bar.className = 'waveform-bar';
-            bar.style.height = h + 'px';
-            bar.style.setProperty('--dur', (0.7 + Math.random() * 1.4) + 's');
-            bar.style.animationDelay = (i * 0.04) + 's';
-            // purple gradient per bar
-            const bright = Math.floor(80 + (h / 95) * 175);
-            bar.style.background = `linear-gradient(to top, rgba(100,20,220,0.3), rgb(${bright - 30},${Math.floor(bright * 0.4)},${bright}))`;
-            bar.style.boxShadow = `0 0 6px rgba(180,100,255,${0.2 + (h/95)*0.5})`;
-            wf.appendChild(bar);
-        });
-
-        /* Scroll header */
+        /* ── Scroll header ── */
         window.addEventListener('scroll', () => {
             document.getElementById('header').classList.toggle('scrolled', window.scrollY > 80);
         });
 
-        /* Smooth scroll */
+        /* ── Smooth scroll for nav ── */
         document.querySelectorAll('a[href^="#"]').forEach(a => {
             a.addEventListener('click', e => {
                 e.preventDefault();
@@ -1155,7 +1014,7 @@
             });
         });
 
-        /* Block locked card clicks */
+        /* ── Block locked card clicks ── */
         document.querySelectorAll('.game-card.locked').forEach(card => {
             card.onclick = e => { e.preventDefault(); e.stopPropagation(); };
         });
