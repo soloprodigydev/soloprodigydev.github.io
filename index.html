@@ -9,6 +9,9 @@
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=IBM+Plex+Mono:wght@400;600&family=Orbitron:wght@400;700;900&display=swap" rel="stylesheet">
     <style>
+        /* FIX 1: smooth scroll on html element */
+        html { scroll-behavior: smooth; }
+
         * { margin: 0; padding: 0; box-sizing: border-box; }
 
         :root {
@@ -27,7 +30,6 @@
             overflow-x: hidden;
         }
 
-        /* ── Scroll-reactive background gradient ── */
         #particle-canvas {
             position: fixed; inset: 0; z-index: 0; pointer-events: none;
         }
@@ -35,7 +37,6 @@
         .bg-gradient {
             position: fixed; inset: 0; z-index: 0; pointer-events: none;
             transition: opacity 0.1s;
-            /* updated by JS */
         }
 
         .content { position: relative; z-index: 1; }
@@ -61,7 +62,7 @@
             font-family: 'Orbitron', sans-serif;
             font-size: 1.7rem;
             font-weight: 900;
-            color: var(--red);           /* always red */
+            color: var(--red);
             cursor: pointer;
             letter-spacing: 2px;
             text-shadow: 0 0 20px rgba(220,38,38,0.4);
@@ -86,6 +87,7 @@
             position: relative;
             padding: 0.4rem 0;
             transition: color 0.3s;
+            cursor: pointer;
         }
         .nav-links a::after {
             content: '';
@@ -125,11 +127,10 @@
             border-radius: 50%;
             font-size: 0.65rem;
             font-weight: 600;
-            display: flex;
+            display: none;
             align-items: center;
             justify-content: center;
             color: #fff;
-            display: none;
         }
         .cart-count.visible { display: flex; }
 
@@ -369,7 +370,7 @@
 
         .hero-label {
             font-size: 0.85rem;
-            color: var(--red);           /* stays red */
+            color: var(--red);
             letter-spacing: 4px;
             margin-bottom: 2rem;
             text-transform: uppercase;
@@ -413,7 +414,6 @@
             margin-bottom: 1rem;
             text-transform: uppercase;
             font-weight: 600;
-            /* color set by JS via data-zone */
         }
 
         .section-title {
@@ -431,10 +431,7 @@
             margin-right: 1rem;
         }
 
-        /* games section title accent changes */
-        .games-section .section-title::before { color: var(--red); }
         .vst-section .section-title::before { color: #7c3aed; }
-        .about .section-title::before { color: var(--red); }
 
         .section-subtitle {
             font-size: 1rem;
@@ -738,7 +735,6 @@
         .spec-key { color: #aa66ee; font-weight: 600; width: 90px; flex-shrink: 0; }
         .spec-val { color: var(--text-mid); }
 
-        /* add to cart button inside orison card */
         .orison-cart-btn {
             display: inline-flex;
             align-items: center;
@@ -910,11 +906,11 @@
     <div class="bg-gradient" id="bg-gradient"></div>
 
     <!-- Cart Overlay + Drawer -->
-    <div class="cart-overlay" id="cart-overlay" onclick="closeCart()"></div>
+    <div class="cart-overlay" id="cart-overlay"></div>
     <div class="cart-drawer" id="cart-drawer">
         <div class="cart-head">
             <h2>CART</h2>
-            <button class="cart-close" onclick="closeCart()">&times;</button>
+            <button class="cart-close" id="cart-close-btn">&times;</button>
         </div>
         <div class="cart-body" id="cart-body">
             <div class="cart-empty" id="cart-empty">
@@ -927,7 +923,7 @@
                 <span class="cart-total-label">Total</span>
                 <span class="cart-total-price" id="cart-total">$0.00</span>
             </div>
-            <button class="cart-checkout" id="cart-checkout" disabled onclick="handleCheckout()">
+            <button class="cart-checkout" id="cart-checkout" disabled>
                 PROCEED TO CHECKOUT
             </button>
         </div>
@@ -935,16 +931,16 @@
 
     <div class="content">
         <header class="header" id="header">
-            <div class="logo">SOLO.PRODIGY</div>
+            <div class="logo" id="logo-home">SOLO.PRODIGY</div>
             <div class="nav-right">
                 <nav class="nav-links">
-                    <a href="#games">GAMES</a>
-                    <a href="#audio">AUDIO</a>
-                    <a href="#about">ABOUT</a>
+                    <a data-target="games">GAMES</a>
+                    <a data-target="audio">AUDIO</a>
+                    <a data-target="about">ABOUT</a>
                     <a href="https://beacons.ai/soloprodigy" target="_blank">CONTACT</a>
                     <a href="https://github.com/soloprodigydev" target="_blank">GITHUB</a>
                 </nav>
-                <button class="cart-btn" onclick="openCart()">
+                <button class="cart-btn" id="cart-open-btn">
                     &#x1F6D2; CART
                     <span class="cart-count" id="cart-count">0</span>
                 </button>
@@ -968,7 +964,7 @@
                 <p class="section-subtitle">Current and upcoming narrative experiences</p>
             </div>
             <div class="games-grid">
-                <div class="game-card" onclick="window.location.href='./shadewalker'">
+                <div class="game-card" id="shadewalker-card">
                     <div class="game-showcase">
                         <div class="showcase-overlay"></div>
                         <img src="./shadewalker/icon.png" alt="Shadewalker" class="showcase-icon">
@@ -1037,7 +1033,7 @@
                         <span class="game-tag" style="background:rgba(140,50,255,0.2);border-color:rgba(160,80,255,0.6);color:#bb77ff;">IN DEVELOPMENT</span>
                     </div>
                     <div class="orison-name">ORISON</div>
-                    <div class="orison-type">VST INSTRUMENT · SYNTHESIZER</div>
+                    <div class="orison-type">VST INSTRUMENT &middot; SYNTHESIZER</div>
                     <p class="orison-tagline">Set the Standard.</p>
                     <p class="orison-desc">
                         ORISON is an original VST instrument built for producers who demand depth without compromise. Wavetable, granular, spectral, and sampled synthesis unified in one instrument — sculpt sound from silence to something sacred.
@@ -1045,10 +1041,10 @@
                     <div class="orison-specs">
                         <div class="spec-line"><span class="spec-key">STATUS</span><span class="spec-val">In active development</span></div>
                         <div class="spec-line"><span class="spec-key">FORMAT</span><span class="spec-val">VST3</span></div>
-                        <div class="spec-line"><span class="spec-key">ENGINE</span><span class="spec-val">Wavetable · Granular · Spectral · Sampler</span></div>
+                        <div class="spec-line"><span class="spec-key">ENGINE</span><span class="spec-val">Wavetable &middot; Granular &middot; Spectral &middot; Sampler</span></div>
                         <div class="spec-line"><span class="spec-key">PRICE</span><span class="spec-val">TBA</span></div>
                     </div>
-                    <button class="orison-cart-btn" id="orison-cart-btn" onclick="toggleOrison(event)">
+                    <button class="orison-cart-btn" id="orison-cart-btn">
                         + ADD TO WISHLIST
                     </button>
                 </div>
@@ -1095,7 +1091,7 @@
                 <div class="feature-card">
                     <div class="feature-label">FOUNDATION</div>
                     <h3 class="feature-title">PASSION DRIVEN</h3>
-                    <p class="feature-description">Solo developer. No team, no publisher. Everything ships when it's ready and not before.</p>
+                    <p class="feature-description">Solo developer. No team, no publisher. Everything ships when it is ready and not before.</p>
                 </div>
             </div>
         </section>
@@ -1110,216 +1106,199 @@
     </div>
 
     <script>
-    /* ═══════════════════════════════════════
-       SCROLL-REACTIVE BACKGROUND GRADIENT
-       Zones: hero=red, games=indigo/purple,
-              audio=deep blue-violet, about=red
-    ═══════════════════════════════════════ */
+    // ═══════════════════════════════════════
+    //  SMOOTH SCROLL HELPER
+    //  FIX: all nav links now use this
+    // ═══════════════════════════════════════
+    function scrollToSection(id) {
+        const el = document.getElementById(id);
+        if (!el) return;
+        el.scrollIntoView({ behavior: 'smooth', block: 'start' });
+    }
 
-    // Each zone: [r1,g1,b1] for accent 1 and 2, positions
-    const ZONES = [
-        { // hero — red
-            c1: [220, 38, 38],  pos1: '20% 30%',
-            c2: [180, 20, 20],  pos2: '80% 70%',
-            a1: 0.13, a2: 0.08
-        },
-        { // games — blue-purple / indigo
-            c1: [99, 102, 241], pos1: '15% 25%',
-            c2: [139, 92, 246], pos2: '85% 65%',
-            a1: 0.14, a2: 0.10
-        },
-        { // audio — deep blue
-            c1: [59, 130, 246], pos1: '25% 40%',
-            c2: [124, 58, 237], pos2: '75% 60%',
-            a1: 0.12, a2: 0.14
-        },
-        { // about — back to red
-            c1: [220, 38, 38],  pos1: '20% 30%',
-            c2: [180, 20, 20],  pos2: '80% 70%',
-            a1: 0.13, a2: 0.08
-        }
+    // Nav link click handlers — data-target attribute drives scroll
+    document.querySelectorAll('.nav-links a[data-target]').forEach(function(a) {
+        a.addEventListener('click', function(e) {
+            e.preventDefault();
+            scrollToSection(this.getAttribute('data-target'));
+        });
+    });
+
+    // Logo scrolls back to top
+    document.getElementById('logo-home').addEventListener('click', function() {
+        window.scrollTo({ top: 0, behavior: 'smooth' });
+    });
+
+    // ═══════════════════════════════════════
+    //  SCROLL-REACTIVE BACKGROUND GRADIENT
+    // ═══════════════════════════════════════
+    var ZONES = [
+        { c1:[220,38,38],  pos1:'20% 30%', c2:[180,20,20],  pos2:'80% 70%', a1:0.13, a2:0.08 },
+        { c1:[99,102,241], pos1:'15% 25%', c2:[139,92,246], pos2:'85% 65%', a1:0.14, a2:0.10 },
+        { c1:[59,130,246], pos1:'25% 40%', c2:[124,58,237], pos2:'75% 60%', a1:0.12, a2:0.14 },
+        { c1:[220,38,38],  pos1:'20% 30%', c2:[180,20,20],  pos2:'80% 70%', a1:0.13, a2:0.08 }
     ];
 
-    // lerp helper
     function lerp(a, b, t) { return a + (b - a) * t; }
     function lerpZone(zA, zB, t) {
         return {
-            c1: zA.c1.map((v, i) => lerp(v, zB.c1[i], t)),
-            c2: zA.c2.map((v, i) => lerp(v, zB.c2[i], t)),
+            c1: zA.c1.map(function(v,i){ return lerp(v, zB.c1[i], t); }),
+            c2: zA.c2.map(function(v,i){ return lerp(v, zB.c2[i], t); }),
             a1: lerp(zA.a1, zB.a1, t),
             a2: lerp(zA.a2, zB.a2, t),
-            pos1: zA.pos1, // position doesn't change much, keep static
+            pos1: zA.pos1,
             pos2: zA.pos2
         };
     }
 
     function applyGradient(z) {
-        const [r1,g1,b1] = z.c1.map(Math.round);
-        const [r2,g2,b2] = z.c2.map(Math.round);
+        var r1=Math.round(z.c1[0]), g1=Math.round(z.c1[1]), b1=Math.round(z.c1[2]);
+        var r2=Math.round(z.c2[0]), g2=Math.round(z.c2[1]), b2=Math.round(z.c2[2]);
         document.getElementById('bg-gradient').style.background =
-            `radial-gradient(ellipse at ${z.pos1}, rgba(${r1},${g1},${b1},${z.a1.toFixed(3)}) 0%, transparent 50%),` +
-            `radial-gradient(ellipse at ${z.pos2}, rgba(${r2},${g2},${b2},${z.a2.toFixed(3)}) 0%, transparent 50%)`;
+            'radial-gradient(ellipse at '+z.pos1+', rgba('+r1+','+g1+','+b1+','+z.a1.toFixed(3)+') 0%, transparent 50%),' +
+            'radial-gradient(ellipse at '+z.pos2+', rgba('+r2+','+g2+','+b2+','+z.a2.toFixed(3)+') 0%, transparent 50%)';
     }
 
     function updateGradient() {
-        const sections = [
+        var sections = [
             document.getElementById('section-hero'),
             document.getElementById('games'),
             document.getElementById('audio'),
             document.getElementById('about')
         ];
-
-        const scroll = window.scrollY + window.innerHeight * 0.4;
-        const docH = document.body.scrollHeight;
-
-        // Build breakpoints based on section midpoints
-        const breaks = sections.map(s => s ? s.offsetTop : 0);
-
-        // Find which zone we're in
-        let zi = 0;
-        for (let i = 0; i < breaks.length; i++) {
-            if (scroll >= breaks[i]) zi = i;
-        }
-
-        const nextZi = Math.min(zi + 1, ZONES.length - 1);
-        const start  = breaks[zi];
-        const end    = breaks[nextZi] || docH;
-        const raw    = (scroll - start) / Math.max(end - start, 1);
-        // ease in-out
-        const t = raw < 0.5 ? 2*raw*raw : -1+(4-2*raw)*raw;
-        const clamped = Math.max(0, Math.min(1, t));
-
-        const zone = zi === nextZi ? ZONES[zi] : lerpZone(ZONES[zi], ZONES[nextZi], clamped);
+        var scroll = window.scrollY + window.innerHeight * 0.4;
+        var breaks = sections.map(function(s){ return s ? s.offsetTop : 0; });
+        var zi = 0;
+        for (var i=0; i<breaks.length; i++) { if (scroll >= breaks[i]) zi = i; }
+        var nextZi = Math.min(zi+1, ZONES.length-1);
+        var start = breaks[zi], end = breaks[nextZi] || document.body.scrollHeight;
+        var raw = (scroll - start) / Math.max(end-start, 1);
+        var t = raw < 0.5 ? 2*raw*raw : -1+(4-2*raw)*raw;
+        var clamped = Math.max(0, Math.min(1, t));
+        var zone = zi === nextZi ? ZONES[zi] : lerpZone(ZONES[zi], ZONES[nextZi], clamped);
         applyGradient(zone);
     }
 
-    // Initial call
     applyGradient(ZONES[0]);
     window.addEventListener('scroll', updateGradient, { passive: true });
     window.addEventListener('resize', updateGradient, { passive: true });
 
-    /* ═══════════════════════════════════════
-       PARTICLE CANVAS
-    ═══════════════════════════════════════ */
-    const canvas = document.getElementById('particle-canvas');
-    const ctx = canvas.getContext('2d');
+    // ═══════════════════════════════════════
+    //  PARTICLE CANVAS
+    // ═══════════════════════════════════════
+    var canvas = document.getElementById('particle-canvas');
+    var ctx = canvas.getContext('2d');
     canvas.width = window.innerWidth;
     canvas.height = window.innerHeight;
 
-    const COUNT = 55;
-    const particles = [];
+    var particles = [];
+    function Particle() { this.reset(true); }
+    Particle.prototype.reset = function(initial) {
+        this.x = Math.random() * canvas.width;
+        this.y = initial ? Math.random() * canvas.height : canvas.height + 10;
+        this.size = Math.random() * 1.8 + 0.4;
+        this.speedY = Math.random() * 0.45 + 0.1;
+        this.speedX = (Math.random() - 0.5) * 0.25;
+        this.opacity = Math.random() * 0.22 + 0.06;
+        var p = [[220,38,38],[255,255,255],[130,130,130]];
+        var c = p[Math.floor(Math.random()*p.length)];
+        this.color = 'rgba('+c[0]+','+c[1]+','+c[2]+','+this.opacity+')';
+    };
+    Particle.prototype.update = function() {
+        this.y -= this.speedY;
+        this.x += this.speedX;
+        if (this.y < -10) this.reset(false);
+        if (this.x < -10 || this.x > canvas.width+10) this.x = Math.random()*canvas.width;
+    };
+    Particle.prototype.draw = function() {
+        ctx.fillStyle = this.color;
+        ctx.beginPath();
+        ctx.arc(this.x, this.y, this.size, 0, Math.PI*2);
+        ctx.fill();
+    };
 
-    class Particle {
-        constructor() { this.reset(true); }
-        reset(initial) {
-            this.x = Math.random() * canvas.width;
-            this.y = initial ? Math.random() * canvas.height : canvas.height + 10;
-            this.size = Math.random() * 1.8 + 0.4;
-            this.speedY = Math.random() * 0.45 + 0.1;
-            this.speedX = (Math.random() - 0.5) * 0.25;
-            this.opacity = Math.random() * 0.22 + 0.06;
-            const p = [[220,38,38],[255,255,255],[130,130,130]];
-            const c = p[Math.floor(Math.random()*p.length)];
-            this.color = `rgba(${c[0]},${c[1]},${c[2]},${this.opacity})`;
-        }
-        update() {
-            this.y -= this.speedY;
-            this.x += this.speedX;
-            if (this.y < -10) this.reset(false);
-            if (this.x < -10 || this.x > canvas.width+10) this.x = Math.random()*canvas.width;
-        }
-        draw() {
-            ctx.fillStyle = this.color;
-            ctx.beginPath();
-            ctx.arc(this.x, this.y, this.size, 0, Math.PI*2);
-            ctx.fill();
-        }
-    }
-
-    for (let i = 0; i < COUNT; i++) particles.push(new Particle());
+    for (var i=0; i<55; i++) particles.push(new Particle());
 
     (function animateParticles() {
         ctx.clearRect(0,0,canvas.width,canvas.height);
-        particles.forEach(p => { p.update(); p.draw(); });
+        particles.forEach(function(p){ p.update(); p.draw(); });
         requestAnimationFrame(animateParticles);
     })();
 
-    window.addEventListener('resize', () => {
+    window.addEventListener('resize', function() {
         canvas.width = window.innerWidth;
         canvas.height = window.innerHeight;
     });
 
-    /* ═══════════════════════════════════════
-       HEADER SCROLL
-    ═══════════════════════════════════════ */
-    window.addEventListener('scroll', () => {
+    // ═══════════════════════════════════════
+    //  HEADER SCROLL
+    // ═══════════════════════════════════════
+    window.addEventListener('scroll', function() {
         document.getElementById('header').classList.toggle('scrolled', window.scrollY > 80);
     }, { passive: true });
 
-    /* ═══════════════════════════════════════
-       SMOOTH SCROLL
-    ═══════════════════════════════════════ */
-    document.querySelectorAll('a[href^="#"]').forEach(a => {
-        a.addEventListener('click', e => {
-            e.preventDefault();
-            const t = document.querySelector(a.getAttribute('href'));
-            if (t) t.scrollIntoView({ behavior: 'smooth', block: 'start' });
-        });
+    // ═══════════════════════════════════════
+    //  LOCKED CARDS
+    // ═══════════════════════════════════════
+    document.querySelectorAll('.game-card.locked').forEach(function(card) {
+        card.addEventListener('click', function(e) { e.preventDefault(); e.stopPropagation(); });
     });
 
-    /* ═══════════════════════════════════════
-       LOCKED CARDS
-    ═══════════════════════════════════════ */
-    document.querySelectorAll('.game-card.locked').forEach(card => {
-        card.onclick = e => { e.preventDefault(); e.stopPropagation(); };
+    // ═══════════════════════════════════════
+    //  SHADEWALKER CARD
+    // ═══════════════════════════════════════
+    document.getElementById('shadewalker-card').addEventListener('click', function() {
+        window.location.href = './shadewalker';
     });
 
-    /* ═══════════════════════════════════════
-       ORISON CARD — navigate on click
-       but NOT when clicking the cart button
-    ═══════════════════════════════════════ */
+    // ═══════════════════════════════════════
+    //  ORISON CARD — navigate on click
+    //  FIX: check folder exists, navigate correctly
+    // ═══════════════════════════════════════
     document.getElementById('orison-card').addEventListener('click', function(e) {
         if (e.target.closest('#orison-cart-btn')) return;
-        window.location.href = './orison';
+        // Navigate to orison subfolder
+        window.location.href = './orison/index.html';
     });
 
-    /* ═══════════════════════════════════════
-       NEBULA STARS
-    ═══════════════════════════════════════ */
-    const starsEl = document.getElementById('stars');
-    for (let i = 0; i < 80; i++) {
-        const s = document.createElement('div');
-        s.className = 'star';
-        const sz = Math.random()*2+0.5;
-        const op = Math.random()*0.6+0.1;
-        s.style.cssText = `width:${sz}px;height:${sz}px;top:${Math.random()*100}%;left:${Math.random()*100}%;--so:${op};--sd:${(1.5+Math.random()*3).toFixed(1)}s;animation-delay:${(Math.random()*3).toFixed(1)}s;`;
-        starsEl.appendChild(s);
+    // ═══════════════════════════════════════
+    //  NEBULA STARS
+    // ═══════════════════════════════════════
+    var starsEl = document.getElementById('stars');
+    for (var s=0; s<80; s++) {
+        var star = document.createElement('div');
+        star.className = 'star';
+        var sz = Math.random()*2+0.5;
+        var op = Math.random()*0.6+0.1;
+        star.style.cssText = 'width:'+sz+'px;height:'+sz+'px;top:'+Math.random()*100+'%;left:'+Math.random()*100+'%;--so:'+op+';--sd:'+(1.5+Math.random()*3).toFixed(1)+'s;animation-delay:'+(Math.random()*3).toFixed(1)+'s;';
+        starsEl.appendChild(star);
     }
 
-    /* ═══════════════════════════════════════
-       WAVEFORM
-    ═══════════════════════════════════════ */
-    const wf = document.getElementById('waveform');
-    const heights = [18,30,50,68,88,78,62,42,72,92,82,58,38,52,68,48,28,44,62,78,58,34,48,68,52,38,22,36,54,72,60,40,56,74,50];
-    heights.forEach((h, i) => {
-        const bar = document.createElement('div');
+    // ═══════════════════════════════════════
+    //  WAVEFORM
+    // ═══════════════════════════════════════
+    var wf = document.getElementById('waveform');
+    var heights = [18,30,50,68,88,78,62,42,72,92,82,58,38,52,68,48,28,44,62,78,58,34,48,68,52,38,22,36,54,72,60,40,56,74,50];
+    heights.forEach(function(h, i) {
+        var bar = document.createElement('div');
         bar.className = 'waveform-bar';
         bar.style.height = h+'px';
         bar.style.setProperty('--dur', (0.7+Math.random()*1.4)+'s');
         bar.style.animationDelay = (i*0.04)+'s';
-        const bright = Math.floor(80+(h/95)*175);
-        bar.style.background = `linear-gradient(to top, rgba(100,20,220,0.3), rgb(${bright-30},${Math.floor(bright*0.4)},${bright}))`;
-        bar.style.boxShadow = `0 0 6px rgba(180,100,255,${0.2+(h/95)*0.5})`;
+        var bright = Math.floor(80+(h/95)*175);
+        bar.style.background = 'linear-gradient(to top, rgba(100,20,220,0.3), rgb('+(bright-30)+','+Math.floor(bright*0.4)+','+bright+'))';
+        bar.style.boxShadow = '0 0 6px rgba(180,100,255,'+(0.2+(h/95)*0.5)+')';
         wf.appendChild(bar);
     });
 
-    /* ═══════════════════════════════════════
-       SHOPPING CART
-    ═══════════════════════════════════════ */
-    // Cart state — in memory only
-    const cart = [];
+    // ═══════════════════════════════════════
+    //  SHOPPING CART — FIX: all inline
+    //  onclick removed, using addEventListener
+    //  FIX: apostrophe in string was breaking JS
+    // ═══════════════════════════════════════
+    var cart = [];
 
-    const PRODUCTS = {
+    var PRODUCTS = {
         orison: {
             id: 'orison',
             name: 'ORISON',
@@ -1343,20 +1322,20 @@
     }
 
     function renderCart() {
-        const body = document.getElementById('cart-body');
-        const empty = document.getElementById('cart-empty');
-        const countEl = document.getElementById('cart-count');
-        const totalEl = document.getElementById('cart-total');
-        const checkoutBtn = document.getElementById('cart-checkout');
+        var body = document.getElementById('cart-body');
+        var empty = document.getElementById('cart-empty');
+        var countEl = document.getElementById('cart-count');
+        var totalEl = document.getElementById('cart-total');
+        var checkoutBtn = document.getElementById('cart-checkout');
 
-        // Remove all items but keep empty state
-        body.querySelectorAll('.cart-item, .cart-note').forEach(el => el.remove());
+        body.querySelectorAll('.cart-item, .cart-note').forEach(function(el){ el.remove(); });
 
         if (cart.length === 0) {
             empty.style.display = 'flex';
             countEl.classList.remove('visible');
             totalEl.textContent = '$0.00';
             checkoutBtn.disabled = true;
+            checkoutBtn.textContent = 'PROCEED TO CHECKOUT';
             return;
         }
 
@@ -1365,29 +1344,35 @@
         countEl.classList.add('visible');
         checkoutBtn.disabled = false;
 
-        let hasWishlist = false;
-        cart.forEach(item => {
+        var hasWishlist = false;
+        cart.forEach(function(item) {
             if (item.numericPrice === 0) hasWishlist = true;
-            const el = document.createElement('div');
+            var el = document.createElement('div');
             el.className = 'cart-item';
-            el.innerHTML = `
-                <div class="cart-item-thumb">
-                    <img src="${item.thumb}" alt="${item.name}" onerror="this.parentElement.textContent='PRO'">
-                </div>
-                <div>
-                    <div class="cart-item-name">${item.name}</div>
-                    <div class="cart-item-type">${item.type}</div>
-                    <button class="cart-item-remove" onclick="removeFromCart('${item.id}')">REMOVE</button>
-                </div>
-                <div class="cart-item-price">${item.price}</div>
-            `;
+            el.innerHTML =
+                '<div class="cart-item-thumb">' +
+                    '<img src="' + item.thumb + '" alt="' + item.name + '" onerror="this.parentElement.textContent=\'PRO\'">' +
+                '</div>' +
+                '<div>' +
+                    '<div class="cart-item-name">' + item.name + '</div>' +
+                    '<div class="cart-item-type">' + item.type + '</div>' +
+                    '<button class="cart-item-remove" data-id="' + item.id + '">REMOVE</button>' +
+                '</div>' +
+                '<div class="cart-item-price">' + item.price + '</div>';
             body.appendChild(el);
         });
 
+        // Attach remove handlers
+        body.querySelectorAll('.cart-item-remove').forEach(function(btn) {
+            btn.addEventListener('click', function() {
+                removeFromCart(this.getAttribute('data-id'));
+            });
+        });
+
         if (hasWishlist) {
-            const note = document.createElement('div');
+            var note = document.createElement('div');
             note.className = 'cart-note';
-            note.textContent = 'ORISON is in development. Price TBA — wishlist now and you'll be the first to know at launch.';
+            note.textContent = 'ORISON is in development. Price TBA — wishlist now and you will be the first to know at launch.';
             body.appendChild(note);
             totalEl.textContent = 'TBA';
             checkoutBtn.textContent = 'NOTIFY ME AT LAUNCH';
@@ -1398,22 +1383,22 @@
     }
 
     function addToCart(productId) {
-        if (cart.find(i => i.id === productId)) return;
-        cart.push({ ...PRODUCTS[productId] });
+        if (cart.find(function(i){ return i.id === productId; })) return;
+        var product = PRODUCTS[productId];
+        cart.push({ id: product.id, name: product.name, type: product.type, price: product.price, numericPrice: product.numericPrice, thumb: product.thumb });
         renderCart();
     }
 
     function removeFromCart(productId) {
-        const idx = cart.findIndex(i => i.id === productId);
+        var idx = cart.findIndex(function(i){ return i.id === productId; });
         if (idx > -1) cart.splice(idx, 1);
         renderCart();
-        // sync button state
         if (productId === 'orison') syncOrisonBtnState();
     }
 
     function syncOrisonBtnState() {
-        const btn = document.getElementById('orison-cart-btn');
-        const inCart = !!cart.find(i => i.id === 'orison');
+        var btn = document.getElementById('orison-cart-btn');
+        var inCart = !!cart.find(function(i){ return i.id === 'orison'; });
         if (inCart) {
             btn.textContent = '✓ WISHLISTED';
             btn.classList.add('in-cart');
@@ -1423,22 +1408,10 @@
         }
     }
 
-    function toggleOrison(e) {
-        e.stopPropagation();
-        const inCart = !!cart.find(i => i.id === 'orison');
-        if (inCart) {
-            removeFromCart('orison');
-        } else {
-            addToCart('orison');
-            openCart();
-        }
-        syncOrisonBtnState();
-    }
-
     function handleCheckout() {
-        const hasWishlist = cart.some(i => i.numericPrice === 0);
+        var hasWishlist = cart.some(function(i){ return i.numericPrice === 0; });
         if (hasWishlist) {
-            alert('You're on the list. We'll notify you the moment ORISON launches.');
+            alert('You are on the list. We will notify you the moment ORISON launches.');
             cart.length = 0;
             renderCart();
             syncOrisonBtnState();
@@ -1446,7 +1419,24 @@
         }
     }
 
-    // Init
+    // ── Wire up all button events here — no inline onclick ──
+    document.getElementById('cart-open-btn').addEventListener('click', openCart);
+    document.getElementById('cart-overlay').addEventListener('click', closeCart);
+    document.getElementById('cart-close-btn').addEventListener('click', closeCart);
+    document.getElementById('cart-checkout').addEventListener('click', handleCheckout);
+
+    document.getElementById('orison-cart-btn').addEventListener('click', function(e) {
+        e.stopPropagation();
+        var inCart = !!cart.find(function(i){ return i.id === 'orison'; });
+        if (inCart) {
+            removeFromCart('orison');
+        } else {
+            addToCart('orison');
+            openCart();
+        }
+        syncOrisonBtnState();
+    });
+
     renderCart();
     </script>
 </body>
