@@ -189,11 +189,11 @@
 
         /* THE 3D SLIDER */
         .game-slider {
-            width: 240px;
-            height: 340px;
+            width: 220px;
+            height: 300px;
             position: relative;
             transform-style: preserve-3d;
-            perspective: 1000px;
+            perspective: 1400px;
             --quantity: 3;
             cursor: pointer;
         }
@@ -205,7 +205,7 @@
 
         .game-slider .g-item {
             position: absolute; inset: 0;
-            transform: rotateY(calc((var(--pos) - 1) * (360deg / var(--quantity)))) translateZ(400px);
+            transform: rotateY(calc((var(--pos) - 1) * (360deg / var(--quantity)))) translateZ(320px);
             transform-style: preserve-3d;
             transition: filter 0.4s;
         }
@@ -244,56 +244,25 @@
         }
         .g-art-inner { width: 100%; height: 100%; position: relative; }
 
-        /* Shadewalker artwork */
+        /* Shadewalker artwork — clean, icon-centred */
         .art-shadewalker {
-            background: radial-gradient(ellipse at 50% 30%, #1a0505 0%, #050101 60%, #000 100%);
+            background: linear-gradient(160deg, #0d0d12 0%, #080810 60%, #050508 100%);
+            display: flex; align-items: center; justify-content: center;
         }
-        .art-shadewalker .art-moon {
-            position: absolute; width: 100px; height: 100px;
-            border-radius: 50%; top: 30px; left: 50%; transform: translateX(-50%);
-            background: radial-gradient(circle at 35% 35%, #ff6060, #cc1111 40%, #550000);
-            box-shadow: 0 0 60px rgba(200,20,20,0.7), 0 0 120px rgba(220,20,20,0.3);
-            animation: moonPulse 4s ease-in-out infinite;
+        .art-shadewalker .art-icon {
+            width: 110px; height: 110px;
+            object-fit: contain;
+            position: relative; z-index: 2;
+            filter: drop-shadow(0 4px 24px rgba(100,100,200,0.35));
+            animation: iconFloat 4s ease-in-out infinite;
         }
-        @keyframes moonPulse { 0%,100%{box-shadow:0 0 60px rgba(200,20,20,0.7),0 0 120px rgba(220,20,20,0.3)} 50%{box-shadow:0 0 80px rgba(220,30,30,0.9),0 0 160px rgba(220,20,20,0.5)} }
-        .art-shadewalker .art-trees {
-            position: absolute; bottom: 0; left: 0; right: 0; height: 55%;
-        }
-        .art-tree {
-            position: absolute; bottom: 0;
-            background: #000;
-            clip-path: polygon(50% 0%, 0% 100%, 100% 100%);
-        }
-        .art-shadewalker .art-fog {
-            position: absolute; bottom: 0; left: 0; right: 0; height: 120px;
-            background: linear-gradient(to top, rgba(80,0,0,0.4) 0%, transparent 100%);
-        }
-        .art-shadewalker .art-silhouette {
-            position: absolute; bottom: 80px; left: 50%; transform: translateX(-50%);
-            width: 30px; height: 70px;
-            background: #000;
-            clip-path: polygon(40% 0%, 60% 0%, 62% 40%, 90% 40%, 90% 50%, 62% 50%, 65% 100%, 35% 100%, 38% 50%, 10% 50%, 10% 40%, 38% 40%);
-            filter: drop-shadow(0 0 8px rgba(180,0,0,0.6));
+        @keyframes iconFloat {
+            0%,100%{ transform: translateY(0px); }
+            50%    { transform: translateY(-7px); }
         }
         .art-scanlines {
             position: absolute; inset: 0; pointer-events: none;
-            background: repeating-linear-gradient(0deg, transparent, transparent 2px, rgba(0,0,0,0.08) 2px, rgba(0,0,0,0.08) 4px);
-        }
-
-        /* Game icon overlay (e.g. Shadewalker icon.png) */
-        .art-logo-overlay {
-            position: absolute;
-            top: 50%; left: 50%;
-            transform: translate(-50%, -58%);
-            width: 90px; height: 90px;
-            object-fit: contain;
-            z-index: 4;
-            filter: drop-shadow(0 0 18px rgba(220,60,60,0.7));
-            animation: logoFloat 4s ease-in-out infinite;
-        }
-        @keyframes logoFloat {
-            0%,100%{transform:translate(-50%,-58%) translateY(0px)}
-            50%{transform:translate(-50%,-58%) translateY(-6px)}
+            background: repeating-linear-gradient(0deg, transparent, transparent 2px, rgba(0,0,0,0.06) 2px, rgba(0,0,0,0.06) 4px);
         }
 
         /* Knight artwork */
@@ -700,12 +669,8 @@
                         <div class="g-card" data-href="./shadewalker">
                             <div class="g-art">
                                 <div class="g-art-inner art-shadewalker">
-                                                    <div class="art-moon"></div>
-                                    <div class="art-trees" id="art-trees"></div>
-                                    <div class="art-fog"></div>
-                                    <div class="art-silhouette"></div>
+                                    <img src="./shadewalker/icon.png" alt="Shadewalker" class="art-icon" onerror="this.style.opacity='0'">
                                     <div class="art-scanlines"></div>
-                                    <img src="./shadewalker/icon.png" alt="Shadewalker" class="art-logo-overlay" onerror="this.style.display='none'">
                                 </div>
                             </div>
                             <div class="g-card-overlay"></div>
@@ -928,17 +893,6 @@ window.addEventListener('resize',function(){canvas.width=window.innerWidth;canva
 window.addEventListener('scroll',function(){document.getElementById('header').classList.toggle('scrolled',window.scrollY>80);},{passive:true});
 
 // ═══════════════════════════════════════════
-//  TREE GENERATION (Shadewalker art)
-// ═══════════════════════════════════════════
-var treesEl=document.getElementById('art-trees');
-var treeData=[
-    {l:'3%', w:50,h:140},{l:'12%',w:30,h:100},{l:'22%',w:55,h:160},{l:'32%',w:35,h:110},
-    {l:'42%',w:60,h:180},{l:'52%',w:40,h:130},{l:'62%',w:65,h:190},{l:'72%',w:38,h:120},
-    {l:'82%',w:52,h:155},{l:'90%',w:35,h:105}
-];
-treeData.forEach(function(t){var el=document.createElement('div');el.className='art-tree';el.style.cssText='left:'+t.l+';width:'+t.w+'px;height:'+t.h+'px;opacity:'+(0.7+Math.random()*0.3)+';';treesEl.appendChild(el);});
-
-// ═══════════════════════════════════════════
 //  KNIGHT STARS
 // ═══════════════════════════════════════════
 var knightStars=document.getElementById('art-knight-stars');
@@ -1063,7 +1017,7 @@ function rafLoop(ts){
     }
 
     slider.style.transform =
-        'perspective(1000px) rotateX(-6deg) rotateY(' + currentAngle + 'deg)';
+        'perspective(1400px) rotateX(-6deg) rotateY(' + currentAngle + 'deg)';
 
     requestAnimationFrame(rafLoop);
 }
