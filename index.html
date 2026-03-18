@@ -9,16 +9,14 @@
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=IBM+Plex+Mono:wght@400;600&family=Orbitron:wght@400;700;900&display=swap" rel="stylesheet">
     <style>
-        /* FIX 1: smooth scroll on html element */
         html { scroll-behavior: smooth; }
-
-        * { margin: 0; padding: 0; box-sizing: border-box; }
+        *, *::before, *::after { margin: 0; padding: 0; box-sizing: border-box; }
 
         :root {
             --red: #dc2626;
             --bg: #0a0a0a;
-            --surface: rgba(18, 18, 18, 0.85);
-            --border: rgba(255, 255, 255, 0.08);
+            --surface: rgba(18,18,18,0.85);
+            --border: rgba(255,255,255,0.08);
             --text-muted: #707070;
             --text-mid: #a0a0a0;
         }
@@ -26,1418 +24,1101 @@
         body {
             font-family: 'IBM Plex Mono', monospace;
             background: var(--bg);
-            color: #ffffff;
+            color: #fff;
             overflow-x: hidden;
         }
 
-        #particle-canvas {
-            position: fixed; inset: 0; z-index: 0; pointer-events: none;
-        }
+        #particle-canvas { position: fixed; inset: 0; z-index: 0; pointer-events: none; }
+        .bg-gradient    { position: fixed; inset: 0; z-index: 0; pointer-events: none; transition: opacity .1s; }
+        .content        { position: relative; z-index: 1; }
 
-        .bg-gradient {
-            position: fixed; inset: 0; z-index: 0; pointer-events: none;
-            transition: opacity 0.1s;
-        }
-
-        .content { position: relative; z-index: 1; }
-
-        /* ── Header ── */
+        /* ═══════════════════════════════ HEADER */
         .header {
             padding: 1.6rem 3.5rem;
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-            position: fixed;
-            top: 0; left: 0; right: 0;
+            display: flex; justify-content: space-between; align-items: center;
+            position: fixed; top: 0; left: 0; right: 0;
             z-index: 1000;
-            background: rgba(10, 10, 10, 0.92);
+            background: rgba(10,10,10,0.92);
             backdrop-filter: blur(22px);
             border-bottom: 1px solid var(--border);
-            transition: box-shadow 0.3s ease;
+            transition: box-shadow .3s ease;
         }
-
         .header.scrolled { box-shadow: 0 4px 40px rgba(0,0,0,0.7); }
-
         .logo {
-            font-family: 'Orbitron', sans-serif;
-            font-size: 1.7rem;
-            font-weight: 900;
-            color: var(--red);
-            cursor: pointer;
-            letter-spacing: 2px;
-            text-shadow: 0 0 20px rgba(220,38,38,0.4);
-            transition: text-shadow 0.3s;
+            font-family: 'Orbitron', sans-serif; font-size: 1.7rem; font-weight: 900;
+            color: var(--red); cursor: pointer; letter-spacing: 2px;
+            text-shadow: 0 0 20px rgba(220,38,38,0.4); transition: text-shadow .3s;
         }
         .logo:hover { text-shadow: 0 0 35px rgba(220,38,38,0.8); }
-
-        .nav-right {
-            display: flex;
-            align-items: center;
-            gap: 2.5rem;
-        }
-
+        .nav-right { display: flex; align-items: center; gap: 2.5rem; }
         .nav-links { display: flex; gap: 2.2rem; }
-
         .nav-links a {
-            color: var(--text-muted);
-            text-decoration: none;
-            font-size: 0.88rem;
-            font-weight: 600;
-            letter-spacing: 1px;
-            position: relative;
-            padding: 0.4rem 0;
-            transition: color 0.3s;
-            cursor: pointer;
+            color: var(--text-muted); text-decoration: none; font-size: .88rem;
+            font-weight: 600; letter-spacing: 1px; position: relative; padding: .4rem 0;
+            transition: color .3s; cursor: pointer;
         }
         .nav-links a::after {
-            content: '';
-            position: absolute;
-            bottom: 0; left: 0;
-            width: 0; height: 1px;
-            background: var(--red);
-            transition: width 0.3s;
+            content: ''; position: absolute; bottom: 0; left: 0;
+            width: 0; height: 1px; background: var(--red); transition: width .3s;
         }
         .nav-links a:hover { color: #fff; }
         .nav-links a:hover::after { width: 100%; }
 
-        /* ── Cart button ── */
+        /* ═══════════════════════════════ CART BUTTON */
         .cart-btn {
-            position: relative;
-            background: transparent;
-            border: 1px solid rgba(255,255,255,0.15);
-            color: var(--text-mid);
-            padding: 0.5rem 0.9rem;
-            cursor: pointer;
-            font-family: 'IBM Plex Mono', monospace;
-            font-size: 1rem;
-            transition: all 0.3s;
-            display: flex;
-            align-items: center;
-            gap: 6px;
+            position: relative; background: transparent;
+            border: 1px solid rgba(255,255,255,0.15); color: var(--text-mid);
+            padding: .5rem .9rem; cursor: pointer;
+            font-family: 'IBM Plex Mono', monospace; font-size: 1rem;
+            transition: all .3s; display: flex; align-items: center; gap: 6px;
         }
-        .cart-btn:hover {
-            border-color: rgba(255,255,255,0.35);
-            color: #fff;
-        }
+        .cart-btn:hover { border-color: rgba(255,255,255,0.35); color: #fff; }
         .cart-count {
-            position: absolute;
-            top: -7px; right: -7px;
-            width: 18px; height: 18px;
-            background: var(--red);
-            border-radius: 50%;
-            font-size: 0.65rem;
-            font-weight: 600;
-            display: none;
-            align-items: center;
-            justify-content: center;
-            color: #fff;
+            position: absolute; top: -7px; right: -7px;
+            width: 18px; height: 18px; background: var(--red); border-radius: 50%;
+            font-size: .65rem; font-weight: 600;
+            display: none; align-items: center; justify-content: center; color: #fff;
         }
         .cart-count.visible { display: flex; }
 
-        /* ── Cart Drawer ── */
+        /* ═══════════════════════════════ CART DRAWER */
         .cart-overlay {
-            position: fixed;
-            inset: 0;
-            background: rgba(0,0,0,0.6);
-            z-index: 2000;
-            opacity: 0;
-            pointer-events: none;
-            transition: opacity 0.35s;
-            backdrop-filter: blur(4px);
+            position: fixed; inset: 0; background: rgba(0,0,0,0.6);
+            z-index: 2000; opacity: 0; pointer-events: none;
+            transition: opacity .35s; backdrop-filter: blur(4px);
         }
-        .cart-overlay.open {
-            opacity: 1;
-            pointer-events: all;
-        }
-
+        .cart-overlay.open { opacity: 1; pointer-events: all; }
         .cart-drawer {
-            position: fixed;
-            top: 0; right: 0;
-            width: 420px;
-            max-width: 100vw;
-            height: 100%;
-            background: #0d0d0d;
-            border-left: 1px solid rgba(255,255,255,0.08);
-            z-index: 2001;
-            transform: translateX(100%);
-            transition: transform 0.4s cubic-bezier(0.4, 0, 0.2, 1);
-            display: flex;
-            flex-direction: column;
+            position: fixed; top: 0; right: 0; width: 420px; max-width: 100vw; height: 100%;
+            background: #0d0d0d; border-left: 1px solid rgba(255,255,255,0.08);
+            z-index: 2001; transform: translateX(100%);
+            transition: transform .4s cubic-bezier(0.4,0,0.2,1);
+            display: flex; flex-direction: column;
         }
         .cart-drawer.open { transform: translateX(0); }
-
         .cart-head {
-            padding: 1.8rem 2rem;
-            border-bottom: 1px solid var(--border);
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
+            padding: 1.8rem 2rem; border-bottom: 1px solid var(--border);
+            display: flex; justify-content: space-between; align-items: center;
         }
-        .cart-head h2 {
-            font-family: 'Orbitron', sans-serif;
-            font-size: 1.1rem;
-            font-weight: 700;
-            letter-spacing: 3px;
-            color: #fff;
-        }
-        .cart-close {
-            background: none;
-            border: none;
-            color: var(--text-muted);
-            font-size: 1.4rem;
-            cursor: pointer;
-            transition: color 0.2s;
-            line-height: 1;
-        }
+        .cart-head h2 { font-family: 'Orbitron',sans-serif; font-size: 1.1rem; font-weight: 700; letter-spacing: 3px; }
+        .cart-close { background: none; border: none; color: var(--text-muted); font-size: 1.4rem; cursor: pointer; transition: color .2s; line-height: 1; }
         .cart-close:hover { color: #fff; }
-
-        .cart-body {
-            flex: 1;
-            overflow-y: auto;
-            padding: 1.5rem 2rem;
-        }
+        .cart-body { flex: 1; overflow-y: auto; padding: 1.5rem 2rem; }
         .cart-body::-webkit-scrollbar { width: 4px; }
-        .cart-body::-webkit-scrollbar-track { background: transparent; }
         .cart-body::-webkit-scrollbar-thumb { background: rgba(255,255,255,0.1); }
+        .cart-empty { display: flex; flex-direction: column; align-items: center; justify-content: center; height: 200px; gap: 1rem; color: var(--text-muted); font-size: .85rem; letter-spacing: 1px; }
+        .cart-empty-icon { font-size: 2.5rem; opacity: .3; }
+        .cart-item { display: grid; grid-template-columns: 60px 1fr auto; gap: 1rem; padding: 1.2rem 0; border-bottom: 1px solid var(--border); align-items: center; }
+        .cart-item-thumb { width: 60px; height: 45px; background: linear-gradient(135deg,#120830,#050210); border: 1px solid rgba(160,80,255,0.2); display: flex; align-items: center; justify-content: center; font-size: .6rem; font-family: 'Orbitron',sans-serif; color: rgba(180,120,255,0.6); letter-spacing: 2px; overflow: hidden; }
+        .cart-item-thumb img { width: 100%; height: 100%; object-fit: cover; opacity: .8; }
+        .cart-item-name { font-family: 'Orbitron',sans-serif; font-size: .85rem; font-weight: 700; color: #fff; letter-spacing: 1px; margin-bottom: .25rem; }
+        .cart-item-type { font-size: .7rem; color: #aa66ee; letter-spacing: 1px; }
+        .cart-item-price { font-size: .9rem; font-weight: 600; color: #fff; white-space: nowrap; }
+        .cart-item-remove { display: block; font-size: .65rem; color: var(--text-muted); cursor: pointer; margin-top: 4px; letter-spacing: 1px; background: none; border: none; font-family: 'IBM Plex Mono',monospace; transition: color .2s; text-align: right; padding: 0; }
+        .cart-item-remove:hover { color: var(--red); }
+        .cart-note { margin-top: 1rem; padding: 1rem; background: rgba(160,80,255,0.07); border: 1px solid rgba(160,80,255,0.2); font-size: .75rem; color: rgba(200,160,255,0.7); line-height: 1.7; letter-spacing: .5px; }
+        .cart-foot { padding: 1.5rem 2rem; border-top: 1px solid var(--border); }
+        .cart-total-row { display: flex; justify-content: space-between; align-items: center; margin-bottom: 1.2rem; }
+        .cart-total-label { font-size: .75rem; color: var(--text-muted); letter-spacing: 2px; text-transform: uppercase; }
+        .cart-total-price { font-family: 'Orbitron',sans-serif; font-size: 1.2rem; font-weight: 700; color: #fff; }
+        .cart-checkout { width: 100%; padding: 1rem; background: linear-gradient(135deg,#6d28d9,#8b5cf6); border: none; color: #fff; font-family: 'IBM Plex Mono',monospace; font-size: .8rem; font-weight: 600; letter-spacing: 3px; text-transform: uppercase; cursor: pointer; transition: all .3s; }
+        .cart-checkout:hover { background: linear-gradient(135deg,#7c3aed,#a855f7); box-shadow: 0 8px 30px rgba(139,92,246,0.5); transform: translateY(-2px); }
+        .cart-checkout:disabled { background: rgba(80,80,80,0.3); color: var(--text-muted); cursor: not-allowed; transform: none; box-shadow: none; }
 
-        .cart-empty {
-            display: flex;
-            flex-direction: column;
-            align-items: center;
-            justify-content: center;
-            height: 200px;
-            gap: 1rem;
-            color: var(--text-muted);
-            font-size: 0.85rem;
-            letter-spacing: 1px;
-        }
-        .cart-empty-icon { font-size: 2.5rem; opacity: 0.3; }
+        /* ═══════════════════════════════ HERO */
+        .hero { min-height: 100vh; display: flex; align-items: center; justify-content: center; padding: 8rem 2rem 4rem; position: relative; }
+        .hero-glow { position: absolute; top: 50%; left: 50%; width: 1000px; height: 1000px; background: radial-gradient(circle,rgba(220,38,38,0.14),transparent 70%); transform: translate(-50%,-50%); animation: pulseGlow 10s ease-in-out infinite; pointer-events: none; }
+        @keyframes pulseGlow { 0%,100%{transform:translate(-50%,-50%) scale(1);opacity:.4} 50%{transform:translate(-50%,-50%) scale(1.08);opacity:.65} }
+        .hero-content { max-width: 1100px; text-align: center; position: relative; z-index: 2; }
+        .hero-label { font-size: .85rem; color: var(--red); letter-spacing: 4px; margin-bottom: 2rem; text-transform: uppercase; font-weight: 600; animation: fadeInUp .8s ease backwards; }
+        .hero-title { font-family: 'Orbitron',sans-serif; font-size: 6rem; font-weight: 900; background: linear-gradient(135deg,#fff 0%,#dc2626 55%,#fff 100%); -webkit-background-clip: text; -webkit-text-fill-color: transparent; background-clip: text; margin-bottom: 1.5rem; letter-spacing: 8px; animation: fadeInUp .8s ease .1s backwards; line-height: 1.1; }
+        .hero-subtitle { font-size: 1.2rem; color: var(--text-mid); margin-bottom: 3rem; animation: fadeInUp .8s ease .2s backwards; font-weight: 400; }
+        @keyframes fadeInUp { from{opacity:0;transform:translateY(24px)} to{opacity:1;transform:translateY(0)} }
 
-        .cart-item {
-            display: grid;
-            grid-template-columns: 60px 1fr auto;
-            gap: 1rem;
-            padding: 1.2rem 0;
-            border-bottom: 1px solid var(--border);
-            align-items: center;
-        }
-        .cart-item-thumb {
-            width: 60px;
-            height: 45px;
-            background: linear-gradient(135deg, #120830, #050210);
-            border: 1px solid rgba(160,80,255,0.2);
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            font-size: 0.6rem;
-            font-family: 'Orbitron', sans-serif;
-            color: rgba(180,120,255,0.6);
-            letter-spacing: 2px;
+        /* ═══════════════════════════════ SECTION HEADERS */
+        .section-header { text-align: center; margin-bottom: 5rem; }
+        .section-label { font-size: .8rem; letter-spacing: 4px; margin-bottom: 1rem; text-transform: uppercase; font-weight: 600; }
+        .section-title { font-family: 'Orbitron',sans-serif; font-size: 3.5rem; color: #fff; font-weight: 700; letter-spacing: 4px; margin-bottom: .75rem; }
+        .section-title::before { content: '>'; color: var(--red); margin-right: 1rem; }
+        .vst-section .section-title::before { color: #7c3aed; }
+        .section-subtitle { font-size: 1rem; color: var(--text-muted); font-weight: 400; }
+
+        /* ═══════════════════════════════ GAMES — 3D CAROUSEL */
+        .games-section {
+            padding: 8rem 0 10rem;
+            position: relative;
             overflow: hidden;
         }
-        .cart-item-thumb img {
-            width: 100%;
-            height: 100%;
-            object-fit: cover;
-            opacity: 0.8;
-        }
-        .cart-item-name {
-            font-family: 'Orbitron', sans-serif;
-            font-size: 0.85rem;
-            font-weight: 700;
-            color: #fff;
-            letter-spacing: 1px;
-            margin-bottom: 0.25rem;
-        }
-        .cart-item-type {
-            font-size: 0.7rem;
-            color: #aa66ee;
-            letter-spacing: 1px;
-        }
-        .cart-item-price {
-            font-size: 0.9rem;
-            font-weight: 600;
-            color: #fff;
-            white-space: nowrap;
-        }
-        .cart-item-remove {
-            display: block;
-            font-size: 0.65rem;
-            color: var(--text-muted);
-            cursor: pointer;
-            margin-top: 4px;
-            letter-spacing: 1px;
-            background: none;
-            border: none;
-            font-family: 'IBM Plex Mono', monospace;
-            transition: color 0.2s;
-            text-align: right;
-            padding: 0;
-        }
-        .cart-item-remove:hover { color: var(--red); }
+        .games-section .section-label { color: #818cf8; }
+        .games-section .section-header { padding: 0 4rem; }
 
-        .cart-note {
-            margin-top: 1rem;
-            padding: 1rem;
-            background: rgba(160,80,255,0.07);
-            border: 1px solid rgba(160,80,255,0.2);
-            font-size: 0.75rem;
-            color: rgba(200,160,255,0.7);
-            line-height: 1.7;
-            letter-spacing: 0.5px;
+        /* Atmospheric fog at carousel edges */
+        .carousel-fog {
+            position: absolute;
+            top: 0; bottom: 0;
+            width: 300px;
+            pointer-events: none;
+            z-index: 10;
         }
+        .carousel-fog.left  { left: 0;  background: linear-gradient(to right, #0a0a0a 0%, transparent 100%); }
+        .carousel-fog.right { right: 0; background: linear-gradient(to left,  #0a0a0a 0%, transparent 100%); }
 
-        .cart-foot {
-            padding: 1.5rem 2rem;
-            border-top: 1px solid var(--border);
-        }
-        .cart-total-row {
+        /* Floor reflection line */
+        .carousel-stage {
+            position: relative;
+            height: 560px;
             display: flex;
-            justify-content: space-between;
             align-items: center;
-            margin-bottom: 1.2rem;
-        }
-        .cart-total-label {
-            font-size: 0.75rem;
-            color: var(--text-muted);
-            letter-spacing: 2px;
-            text-transform: uppercase;
-        }
-        .cart-total-price {
-            font-family: 'Orbitron', sans-serif;
-            font-size: 1.2rem;
-            font-weight: 700;
-            color: #fff;
-        }
-        .cart-checkout {
-            width: 100%;
-            padding: 1rem;
-            background: linear-gradient(135deg, #6d28d9, #8b5cf6);
-            border: none;
-            color: #fff;
-            font-family: 'IBM Plex Mono', monospace;
-            font-size: 0.8rem;
-            font-weight: 600;
-            letter-spacing: 3px;
-            text-transform: uppercase;
-            cursor: pointer;
-            transition: all 0.3s;
-        }
-        .cart-checkout:hover {
-            background: linear-gradient(135deg, #7c3aed, #a855f7);
-            box-shadow: 0 8px 30px rgba(139,92,246,0.5);
-            transform: translateY(-2px);
-        }
-        .cart-checkout:disabled {
-            background: rgba(80,80,80,0.3);
-            color: var(--text-muted);
-            cursor: not-allowed;
-            transform: none;
-            box-shadow: none;
+            justify-content: center;
         }
 
-        /* ── Hero ── */
-        .hero {
+        /* Ground plane glow */
+        .carousel-ground {
+            position: absolute;
+            bottom: 0; left: 50%; transform: translateX(-50%);
+            width: 900px; height: 2px;
+            background: linear-gradient(to right, transparent, rgba(220,38,38,0.4) 30%, rgba(99,102,241,0.5) 50%, rgba(220,38,38,0.4) 70%, transparent);
+            box-shadow: 0 0 60px rgba(99,102,241,0.25);
+        }
+        .carousel-ground-glow {
+            position: absolute;
+            bottom: 0; left: 50%; transform: translateX(-50%);
+            width: 700px; height: 80px;
+            background: radial-gradient(ellipse at center bottom, rgba(99,102,241,0.18) 0%, transparent 70%);
+        }
+
+        /* THE 3D SLIDER */
+        .game-slider {
+            width: 300px;
+            height: 420px;
+            position: relative;
+            transform-style: preserve-3d;
+            perspective: 1200px;
+            --quantity: 3;
+            animation: gameCarousel 22s linear infinite;
+            cursor: pointer;
+        }
+        .game-slider:hover { animation-play-state: paused; }
+
+        @keyframes gameCarousel {
+            from { transform: perspective(1200px) rotateX(-6deg) rotateY(0deg); }
+            to   { transform: perspective(1200px) rotateX(-6deg) rotateY(360deg); }
+        }
+
+        .game-slider .g-list {
+            position: absolute; inset: 0;
+            transform-style: preserve-3d;
+        }
+
+        .game-slider .g-item {
+            position: absolute; inset: 0;
+            transform: rotateY(calc((var(--pos) - 1) * (360deg / var(--quantity)))) translateZ(480px);
+            transform-style: preserve-3d;
+            transition: filter 0.4s;
+        }
+
+        .g-item:nth-child(1) { --pos: 1; }
+        .g-item:nth-child(2) { --pos: 2; }
+        .g-item:nth-child(3) { --pos: 3; }
+
+        /* Individual game card */
+        .g-card {
+            width: 100%; height: 100%;
+            position: relative;
+            overflow: hidden;
+            border-radius: 4px;
+            border: 1px solid rgba(255,255,255,0.1);
+            box-shadow:
+                0 0 0 1px rgba(255,255,255,0.04) inset,
+                0 30px 80px rgba(0,0,0,0.8),
+                0 0 40px rgba(0,0,0,0.5);
+            background: #080808;
+            transition: box-shadow 0.4s, border-color 0.4s;
+        }
+
+        .g-card:hover {
+            border-color: rgba(220,38,38,0.5);
+            box-shadow:
+                0 0 0 1px rgba(220,38,38,0.15) inset,
+                0 40px 100px rgba(0,0,0,0.9),
+                0 0 60px rgba(220,38,38,0.2);
+        }
+
+        /* Card artwork area */
+        .g-art {
+            position: absolute; inset: 0;
+            overflow: hidden;
+        }
+        .g-art-inner { width: 100%; height: 100%; position: relative; }
+
+        /* Shadewalker artwork */
+        .art-shadewalker {
+            background: radial-gradient(ellipse at 50% 30%, #1a0505 0%, #050101 60%, #000 100%);
+        }
+        .art-shadewalker .art-moon {
+            position: absolute; width: 100px; height: 100px;
+            border-radius: 50%; top: 30px; left: 50%; transform: translateX(-50%);
+            background: radial-gradient(circle at 35% 35%, #ff6060, #cc1111 40%, #550000);
+            box-shadow: 0 0 60px rgba(200,20,20,0.7), 0 0 120px rgba(220,20,20,0.3);
+            animation: moonPulse 4s ease-in-out infinite;
+        }
+        @keyframes moonPulse { 0%,100%{box-shadow:0 0 60px rgba(200,20,20,0.7),0 0 120px rgba(220,20,20,0.3)} 50%{box-shadow:0 0 80px rgba(220,30,30,0.9),0 0 160px rgba(220,20,20,0.5)} }
+        .art-shadewalker .art-trees {
+            position: absolute; bottom: 0; left: 0; right: 0; height: 55%;
+        }
+        .art-tree {
+            position: absolute; bottom: 0;
+            background: #000;
+            clip-path: polygon(50% 0%, 0% 100%, 100% 100%);
+        }
+        .art-shadewalker .art-fog {
+            position: absolute; bottom: 0; left: 0; right: 0; height: 120px;
+            background: linear-gradient(to top, rgba(80,0,0,0.4) 0%, transparent 100%);
+        }
+        .art-shadewalker .art-silhouette {
+            position: absolute; bottom: 80px; left: 50%; transform: translateX(-50%);
+            width: 30px; height: 70px;
+            background: #000;
+            clip-path: polygon(40% 0%, 60% 0%, 62% 40%, 90% 40%, 90% 50%, 62% 50%, 65% 100%, 35% 100%, 38% 50%, 10% 50%, 10% 40%, 38% 40%);
+            filter: drop-shadow(0 0 8px rgba(180,0,0,0.6));
+        }
+        .art-scanlines {
+            position: absolute; inset: 0; pointer-events: none;
+            background: repeating-linear-gradient(0deg, transparent, transparent 2px, rgba(0,0,0,0.08) 2px, rgba(0,0,0,0.08) 4px);
+        }
+
+        /* Knight artwork */
+        .art-knight { background: radial-gradient(ellipse at 50% 20%, #120a02 0%, #060402 50%, #020201 100%); }
+        .art-knight .art-sky { position: absolute; inset: 0; background: linear-gradient(to bottom, #0a0604 0%, #1a0e04 40%, #0a0604 100%); }
+        .art-knight .art-castle {
+            position: absolute; bottom: 60px; left: 50%; transform: translateX(-50%);
+            width: 120px; height: 100px;
+            background: #0d0905;
+            border-top: 3px solid #2a1e0a;
+        }
+        .art-knight .art-torch {
+            position: absolute; width: 6px; height: 20px;
+            background: linear-gradient(to top, #8B4513, #FF6600, #FFD700);
+            border-radius: 2px 2px 0 0;
+            animation: torchFlicker 0.15s ease-in-out infinite alternate;
+        }
+        @keyframes torchFlicker { 0%{filter:brightness(0.8) blur(1px)} 100%{filter:brightness(1.3) blur(0px)} }
+        .art-knight .art-sword {
+            position: absolute; bottom: 160px; left: 50%; transform: translateX(-50%) rotate(45deg);
+            width: 4px; height: 130px;
+            background: linear-gradient(to bottom, #c0c0c0, #888, rgba(0,0,0,0));
+            box-shadow: 0 0 15px rgba(180,180,255,0.4), 0 0 30px rgba(180,180,255,0.2);
+        }
+        .art-knight .art-ground { position: absolute; bottom: 0; left: 0; right: 0; height: 60px; background: linear-gradient(to top, #0d0906, transparent); }
+        .art-knight .art-stars-bg { position: absolute; inset: 0; }
+
+        /* Unknown artwork */
+        .art-unknown { background: #030303; }
+        .art-unknown .art-glitch-layer {
+            position: absolute; inset: 0;
+            display: flex; flex-direction: column; gap: 3px;
+            padding: 20px;
+            animation: dataScroll 3s linear infinite;
+        }
+        @keyframes dataScroll { 0%{transform:translateY(0)} 100%{transform:translateY(-50%)} }
+        .art-data-line { font-family: 'IBM Plex Mono', monospace; font-size: 9px; color: rgba(0,255,80,0.12); white-space: nowrap; overflow: hidden; letter-spacing: 2px; }
+        .art-unknown .art-question {
+            position: absolute; top: 50%; left: 50%; transform: translate(-50%, -50%);
+            font-family: 'Orbitron', sans-serif; font-size: 5rem; font-weight: 900;
+            color: transparent; -webkit-text-stroke: 1px rgba(255,255,255,0.08);
+            animation: questionGlitch 4s ease-in-out infinite;
+        }
+        @keyframes questionGlitch {
+            0%,90%,100%{opacity:1;transform:translate(-50%,-50%) skewX(0deg)}
+            92%{opacity:0.3;transform:translate(-48%,-50%) skewX(-5deg)}
+            94%{opacity:1;transform:translate(-52%,-50%) skewX(3deg)}
+            96%{opacity:0.5;transform:translate(-50%,-50%) skewX(0deg)}
+        }
+        .art-unknown .art-corrupt-bar {
+            position: absolute; left: 0; right: 0; height: 3px;
+            background: rgba(0,255,80,0.2);
+            animation: corruptScan 6s linear infinite;
+        }
+        @keyframes corruptScan { 0%{top:-3px;opacity:0} 10%{opacity:1} 90%{opacity:1} 100%{top:100%;opacity:0} }
+
+        /* Card overlay gradient (bottom fade to info) */
+        .g-card-overlay {
+            position: absolute; bottom: 0; left: 0; right: 0; height: 65%;
+            background: linear-gradient(to top, rgba(0,0,0,0.98) 0%, rgba(0,0,0,0.7) 50%, transparent 100%);
+            z-index: 2;
+        }
+
+        /* Card info */
+        .g-card-info {
+            position: absolute; bottom: 0; left: 0; right: 0; padding: 1.6rem 1.4rem;
+            z-index: 3;
+        }
+        .g-card-tag {
+            display: inline-block; padding: .28rem .7rem;
+            font-size: .62rem; font-weight: 600; letter-spacing: 2px; text-transform: uppercase;
+            margin-bottom: .7rem;
+        }
+        .g-card-tag.active-dev { background: rgba(99,102,241,0.2); border: 1px solid rgba(99,102,241,0.6); color: #a5b4fc; }
+        .g-card-tag.coming    { background: rgba(180,100,0,0.15);  border: 1px solid rgba(180,100,0,0.5);   color: #cc8800; }
+        .g-card-tag.unknown-tag { background: rgba(0,255,80,0.07); border: 1px solid rgba(0,255,80,0.25);   color: rgba(0,255,80,0.5); }
+        .g-card-title { font-family: 'Orbitron', sans-serif; font-size: 1.25rem; font-weight: 900; letter-spacing: 2px; margin-bottom: .35rem; }
+        .g-card-title.locked-t { color: #333; }
+        .g-card-genre { font-size: .72rem; color: var(--text-muted); letter-spacing: 1px; text-transform: uppercase; }
+        .g-card-desc { font-size: .78rem; color: var(--text-mid); line-height: 1.7; margin-top: .6rem; max-height: 0; overflow: hidden; transition: max-height .4s; }
+        .game-slider:hover .g-item .g-card-desc { max-height: 80px; }
+
+        /* Reflection */
+        .g-reflection {
+            position: absolute; inset: 0;
+            transform: rotateX(180deg) translateZ(-1px) translateY(-100%);
+            transform-origin: bottom center;
+            opacity: 0.15;
+            -webkit-mask-image: linear-gradient(to top, rgba(0,0,0,0.5) 0%, transparent 50%);
+            mask-image: linear-gradient(to top, rgba(0,0,0,0.5) 0%, transparent 50%);
+            pointer-events: none;
+        }
+
+        /* Nav arrows */
+        .carousel-nav {
+            display: flex; justify-content: center; align-items: center;
+            gap: 2rem; margin-top: 3rem;
+            position: relative; z-index: 10;
+        }
+        .carousel-arrow {
+            width: 48px; height: 48px;
+            background: rgba(255,255,255,0.04);
+            border: 1px solid rgba(255,255,255,0.1);
+            color: var(--text-muted);
+            font-size: 1.2rem; cursor: pointer;
+            display: flex; align-items: center; justify-content: center;
+            transition: all .3s; font-family: 'IBM Plex Mono', monospace;
+        }
+        .carousel-arrow:hover { background: rgba(220,38,38,0.15); border-color: rgba(220,38,38,0.5); color: #fff; }
+        .carousel-dots { display: flex; gap: .8rem; }
+        .carousel-dot {
+            width: 6px; height: 6px; border-radius: 50%;
+            background: rgba(255,255,255,0.15); border: none; cursor: pointer;
+            transition: all .3s; padding: 0;
+        }
+        .carousel-dot.active { background: var(--red); box-shadow: 0 0 10px rgba(220,38,38,0.6); width: 20px; border-radius: 3px; }
+
+        /* ═══════════════════════════════ ORISON / PLUGINS */
+        .vst-section {
+            padding: 0 0 0;
+            position: relative;
+            overflow: hidden;
+        }
+        .vst-section .section-header { padding: 0 4rem; margin-bottom: 0; }
+        .vst-section .section-label { color: #a855f7; }
+
+        /* Full-bleed ORISON stage */
+        .orison-stage {
+            position: relative;
+            width: 100%;
             min-height: 100vh;
             display: flex;
             align-items: center;
-            justify-content: center;
-            padding: 8rem 2rem 4rem;
-            position: relative;
-        }
-
-        .hero-glow {
-            position: absolute;
-            top: 50%; left: 50%;
-            width: 1000px; height: 1000px;
-            background: radial-gradient(circle, rgba(220,38,38,0.14), transparent 70%);
-            transform: translate(-50%,-50%);
-            animation: pulseGlow 10s ease-in-out infinite;
-            pointer-events: none;
-        }
-
-        @keyframes pulseGlow {
-            0%,100% { transform: translate(-50%,-50%) scale(1); opacity: 0.4; }
-            50%      { transform: translate(-50%,-50%) scale(1.08); opacity: 0.65; }
-        }
-
-        .hero-content {
-            max-width: 1100px;
-            text-align: center;
-            position: relative;
-            z-index: 2;
-        }
-
-        .hero-label {
-            font-size: 0.85rem;
-            color: var(--red);
-            letter-spacing: 4px;
-            margin-bottom: 2rem;
-            text-transform: uppercase;
-            font-weight: 600;
-            animation: fadeInUp 0.8s ease backwards;
-        }
-
-        .hero-title {
-            font-family: 'Orbitron', sans-serif;
-            font-size: 6rem;
-            font-weight: 900;
-            background: linear-gradient(135deg, #ffffff 0%, #dc2626 55%, #ffffff 100%);
-            -webkit-background-clip: text;
-            -webkit-text-fill-color: transparent;
-            background-clip: text;
-            margin-bottom: 1.5rem;
-            letter-spacing: 8px;
-            animation: fadeInUp 0.8s ease 0.1s backwards;
-            line-height: 1.1;
-        }
-
-        .hero-subtitle {
-            font-size: 1.2rem;
-            color: var(--text-mid);
-            margin-bottom: 3rem;
-            animation: fadeInUp 0.8s ease 0.2s backwards;
-            font-weight: 400;
-        }
-
-        @keyframes fadeInUp {
-            from { opacity: 0; transform: translateY(24px); }
-            to   { opacity: 1; transform: translateY(0); }
-        }
-
-        /* ── Sections ── */
-        .section-header { text-align: center; margin-bottom: 5rem; }
-
-        .section-label {
-            font-size: 0.8rem;
-            letter-spacing: 4px;
-            margin-bottom: 1rem;
-            text-transform: uppercase;
-            font-weight: 600;
-        }
-
-        .section-title {
-            font-family: 'Orbitron', sans-serif;
-            font-size: 3.5rem;
-            color: #ffffff;
-            font-weight: 700;
-            letter-spacing: 4px;
-            margin-bottom: 0.75rem;
-        }
-
-        .section-title::before {
-            content: '>';
-            color: var(--red);
-            margin-right: 1rem;
-        }
-
-        .vst-section .section-title::before { color: #7c3aed; }
-
-        .section-subtitle {
-            font-size: 1rem;
-            color: var(--text-muted);
-            font-weight: 400;
-        }
-
-        /* ── Games ── */
-        .games-section {
-            padding: 8rem 4rem;
-            max-width: 1600px;
-            margin: 0 auto;
-        }
-
-        .games-section .section-label { color: #818cf8; }
-
-        .games-grid {
-            display: grid;
-            grid-template-columns: repeat(auto-fit, minmax(400px, 1fr));
-            gap: 2.5rem;
-        }
-
-        .game-card {
-            background: var(--surface);
-            border: 1px solid var(--border);
             overflow: hidden;
-            transition: all 0.4s ease;
-            cursor: pointer;
-            position: relative;
         }
 
-        .game-card::before {
-            content: '';
-            position: absolute;
-            inset: 0;
-            background: linear-gradient(135deg, rgba(99,102,241,0.12), transparent 70%);
-            opacity: 0;
-            transition: opacity 0.4s;
-            z-index: 0;
-        }
-
-        .game-card:hover::before { opacity: 1; }
-        .game-card:hover {
-            transform: translateY(-8px);
-            border-color: rgba(99,102,241,0.5);
-            box-shadow: 0 20px 60px rgba(0,0,0,0.5), 0 0 30px rgba(99,102,241,0.2);
-        }
-
-        .game-card.locked { opacity: 0.45; cursor: default; }
-        .game-card.locked:hover { transform: none; box-shadow: none; border-color: var(--border); }
-        .game-card.locked::before { display: none; }
-
-        .game-showcase {
-            position: relative;
-            width: 100%;
-            aspect-ratio: 16/9;
-            background: #080808;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            overflow: hidden;
-            border-bottom: 1px solid var(--border);
-        }
-
-        .game-showcase.medieval { background: linear-gradient(135deg, #120a0a 0%, #080404 100%); }
-
-        .showcase-overlay {
-            position: absolute; inset: 0;
-            background: radial-gradient(circle at center, transparent 40%, rgba(8,8,8,0.85) 100%);
-            z-index: 1;
-        }
-
-        .showcase-icon {
-            width: 130px; height: 130px;
-            transition: transform 0.4s;
-            z-index: 2; position: relative;
-        }
-        .game-card:hover .showcase-icon { transform: scale(1.08); }
-
-        .showcase-shape { z-index: 2; position: relative; opacity: 0.12; }
-        .shape-sword {
-            width: 3px; height: 100px;
-            background: #6366f1;
-            transform: rotate(45deg);
-            box-shadow: 0 0 20px rgba(99,102,241,0.4);
-        }
-
-        .game-info { padding: 2.5rem; position: relative; z-index: 1; }
-
-        .game-tag {
-            display: inline-block;
-            padding: 0.35rem 0.9rem;
-            background: rgba(99,102,241,0.2);
-            border: 1px solid rgba(99,102,241,0.6);
-            font-size: 0.72rem;
-            color: #a5b4fc;
-            margin-bottom: 1rem;
-            font-weight: 600;
-            letter-spacing: 2px;
-            text-transform: uppercase;
-        }
-
-        .game-tag.locked-tag {
-            background: rgba(80,80,80,0.15);
-            border-color: rgba(80,80,80,0.35);
-            color: #555555;
-        }
-
-        .game-tag.medieval-tag {
-            background: rgba(200,110,0,0.15);
-            border-color: rgba(200,110,0,0.45);
-            color: #cc7700;
-        }
-
-        .game-title {
-            font-family: 'Orbitron', sans-serif;
-            font-size: 1.9rem;
-            color: #ffffff;
-            margin-bottom: 0.4rem;
-            font-weight: 700;
-            letter-spacing: 2px;
-        }
-        .game-title.locked-title { color: #404040; }
-
-        .game-genre {
-            font-size: 0.85rem;
-            color: var(--text-muted);
-            margin-bottom: 1.2rem;
-            text-transform: uppercase;
-            letter-spacing: 1px;
-        }
-
-        .game-description { color: var(--text-mid); line-height: 1.9; font-size: 0.95rem; }
-        .game-description.locked-desc { color: #444444; }
-
-        /* ── VST / ORISON ── */
-        .vst-section {
-            padding: 0 4rem 8rem;
-            max-width: 1600px;
-            margin: 0 auto;
-        }
-
-        .vst-section .section-label { color: #a855f7; }
-
-        .orison-card {
-            background: rgba(10,6,18,0.95);
-            border: 1px solid rgba(160,80,255,0.25);
-            overflow: hidden;
-            transition: all 0.4s ease;
-            position: relative;
-            display: grid;
-            grid-template-columns: 1.2fr 1fr;
-            cursor: pointer;
-        }
-
-        .orison-card:hover {
-            transform: translateY(-8px);
-            border-color: rgba(180,100,255,0.55);
-            box-shadow:
-                0 30px 80px rgba(0,0,0,0.7),
-                0 0 60px rgba(140,60,255,0.2),
-                inset 0 0 80px rgba(100,30,200,0.05);
-        }
-
-        .orison-visual {
-            position: relative;
-            min-height: 360px;
-            background: #05020f;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            overflow: hidden;
-            border-right: 1px solid rgba(160,80,255,0.15);
-        }
-
-        .nebula-bg {
+        /* Nebula background */
+        .orison-nebula {
             position: absolute; inset: 0;
             background:
-                radial-gradient(ellipse at 30% 40%, rgba(120,40,220,0.35) 0%, transparent 55%),
-                radial-gradient(ellipse at 75% 65%, rgba(60,10,160,0.3) 0%, transparent 50%),
-                radial-gradient(ellipse at 60% 20%, rgba(200,80,255,0.15) 0%, transparent 45%);
-            animation: nebulaDrift 14s ease-in-out infinite alternate;
+                radial-gradient(ellipse at 60% 40%, rgba(110,30,220,0.25) 0%, transparent 50%),
+                radial-gradient(ellipse at 20% 70%, rgba(60,10,180,0.2)  0%, transparent 45%),
+                radial-gradient(ellipse at 80% 80%, rgba(180,50,255,0.12) 0%, transparent 40%),
+                #030008;
+            animation: nebulaDrift 18s ease-in-out infinite alternate;
+        }
+        @keyframes nebulaDrift { 0%{opacity:.8;transform:scale(1) rotate(0deg)} 100%{opacity:1;transform:scale(1.05) rotate(1deg)} }
+
+        .orison-stars-layer { position: absolute; inset: 0; z-index: 1; }
+
+        /* Horizontal divider line with glow */
+        .orison-divider {
+            position: absolute; top: 0; left: 0; right: 0; height: 1px;
+            background: linear-gradient(to right, transparent, rgba(160,80,255,0.6) 30%, rgba(200,100,255,0.8) 50%, rgba(160,80,255,0.6) 70%, transparent);
+            box-shadow: 0 0 30px rgba(160,80,255,0.4);
         }
 
-        @keyframes nebulaDrift {
-            0%   { opacity: 0.7; transform: scale(1) rotate(0deg); }
-            100% { opacity: 1;   transform: scale(1.06) rotate(1.5deg); }
-        }
-
-        .stars { position: absolute; inset: 0; z-index: 1; }
-        .star {
+        /* 3D Synth visualization */
+        .synth-3d-wrap {
             position: absolute;
-            border-radius: 50%;
-            background: #fff;
-            animation: starTwinkle var(--sd) ease-in-out infinite;
-        }
-        @keyframes starTwinkle {
-            0%,100% { opacity: var(--so); transform: scale(1); }
-            50%      { opacity: calc(var(--so)*0.3); transform: scale(0.6); }
-        }
-
-        .waveform-wrap {
-            position: relative; z-index: 3;
-            display: flex; flex-direction: column;
-            align-items: center; gap: 1.5rem;
-        }
-
-        .orison-logo-text {
-            font-family: 'Orbitron', sans-serif;
-            font-size: 1rem;
-            letter-spacing: 8px;
-            font-weight: 700;
-            color: rgba(200,150,255,0.5);
-            text-transform: uppercase;
-        }
-
-        .waveform { display: flex; align-items: center; gap: 3px; }
-        .waveform-bar {
-            width: 3px; border-radius: 2px;
-            animation: wavePulse var(--dur) ease-in-out infinite;
-            transform-origin: bottom center;
-        }
-        @keyframes wavePulse {
-            0%,100% { transform: scaleY(0.15); opacity: 0.4; }
-            50%      { transform: scaleY(1);    opacity: 1; }
-        }
-
-        .orbit-ring {
-            position: absolute;
-            border-radius: 50%;
-            border: 1px solid rgba(180,100,255,0.18);
-            animation: orbitSpin var(--os) linear infinite;
+            right: 0; top: 0; bottom: 0;
+            width: 55%;
+            display: flex; align-items: center; justify-content: center;
+            perspective: 1000px;
             z-index: 2;
         }
-        @keyframes orbitSpin {
-            from { transform: translate(-50%,-50%) rotate(0deg); }
-            to   { transform: translate(-50%,-50%) rotate(360deg); }
+
+        .synth-3d {
+            width: 420px; height: 420px;
+            position: relative;
+            transform-style: preserve-3d;
+            animation: synthSpin 40s linear infinite;
         }
-        .orbit-dot {
-            position: absolute;
-            width: 5px; height: 5px;
+        @keyframes synthSpin { from{transform:rotateX(-20deg) rotateY(0deg)} to{transform:rotateX(-20deg) rotateY(360deg)} }
+
+        /* Ring panels */
+        .synth-ring {
+            position: absolute; top: 50%; left: 50%;
             border-radius: 50%;
-            background: rgba(200,130,255,0.7);
-            top: -2.5px; left: 50%; margin-left: -2.5px;
-            box-shadow: 0 0 8px rgba(200,130,255,0.9);
+            border: 1px solid rgba(160,80,255,0.3);
+            transform-style: preserve-3d;
+        }
+        .synth-ring .ring-dot {
+            position: absolute; width: 6px; height: 6px; border-radius: 50%;
+            top: -3px; left: 50%; margin-left: -3px;
+            background: rgba(200,130,255,0.8);
+            box-shadow: 0 0 12px rgba(200,130,255,1);
         }
 
-        .orison-info {
-            padding: 3.5rem;
-            position: relative; z-index: 1;
-            background: linear-gradient(135deg, rgba(20,8,40,0.6) 0%, rgba(10,5,20,0.4) 100%);
-            display: flex; flex-direction: column; justify-content: center;
+        /* Frequency bars in 3D - arranged in a circle */
+        .synth-bars {
+            position: absolute; top: 50%; left: 50%;
+            width: 0; height: 0;
+            transform-style: preserve-3d;
+        }
+        .synth-bar {
+            position: absolute;
+            width: 6px;
+            background: linear-gradient(to top, rgba(100,20,220,0.3), rgba(200,80,255,0.9));
+            border-radius: 2px 2px 0 0;
+            box-shadow: 0 0 10px rgba(200,80,255,0.5);
+            transform-origin: bottom center;
+            bottom: 0;
         }
 
-        .orison-name {
+        /* Core sphere */
+        .synth-core {
+            position: absolute; top: 50%; left: 50%;
+            width: 80px; height: 80px;
+            transform: translate(-50%,-50%);
+            border-radius: 50%;
+            background: radial-gradient(circle at 35% 35%, rgba(220,150,255,0.9), rgba(120,30,240,0.8), rgba(60,10,150,0.6));
+            box-shadow: 0 0 60px rgba(160,80,255,0.6), 0 0 120px rgba(160,80,255,0.3);
+            animation: coreBreath 3s ease-in-out infinite;
+        }
+        @keyframes coreBreath { 0%,100%{box-shadow:0 0 60px rgba(160,80,255,0.6),0 0 120px rgba(160,80,255,0.3);transform:translate(-50%,-50%) scale(1)} 50%{box-shadow:0 0 90px rgba(180,100,255,0.8),0 0 180px rgba(160,80,255,0.4);transform:translate(-50%,-50%) scale(1.08)} }
+
+        /* ORISON info panel */
+        .orison-info-panel {
+            position: relative; z-index: 3;
+            width: 45%; padding: 8rem 5rem 8rem 6rem;
+        }
+        .orison-badge {
+            display: inline-block; padding: .3rem .9rem;
+            background: rgba(140,50,255,0.2); border: 1px solid rgba(160,80,255,0.6);
+            color: #bb77ff; font-size: .68rem; font-weight: 600; letter-spacing: 2px;
+            text-transform: uppercase; margin-bottom: 2rem;
+        }
+        .orison-title {
             font-family: 'Orbitron', sans-serif;
-            font-size: 3.2rem;
-            font-weight: 900;
+            font-size: 5.5rem; font-weight: 900; line-height: .9;
             letter-spacing: 6px;
-            background: linear-gradient(135deg, #ffffff 0%, #cc88ff 45%, #8833ee 100%);
-            -webkit-background-clip: text;
-            -webkit-text-fill-color: transparent;
-            background-clip: text;
-            margin-bottom: 0.4rem;
-            filter: drop-shadow(0 0 20px rgba(160,80,255,0.4));
+            background: linear-gradient(135deg, #fff 0%, #cc88ff 40%, #6600cc 100%);
+            -webkit-background-clip: text; -webkit-text-fill-color: transparent; background-clip: text;
+            filter: drop-shadow(0 0 30px rgba(160,80,255,0.5));
+            margin-bottom: 1rem;
+        }
+        .orison-sub {
+            font-size: .8rem; color: #aa66ee; letter-spacing: 5px;
+            text-transform: uppercase; font-weight: 600; margin-bottom: 1.5rem;
+        }
+        .orison-tagline-big {
+            font-size: 1.4rem; color: rgba(200,160,255,0.8);
+            font-style: italic; margin-bottom: 2rem;
+            font-weight: 400; letter-spacing: .5px;
+        }
+        .orison-body {
+            color: var(--text-mid); line-height: 1.9; font-size: .92rem;
+            margin-bottom: 2.5rem; max-width: 460px;
         }
 
-        .orison-type {
-            font-size: 0.8rem;
-            color: #aa66ee;
-            letter-spacing: 4px;
-            text-transform: uppercase;
-            font-weight: 600;
-            margin-bottom: 1.2rem;
-        }
-
-        .orison-tagline {
-            font-size: 1.05rem;
-            color: rgba(200,160,255,0.85);
-            font-style: italic;
-            margin-bottom: 1.8rem;
-            letter-spacing: 0.5px;
-        }
-
-        .orison-desc {
-            color: var(--text-mid);
-            line-height: 1.9;
-            font-size: 0.92rem;
-            margin-bottom: 2rem;
-            max-width: 460px;
-        }
-
-        .orison-specs {
-            display: flex; flex-direction: column; gap: 0.5rem;
-            border-left: 2px solid rgba(160,80,255,0.3);
+        /* Spec grid */
+        .orison-specs-grid {
+            display: grid; grid-template-columns: 1fr 1fr;
+            gap: .4rem 2rem;
+            border-left: 2px solid rgba(160,80,255,0.35);
             padding-left: 1.5rem;
-            margin-bottom: 2rem;
+            margin-bottom: 2.5rem;
         }
+        .spec-row { display: flex; flex-direction: column; gap: .15rem; padding: .6rem 0; border-bottom: 1px solid rgba(160,80,255,0.1); }
+        .spec-k { font-size: .65rem; color: #aa66ee; letter-spacing: 2px; font-weight: 600; text-transform: uppercase; }
+        .spec-v { font-size: .82rem; color: var(--text-mid); }
 
-        .spec-line { display: flex; gap: 1.2rem; font-size: 0.82rem; }
-        .spec-key { color: #aa66ee; font-weight: 600; width: 90px; flex-shrink: 0; }
-        .spec-val { color: var(--text-mid); }
-
-        .orison-cart-btn {
-            display: inline-flex;
-            align-items: center;
-            gap: 10px;
-            padding: 0.9rem 1.8rem;
-            background: rgba(140,50,255,0.2);
-            border: 1px solid rgba(160,80,255,0.5);
+        /* Wishlist button */
+        .wishlist-btn {
+            display: inline-flex; align-items: center; gap: 12px;
+            padding: 1rem 2.2rem;
+            background: rgba(120,40,255,0.2);
+            border: 1px solid rgba(160,80,255,0.55);
             color: #cc88ff;
             font-family: 'IBM Plex Mono', monospace;
-            font-size: 0.78rem;
-            font-weight: 600;
-            letter-spacing: 2px;
-            text-transform: uppercase;
-            cursor: pointer;
-            transition: all 0.3s;
-            align-self: flex-start;
+            font-size: .8rem; font-weight: 600; letter-spacing: 3px; text-transform: uppercase;
+            cursor: pointer; transition: all .3s;
         }
-        .orison-cart-btn:hover {
-            background: rgba(160,80,255,0.35);
-            border-color: rgba(200,120,255,0.8);
-            color: #fff;
-            box-shadow: 0 0 25px rgba(160,80,255,0.4);
-            transform: translateY(-2px);
+        .wishlist-btn:hover {
+            background: rgba(160,80,255,0.35); border-color: rgba(200,120,255,0.9);
+            color: #fff; box-shadow: 0 0 40px rgba(160,80,255,0.5); transform: translateY(-2px);
         }
-        .orison-cart-btn.in-cart {
-            background: rgba(100,200,100,0.15);
-            border-color: rgba(100,200,100,0.4);
-            color: #88dd88;
+        .wishlist-btn.in-cart { background: rgba(100,200,100,0.15); border-color: rgba(100,200,100,0.45); color: #88dd88; }
+
+        /* Equalizer strip below ORISON */
+        .orison-eq-strip {
+            position: absolute; bottom: 0; left: 0; right: 0;
+            height: 80px; display: flex; align-items: flex-end;
+            justify-content: center; gap: 3px;
+            z-index: 2; padding-bottom: 8px;
+            background: linear-gradient(to top, rgba(0,0,0,0.8) 0%, transparent 100%);
+        }
+        .eq-bar-bg {
+            width: 4px; border-radius: 2px 2px 0 0;
+            background: linear-gradient(to top, rgba(100,20,220,0.2), rgba(180,80,255,0.5));
         }
 
-        /* ── About ── */
-        .about {
-            padding: 8rem 4rem;
-            max-width: 1400px;
-            margin: 0 auto;
-        }
-
+        /* ═══════════════════════════════ ABOUT */
+        .about { padding: 8rem 4rem; max-width: 1400px; margin: 0 auto; }
         .about .section-label { color: var(--red); }
-
-        .terminal-about {
-            background: rgba(0,0,0,0.97);
-            border: 1px solid rgba(220,38,38,0.4);
-            box-shadow: 0 0 40px rgba(220,38,38,0.12);
-            font-family: 'IBM Plex Mono', monospace;
-            max-width: 1100px;
-            margin: 0 auto;
-        }
-        .terminal-header {
-            background: rgba(220,38,38,0.9);
-            padding: 0.75rem 1.5rem;
-            display: flex; align-items: center; gap: 0.8rem;
-        }
+        .terminal-about { background: rgba(0,0,0,0.97); border: 1px solid rgba(220,38,38,0.4); box-shadow: 0 0 40px rgba(220,38,38,0.12); font-family: 'IBM Plex Mono',monospace; max-width: 1100px; margin: 0 auto; }
+        .terminal-header { background: rgba(220,38,38,0.9); padding: .75rem 1.5rem; display: flex; align-items: center; gap: .8rem; }
         .terminal-dot { width: 12px; height: 12px; border-radius: 50%; background: rgba(0,0,0,0.4); }
-        .terminal-title { color: #fff; font-size: 0.9rem; font-weight: 600; letter-spacing: 1px; }
+        .terminal-title { color: #fff; font-size: .9rem; font-weight: 600; letter-spacing: 1px; }
         .terminal-body { padding: 2.5rem; }
-        .terminal-line { margin: 0.75rem 0; display: flex; align-items: flex-start; line-height: 1.8; }
-        .terminal-prompt { color: var(--red); margin-right: 0.8rem; font-weight: 600; flex-shrink: 0; }
-        .terminal-text { color: #00cc55; }
+        .terminal-line { margin: .75rem 0; display: flex; align-items: flex-start; line-height: 1.8; }
+        .terminal-prompt { color: var(--red); margin-right: .8rem; font-weight: 600; flex-shrink: 0; }
+        .terminal-text  { color: #00cc55; }
         .terminal-error { color: var(--red); font-weight: 600; }
-        .terminal-info { color: #c0c0c0; }
-        .terminal-cursor {
-            display: inline-block; width: 9px; height: 15px;
-            background: #00cc55;
-            animation: blink 1s step-end infinite;
-            margin-left: 3px; vertical-align: middle;
-        }
+        .terminal-info  { color: #c0c0c0; }
+        .terminal-cursor { display: inline-block; width: 9px; height: 15px; background: #00cc55; animation: blink 1s step-end infinite; margin-left: 3px; vertical-align: middle; }
         @keyframes blink { 0%,50%{opacity:1} 51%,100%{opacity:0} }
+        .features-grid { display: grid; grid-template-columns: repeat(auto-fit,minmax(300px,1fr)); gap: 2rem; margin-top: 4rem; }
+        .feature-card { background: rgba(15,15,15,0.7); padding: 2.5rem; border: 1px solid var(--border); transition: all .4s; position: relative; overflow: hidden; }
+        .feature-card::before { content:''; position: absolute; top:0; left:0; width:2px; height:0; background:var(--red); transition:height .4s; }
+        .feature-card:hover::before { height:100%; }
+        .feature-card:hover { transform:translateY(-4px); border-color:rgba(255,255,255,0.14); background:rgba(18,18,18,0.85); }
+        .feature-label  { font-size:.72rem; color:var(--red); letter-spacing:3px; text-transform:uppercase; font-weight:600; margin-bottom:.75rem; }
+        .feature-title  { font-family:'Orbitron',sans-serif; font-size:1.25rem; margin-bottom:1rem; color:#fff; font-weight:700; letter-spacing:1px; }
+        .feature-description { color:var(--text-mid); line-height:1.8; font-size:.95rem; }
 
-        .features-grid {
-            display: grid;
-            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
-            gap: 2rem;
-            margin-top: 4rem;
-        }
+        /* ═══════════════════════════════ FOOTER */
+        footer { padding: 4rem; text-align: center; border-top: 1px solid var(--border); margin-top: 4rem; background: rgba(8,8,8,0.9); }
+        .social-links { display: flex; justify-content: center; gap: 1.5rem; margin-bottom: 2.5rem; flex-wrap: wrap; }
+        .social-links a { color: var(--text-mid); text-decoration: none; font-size: .85rem; padding: .8rem 2rem; border: 1px solid rgba(255,255,255,0.12); transition: all .3s; font-weight: 600; letter-spacing: 2px; }
+        .social-links a:hover { background: var(--red); border-color: var(--red); color: #fff; transform: translateY(-3px); box-shadow: 0 8px 25px rgba(220,38,38,0.4); }
+        .copyright { color: #3a3a3a; font-size: .8rem; letter-spacing: 1px; }
 
-        .feature-card {
-            background: rgba(15,15,15,0.7);
-            padding: 2.5rem;
-            border: 1px solid var(--border);
-            transition: all 0.4s;
-            position: relative;
-            overflow: hidden;
-        }
-        .feature-card::before {
-            content: '';
-            position: absolute;
-            top: 0; left: 0;
-            width: 2px; height: 0;
-            background: var(--red);
-            transition: height 0.4s;
-        }
-        .feature-card:hover::before { height: 100%; }
-        .feature-card:hover {
-            transform: translateY(-4px);
-            border-color: rgba(255,255,255,0.14);
-            background: rgba(18,18,18,0.85);
-        }
-        .feature-label {
-            font-size: 0.72rem;
-            color: var(--red);
-            letter-spacing: 3px;
-            text-transform: uppercase;
-            font-weight: 600;
-            margin-bottom: 0.75rem;
-        }
-        .feature-title {
-            font-family: 'Orbitron', sans-serif;
-            font-size: 1.25rem;
-            margin-bottom: 1rem;
-            color: #fff;
-            font-weight: 700;
-            letter-spacing: 1px;
-        }
-        .feature-description { color: var(--text-mid); line-height: 1.8; font-size: 0.95rem; }
-
-        /* ── Footer ── */
-        footer {
-            padding: 4rem;
-            text-align: center;
-            border-top: 1px solid var(--border);
-            margin-top: 4rem;
-            background: rgba(8,8,8,0.9);
-        }
-
-        .social-links {
-            display: flex; justify-content: center;
-            gap: 1.5rem; margin-bottom: 2.5rem; flex-wrap: wrap;
-        }
-        .social-links a {
-            color: var(--text-mid);
-            text-decoration: none;
-            font-size: 0.85rem;
-            padding: 0.8rem 2rem;
-            border: 1px solid rgba(255,255,255,0.12);
-            transition: all 0.3s;
-            font-weight: 600;
-            letter-spacing: 2px;
-        }
-        .social-links a:hover {
-            background: var(--red);
-            border-color: var(--red);
-            color: #fff;
-            transform: translateY(-3px);
-            box-shadow: 0 8px 25px rgba(220,38,38,0.4);
-        }
-        .copyright { color: #3a3a3a; font-size: 0.8rem; letter-spacing: 1px; }
-
-        /* ── Responsive ── */
-        @media (max-width: 1100px) {
-            .orison-card { grid-template-columns: 1fr; }
-            .orison-visual { min-height: 260px; border-right: none; border-bottom: 1px solid rgba(160,80,255,0.15); }
-        }
-        @media (max-width: 1024px) {
-            .hero-title { font-size: 4rem; }
-            .header { padding: 1.5rem 2rem; }
-            .games-section, .vst-section, .about { padding: 4rem 2rem; }
-            .games-grid { grid-template-columns: 1fr; }
-            .section-title { font-size: 2.8rem; }
-        }
-        @media (max-width: 768px) {
-            .hero-title { font-size: 2.8rem; letter-spacing: 4px; }
-            .nav-links { display: none; }
-            .cart-drawer { width: 100vw; }
-        }
+        /* ═══════════════════════════════ RESPONSIVE */
+        @media(max-width:1100px){ .synth-3d-wrap{display:none} .orison-info-panel{width:100%;padding:5rem 3rem} .orison-stage{min-height:auto} }
+        @media(max-width:1024px){ .hero-title{font-size:4rem} .header{padding:1.5rem 2rem} .about{padding:4rem 2rem} .section-title{font-size:2.8rem} .orison-title{font-size:3.5rem} }
+        @media(max-width:768px){ .hero-title{font-size:2.8rem;letter-spacing:4px} .nav-links{display:none} .cart-drawer{width:100vw} .game-slider{width:240px;height:340px} }
     </style>
 </head>
 <body>
-    <canvas id="particle-canvas"></canvas>
-    <div class="bg-gradient" id="bg-gradient"></div>
+<canvas id="particle-canvas"></canvas>
+<div class="bg-gradient" id="bg-gradient"></div>
 
-    <!-- Cart Overlay + Drawer -->
-    <div class="cart-overlay" id="cart-overlay"></div>
-    <div class="cart-drawer" id="cart-drawer">
-        <div class="cart-head">
-            <h2>CART</h2>
-            <button class="cart-close" id="cart-close-btn">&times;</button>
-        </div>
-        <div class="cart-body" id="cart-body">
-            <div class="cart-empty" id="cart-empty">
-                <div class="cart-empty-icon">&#x1F6D2;</div>
-                <span>Your cart is empty.</span>
-            </div>
-        </div>
-        <div class="cart-foot">
-            <div class="cart-total-row">
-                <span class="cart-total-label">Total</span>
-                <span class="cart-total-price" id="cart-total">$0.00</span>
-            </div>
-            <button class="cart-checkout" id="cart-checkout" disabled>
-                PROCEED TO CHECKOUT
-            </button>
+<!-- Cart Overlay -->
+<div class="cart-overlay" id="cart-overlay"></div>
+<div class="cart-drawer" id="cart-drawer">
+    <div class="cart-head">
+        <h2>CART</h2>
+        <button class="cart-close" id="cart-close-btn">&times;</button>
+    </div>
+    <div class="cart-body" id="cart-body">
+        <div class="cart-empty" id="cart-empty">
+            <div class="cart-empty-icon">&#x1F6D2;</div>
+            <span>Your cart is empty.</span>
         </div>
     </div>
+    <div class="cart-foot">
+        <div class="cart-total-row">
+            <span class="cart-total-label">Total</span>
+            <span class="cart-total-price" id="cart-total">$0.00</span>
+        </div>
+        <button class="cart-checkout" id="cart-checkout" disabled>PROCEED TO CHECKOUT</button>
+    </div>
+</div>
 
-    <div class="content">
-        <header class="header" id="header">
-            <div class="logo" id="logo-home">SOLO.PRODIGY</div>
-            <div class="nav-right">
-                <nav class="nav-links">
-                    <a data-target="games">GAMES</a>
-                    <a data-target="audio">AUDIO</a>
-                    <a data-target="about">ABOUT</a>
-                    <a href="https://beacons.ai/soloprodigy" target="_blank">CONTACT</a>
-                    <a href="https://github.com/soloprodigydev" target="_blank">GITHUB</a>
-                </nav>
-                <button class="cart-btn" id="cart-open-btn">
-                    &#x1F6D2; CART
-                    <span class="cart-count" id="cart-count">0</span>
-                </button>
-            </div>
-        </header>
-
-        <section class="hero" id="section-hero">
-            <div class="hero-glow"></div>
-            <div class="hero-content">
-                <div class="hero-label">INDEPENDENT DEVELOPER</div>
-                <h1 class="hero-title">SOLO.PRODIGY</h1>
-                <p class="hero-subtitle">Story-driven games and audio tools, built from scratch.</p>
-            </div>
-        </section>
-
-        <!-- Games -->
-        <section class="games-section" id="games">
-            <div class="section-header">
-                <div class="section-label">PORTFOLIO</div>
-                <h2 class="section-title">GAMES</h2>
-                <p class="section-subtitle">Current and upcoming narrative experiences</p>
-            </div>
-            <div class="games-grid">
-                <div class="game-card" id="shadewalker-card">
-                    <div class="game-showcase">
-                        <div class="showcase-overlay"></div>
-                        <img src="./shadewalker/icon.png" alt="Shadewalker" class="showcase-icon">
-                    </div>
-                    <div class="game-info">
-                        <span class="game-tag">IN DEVELOPMENT</span>
-                        <h3 class="game-title">SHADEWALKER</h3>
-                        <p class="game-genre">Dark Fantasy &bull; Story Exploration</p>
-                        <p class="game-description">
-                            Venture into a world consumed by shadows. Explore hauntingly beautiful environments,
-                            uncover ancient mysteries, and immerse yourself in a narrative-driven adventure where
-                            every step reveals new secrets.
-                        </p>
-                    </div>
-                </div>
-                <div class="game-card locked">
-                    <div class="game-showcase medieval">
-                        <div class="showcase-overlay"></div>
-                        <div class="showcase-shape shape-sword"></div>
-                    </div>
-                    <div class="game-info">
-                        <span class="game-tag medieval-tag">COMING SOON</span>
-                        <h3 class="game-title locked-title">UNTITLED KNIGHT PROJECT</h3>
-                        <p class="game-genre">Medieval Fantasy &bull; Story Driven</p>
-                        <p class="game-description locked-desc">
-                            A medieval action-narrative game currently in pre-production. Development begins after Shadewalker ships.
-                        </p>
-                    </div>
-                </div>
-                <div class="game-card locked">
-                    <div class="game-showcase">
-                        <div class="showcase-overlay"></div>
-                        <div class="showcase-shape" style="width:60px;height:60px;border:1px solid #555;border-radius:50%;"></div>
-                    </div>
-                    <div class="game-info">
-                        <span class="game-tag locked-tag">UNANNOUNCED</span>
-                        <h3 class="game-title locked-title">PROJECT UNKNOWN</h3>
-                        <p class="game-genre">TBD</p>
-                        <p class="game-description locked-desc">Details withheld. More information when the time comes.</p>
-                    </div>
-                </div>
-            </div>
-        </section>
-
-        <!-- Audio Tools -->
-        <section class="vst-section" id="audio">
-            <div class="section-header">
-                <div class="section-label">AUDIO TOOLS</div>
-                <h2 class="section-title">PLUGINS</h2>
-                <p class="section-subtitle">Original VST instruments and effects</p>
-            </div>
-
-            <div class="orison-card" id="orison-card">
-                <div class="orison-visual">
-                    <div class="nebula-bg"></div>
-                    <div class="stars" id="stars"></div>
-                    <div class="orbit-ring" style="width:180px;height:180px;top:50%;left:50%;--os:18s;"><div class="orbit-dot"></div></div>
-                    <div class="orbit-ring" style="width:260px;height:260px;top:50%;left:50%;--os:30s;animation-direction:reverse;opacity:0.6;"><div class="orbit-dot" style="background:rgba(255,160,255,0.6);box-shadow:0 0 8px rgba(255,160,255,0.8);"></div></div>
-                    <div class="waveform-wrap">
-                        <div class="orison-logo-text">Orison</div>
-                        <div class="waveform" id="waveform"></div>
-                    </div>
-                </div>
-                <div class="orison-info">
-                    <div style="margin-bottom:1.2rem;">
-                        <span class="game-tag" style="background:rgba(140,50,255,0.2);border-color:rgba(160,80,255,0.6);color:#bb77ff;">IN DEVELOPMENT</span>
-                    </div>
-                    <div class="orison-name">ORISON</div>
-                    <div class="orison-type">VST INSTRUMENT &middot; SYNTHESIZER</div>
-                    <p class="orison-tagline">Set the Standard.</p>
-                    <p class="orison-desc">
-                        ORISON is an original VST instrument built for producers who demand depth without compromise. Wavetable, granular, spectral, and sampled synthesis unified in one instrument — sculpt sound from silence to something sacred.
-                    </p>
-                    <div class="orison-specs">
-                        <div class="spec-line"><span class="spec-key">STATUS</span><span class="spec-val">In active development</span></div>
-                        <div class="spec-line"><span class="spec-key">FORMAT</span><span class="spec-val">VST3</span></div>
-                        <div class="spec-line"><span class="spec-key">ENGINE</span><span class="spec-val">Wavetable &middot; Granular &middot; Spectral &middot; Sampler</span></div>
-                        <div class="spec-line"><span class="spec-key">PRICE</span><span class="spec-val">TBA</span></div>
-                    </div>
-                    <button class="orison-cart-btn" id="orison-cart-btn">
-                        + ADD TO WISHLIST
-                    </button>
-                </div>
-            </div>
-        </section>
-
-        <!-- About -->
-        <section class="about" id="about">
-            <div class="section-header">
-                <div class="section-label">BACKGROUND</div>
-                <h2 class="section-title">ABOUT</h2>
-                <p class="section-subtitle">The story behind the work</p>
-            </div>
-            <div class="terminal-about">
-                <div class="terminal-header">
-                    <div class="terminal-dot"></div>
-                    <div class="terminal-dot"></div>
-                    <div class="terminal-dot"></div>
-                    <div class="terminal-title">dev_console.exe</div>
-                </div>
-                <div class="terminal-body">
-                    <div class="terminal-line"><span class="terminal-prompt">&gt;</span><span class="terminal-error">ERROR: sleep.not_found</span></div>
-                    <div class="terminal-line"><span class="terminal-prompt">&gt;</span><span class="terminal-text">compile_dreams()</span></div>
-                    <div class="terminal-line"><span class="terminal-prompt">&gt;</span><span class="terminal-text">init_developer_bio()</span></div>
-                    <div class="terminal-line" style="margin-top:2rem;"><span class="terminal-prompt">&gt;</span><span class="terminal-info">Solo.Prodigy is an independent developer focused on story-driven games and original audio tools. The goal is straightforward: build things that are actually worth your time and money.</span></div>
-                    <div class="terminal-line" style="margin-top:1.5rem;"><span class="terminal-prompt">&gt;</span><span class="terminal-info">Before Shadewalker there were two school projects — Serein and OverStory — both on itch.io, both 3D. They were learning exercises, not professional releases, and they served their purpose. Those taught the fundamentals of what not to do, which turned out to be more valuable than expected.</span></div>
-                    <div class="terminal-line" style="margin-top:1.5rem;"><span class="terminal-prompt">&gt;</span><span class="terminal-info">Shadewalker is the first fully original, properly licensed professional project. Every system, every animation, every design decision built from scratch with the intent to ship something players genuinely enjoy. ORISON follows the same standard — this time in sound.</span></div>
-                    <div class="terminal-line" style="margin-top:1.5rem;"><span class="terminal-prompt">&gt;</span><span class="terminal-info">Still early in the journey. The work continues.</span></div>
-                    <div class="terminal-line" style="margin-top:2rem;"><span class="terminal-prompt">&gt;</span><span class="terminal-text">status: building</span></div>
-                    <div class="terminal-line"><span class="terminal-prompt">&gt;</span><span class="terminal-text">next_release: loading<span class="terminal-cursor"></span></span></div>
-                </div>
-            </div>
-            <div class="features-grid">
-                <div class="feature-card">
-                    <div class="feature-label">APPROACH</div>
-                    <h3 class="feature-title">STORY FIRST</h3>
-                    <p class="feature-description">Every game is built around narrative. The mechanics serve the story, not the other way around.</p>
-                </div>
-                <div class="feature-card">
-                    <div class="feature-label">CRAFT</div>
-                    <h3 class="feature-title">WORLD BUILDING</h3>
-                    <p class="feature-description">Environments where atmosphere is deliberate. Every space is designed to say something.</p>
-                </div>
-                <div class="feature-card">
-                    <div class="feature-label">FOUNDATION</div>
-                    <h3 class="feature-title">PASSION DRIVEN</h3>
-                    <p class="feature-description">Solo developer. No team, no publisher. Everything ships when it is ready and not before.</p>
-                </div>
-            </div>
-        </section>
-
-        <footer>
-            <div class="social-links">
+<div class="content">
+    <header class="header" id="header">
+        <div class="logo" id="logo-home">SOLO.PRODIGY</div>
+        <div class="nav-right">
+            <nav class="nav-links">
+                <a data-target="games">GAMES</a>
+                <a data-target="audio">AUDIO</a>
+                <a data-target="about">ABOUT</a>
                 <a href="https://beacons.ai/soloprodigy" target="_blank">CONTACT</a>
                 <a href="https://github.com/soloprodigydev" target="_blank">GITHUB</a>
+            </nav>
+            <button class="cart-btn" id="cart-open-btn">
+                &#x1F6D2; CART
+                <span class="cart-count" id="cart-count">0</span>
+            </button>
+        </div>
+    </header>
+
+    <!-- ═══ HERO ═══ -->
+    <section class="hero" id="section-hero">
+        <div class="hero-glow"></div>
+        <div class="hero-content">
+            <div class="hero-label">INDEPENDENT DEVELOPER</div>
+            <h1 class="hero-title">SOLO.PRODIGY</h1>
+            <p class="hero-subtitle">Story-driven games and audio tools, built from scratch.</p>
+        </div>
+    </section>
+
+    <!-- ═══ GAMES — 3D CAROUSEL ═══ -->
+    <section class="games-section" id="games">
+        <div class="section-header">
+            <div class="section-label">PORTFOLIO</div>
+            <h2 class="section-title">GAMES</h2>
+            <p class="section-subtitle">Current and upcoming narrative experiences</p>
+        </div>
+
+        <div class="carousel-stage">
+            <div class="carousel-fog left"></div>
+            <div class="carousel-fog right"></div>
+            <div class="carousel-ground"></div>
+            <div class="carousel-ground-glow"></div>
+
+            <div class="game-slider" id="game-slider">
+                <div class="g-list">
+
+                    <!-- Card 1: SHADEWALKER -->
+                    <div class="g-item" id="g-shadewalker">
+                        <div class="g-card" data-href="./shadewalker">
+                            <div class="g-art">
+                                <div class="g-art-inner art-shadewalker">
+                                    <div class="art-moon"></div>
+                                    <div class="art-trees" id="art-trees"></div>
+                                    <div class="art-fog"></div>
+                                    <div class="art-silhouette"></div>
+                                    <div class="art-scanlines"></div>
+                                </div>
+                            </div>
+                            <div class="g-card-overlay"></div>
+                            <div class="g-card-info">
+                                <span class="g-card-tag active-dev">IN DEVELOPMENT</span>
+                                <div class="g-card-title">SHADEWALKER</div>
+                                <div class="g-card-genre">Dark Fantasy &bull; Story Exploration</div>
+                                <div class="g-card-desc">Venture into a world consumed by shadows. Hauntingly beautiful environments await.</div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Card 2: KNIGHT -->
+                    <div class="g-item" id="g-knight">
+                        <div class="g-card" style="cursor:default">
+                            <div class="g-art">
+                                <div class="g-art-inner art-knight">
+                                    <div class="art-sky"></div>
+                                    <div id="art-knight-stars"></div>
+                                    <div class="art-sword"></div>
+                                    <div class="art-castle">
+                                        <div class="art-torch" style="top:-20px;left:20px;"></div>
+                                        <div class="art-torch" style="top:-20px;right:20px;"></div>
+                                    </div>
+                                    <div class="art-ground"></div>
+                                    <div class="art-scanlines"></div>
+                                </div>
+                            </div>
+                            <div class="g-card-overlay"></div>
+                            <div class="g-card-info">
+                                <span class="g-card-tag coming">COMING SOON</span>
+                                <div class="g-card-title locked-t">UNTITLED KNIGHT</div>
+                                <div class="g-card-genre">Medieval Fantasy &bull; Story Driven</div>
+                                <div class="g-card-desc">Medieval action-narrative. Pre-production. Development begins after Shadewalker ships.</div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Card 3: UNKNOWN -->
+                    <div class="g-item" id="g-unknown">
+                        <div class="g-card" style="cursor:default">
+                            <div class="g-art">
+                                <div class="g-art-inner art-unknown">
+                                    <div class="art-glitch-layer" id="art-glitch"></div>
+                                    <div class="art-question">?</div>
+                                    <div class="art-corrupt-bar"></div>
+                                    <div class="art-scanlines"></div>
+                                </div>
+                            </div>
+                            <div class="g-card-overlay"></div>
+                            <div class="g-card-info">
+                                <span class="g-card-tag unknown-tag">UNANNOUNCED</span>
+                                <div class="g-card-title locked-t">PROJECT UNKNOWN</div>
+                                <div class="g-card-genre">CLASSIFIED</div>
+                                <div class="g-card-desc">Details withheld. More information when the time comes.</div>
+                            </div>
+                        </div>
+                    </div>
+
+                </div><!-- /.g-list -->
+            </div><!-- /.game-slider -->
+        </div><!-- /.carousel-stage -->
+
+        <div class="carousel-nav">
+            <button class="carousel-arrow" id="carousel-prev">&#x2039;</button>
+            <div class="carousel-dots">
+                <button class="carousel-dot active" data-idx="0"></button>
+                <button class="carousel-dot"        data-idx="1"></button>
+                <button class="carousel-dot"        data-idx="2"></button>
             </div>
-            <p class="copyright">&copy; 2025 Solo Prodigy Dev. All rights reserved.</p>
-        </footer>
-    </div>
+            <button class="carousel-arrow" id="carousel-next">&#x203A;</button>
+        </div>
+    </section>
 
-    <script>
-    // ═══════════════════════════════════════
-    //  SMOOTH SCROLL HELPER
-    //  FIX: all nav links now use this
-    // ═══════════════════════════════════════
-    function scrollToSection(id) {
-        const el = document.getElementById(id);
-        if (!el) return;
-        el.scrollIntoView({ behavior: 'smooth', block: 'start' });
+    <!-- ═══ AUDIO TOOLS — ORISON ═══ -->
+    <section class="vst-section" id="audio">
+        <div class="section-header" style="padding-top:6rem; margin-bottom:4rem;">
+            <div class="section-label">AUDIO TOOLS</div>
+            <h2 class="section-title">PLUGINS</h2>
+            <p class="section-subtitle">Original VST instruments and effects</p>
+        </div>
+
+        <div class="orison-stage" id="orison-card">
+            <div class="orison-nebula"></div>
+            <div class="orison-divider"></div>
+            <div class="orison-stars-layer" id="orison-stars"></div>
+
+            <!-- Info panel (left) -->
+            <div class="orison-info-panel">
+                <div class="orison-badge">IN DEVELOPMENT</div>
+                <div class="orison-title">ORISON</div>
+                <div class="orison-sub">VST Instrument &middot; Synthesizer</div>
+                <p class="orison-tagline-big">Set the Standard.</p>
+                <p class="orison-body">
+                    ORISON is an original VST instrument built for producers who demand depth without compromise.
+                    Wavetable, granular, spectral, and sampled synthesis unified in one instrument — sculpt
+                    sound from silence to something sacred.
+                </p>
+                <div class="orison-specs-grid">
+                    <div class="spec-row"><span class="spec-k">Status</span><span class="spec-v">Active development</span></div>
+                    <div class="spec-row"><span class="spec-k">Format</span><span class="spec-v">VST3</span></div>
+                    <div class="spec-row"><span class="spec-k">Engine</span><span class="spec-v">Wavetable &middot; Granular</span></div>
+                    <div class="spec-row"><span class="spec-k">Engine+</span><span class="spec-v">Spectral &middot; Sampler</span></div>
+                    <div class="spec-row"><span class="spec-k">Price</span><span class="spec-v">TBA at launch</span></div>
+                    <div class="spec-row"><span class="spec-k">Platform</span><span class="spec-v">Win / Mac</span></div>
+                </div>
+                <button class="wishlist-btn" id="orison-cart-btn">+ ADD TO WISHLIST</button>
+            </div>
+
+            <!-- 3D synth (right) -->
+            <div class="synth-3d-wrap">
+                <div class="synth-3d" id="synth-3d">
+                    <!-- rings and bars injected by JS -->
+                    <div class="synth-core"></div>
+                </div>
+            </div>
+
+            <!-- EQ strip -->
+            <div class="orison-eq-strip" id="orison-eq"></div>
+        </div>
+    </section>
+
+    <!-- ═══ ABOUT ═══ -->
+    <section class="about" id="about">
+        <div class="section-header">
+            <div class="section-label">BACKGROUND</div>
+            <h2 class="section-title">ABOUT</h2>
+            <p class="section-subtitle">The story behind the work</p>
+        </div>
+        <div class="terminal-about">
+            <div class="terminal-header">
+                <div class="terminal-dot"></div><div class="terminal-dot"></div><div class="terminal-dot"></div>
+                <div class="terminal-title">dev_console.exe</div>
+            </div>
+            <div class="terminal-body">
+                <div class="terminal-line"><span class="terminal-prompt">&gt;</span><span class="terminal-error">ERROR: sleep.not_found</span></div>
+                <div class="terminal-line"><span class="terminal-prompt">&gt;</span><span class="terminal-text">compile_dreams()</span></div>
+                <div class="terminal-line"><span class="terminal-prompt">&gt;</span><span class="terminal-text">init_developer_bio()</span></div>
+                <div class="terminal-line" style="margin-top:2rem"><span class="terminal-prompt">&gt;</span><span class="terminal-info">Solo.Prodigy is an independent developer focused on story-driven games and original audio tools. The goal is straightforward: build things that are actually worth your time and money.</span></div>
+                <div class="terminal-line" style="margin-top:1.5rem"><span class="terminal-prompt">&gt;</span><span class="terminal-info">Before Shadewalker there were two school projects — Serein and OverStory — both on itch.io, both 3D. They were learning exercises, not professional releases, and they served their purpose. Those taught the fundamentals of what not to do, which turned out to be more valuable than expected.</span></div>
+                <div class="terminal-line" style="margin-top:1.5rem"><span class="terminal-prompt">&gt;</span><span class="terminal-info">Shadewalker is the first fully original, properly licensed professional project. Every system, every animation, every design decision built from scratch with the intent to ship something players genuinely enjoy. ORISON follows the same standard — this time in sound.</span></div>
+                <div class="terminal-line" style="margin-top:1.5rem"><span class="terminal-prompt">&gt;</span><span class="terminal-info">Still early in the journey. The work continues.</span></div>
+                <div class="terminal-line" style="margin-top:2rem"><span class="terminal-prompt">&gt;</span><span class="terminal-text">status: building</span></div>
+                <div class="terminal-line"><span class="terminal-prompt">&gt;</span><span class="terminal-text">next_release: loading<span class="terminal-cursor"></span></span></div>
+            </div>
+        </div>
+        <div class="features-grid">
+            <div class="feature-card">
+                <div class="feature-label">APPROACH</div>
+                <h3 class="feature-title">STORY FIRST</h3>
+                <p class="feature-description">Every game is built around narrative. The mechanics serve the story, not the other way around.</p>
+            </div>
+            <div class="feature-card">
+                <div class="feature-label">CRAFT</div>
+                <h3 class="feature-title">WORLD BUILDING</h3>
+                <p class="feature-description">Environments where atmosphere is deliberate. Every space is designed to say something.</p>
+            </div>
+            <div class="feature-card">
+                <div class="feature-label">FOUNDATION</div>
+                <h3 class="feature-title">PASSION DRIVEN</h3>
+                <p class="feature-description">Solo developer. No team, no publisher. Everything ships when it is ready and not before.</p>
+            </div>
+        </div>
+    </section>
+
+    <footer>
+        <div class="social-links">
+            <a href="https://beacons.ai/soloprodigy" target="_blank">CONTACT</a>
+            <a href="https://github.com/soloprodigydev" target="_blank">GITHUB</a>
+        </div>
+        <p class="copyright">&copy; 2025 Solo Prodigy Dev. All rights reserved.</p>
+    </footer>
+</div><!-- /.content -->
+
+<script>
+// ═══════════════════════════════════════════
+//  NAV SMOOTH SCROLL
+// ═══════════════════════════════════════════
+function scrollToSection(id){ var el=document.getElementById(id); if(el) el.scrollIntoView({behavior:'smooth',block:'start'}); }
+document.querySelectorAll('.nav-links a[data-target]').forEach(function(a){
+    a.addEventListener('click',function(e){ e.preventDefault(); scrollToSection(this.getAttribute('data-target')); });
+});
+document.getElementById('logo-home').addEventListener('click',function(){ window.scrollTo({top:0,behavior:'smooth'}); });
+
+// ═══════════════════════════════════════════
+//  SCROLL GRADIENT
+// ═══════════════════════════════════════════
+var ZONES=[
+    {c1:[220,38,38], pos1:'20% 30%',c2:[180,20,20], pos2:'80% 70%',a1:.13,a2:.08},
+    {c1:[99,102,241],pos1:'15% 25%',c2:[139,92,246],pos2:'85% 65%',a1:.14,a2:.10},
+    {c1:[59,130,246],pos1:'25% 40%',c2:[124,58,237],pos2:'75% 60%',a1:.12,a2:.14},
+    {c1:[220,38,38], pos1:'20% 30%',c2:[180,20,20], pos2:'80% 70%',a1:.13,a2:.08}
+];
+function lerp(a,b,t){return a+(b-a)*t;}
+function lerpZone(zA,zB,t){return{c1:zA.c1.map(function(v,i){return lerp(v,zB.c1[i],t);}),c2:zA.c2.map(function(v,i){return lerp(v,zB.c2[i],t);}),a1:lerp(zA.a1,zB.a1,t),a2:lerp(zA.a2,zB.a2,t),pos1:zA.pos1,pos2:zA.pos2};}
+function applyGradient(z){var r1=Math.round(z.c1[0]),g1=Math.round(z.c1[1]),b1=Math.round(z.c1[2]),r2=Math.round(z.c2[0]),g2=Math.round(z.c2[1]),b2=Math.round(z.c2[2]);document.getElementById('bg-gradient').style.background='radial-gradient(ellipse at '+z.pos1+', rgba('+r1+','+g1+','+b1+','+z.a1.toFixed(3)+') 0%, transparent 50%),radial-gradient(ellipse at '+z.pos2+', rgba('+r2+','+g2+','+b2+','+z.a2.toFixed(3)+') 0%, transparent 50%)';}
+function updateGradient(){var sections=[document.getElementById('section-hero'),document.getElementById('games'),document.getElementById('audio'),document.getElementById('about')];var scroll=window.scrollY+window.innerHeight*0.4;var breaks=sections.map(function(s){return s?s.offsetTop:0;});var zi=0;for(var i=0;i<breaks.length;i++){if(scroll>=breaks[i])zi=i;}var nextZi=Math.min(zi+1,ZONES.length-1);var start=breaks[zi],end=breaks[nextZi]||document.body.scrollHeight;var raw=(scroll-start)/Math.max(end-start,1);var t=raw<0.5?2*raw*raw:-1+(4-2*raw)*raw;var c=Math.max(0,Math.min(1,t));var zone=zi===nextZi?ZONES[zi]:lerpZone(ZONES[zi],ZONES[nextZi],c);applyGradient(zone);}
+applyGradient(ZONES[0]);
+window.addEventListener('scroll',updateGradient,{passive:true});
+window.addEventListener('resize',updateGradient,{passive:true});
+
+// ═══════════════════════════════════════════
+//  PARTICLE CANVAS
+// ═══════════════════════════════════════════
+var canvas=document.getElementById('particle-canvas');
+var ctx=canvas.getContext('2d');
+canvas.width=window.innerWidth; canvas.height=window.innerHeight;
+var particles=[];
+function Particle(){this.reset(true);}
+Particle.prototype.reset=function(init){this.x=Math.random()*canvas.width;this.y=init?Math.random()*canvas.height:canvas.height+10;this.size=Math.random()*1.8+0.4;this.speedY=Math.random()*0.45+0.1;this.speedX=(Math.random()-0.5)*0.25;this.opacity=Math.random()*0.22+0.06;var p=[[220,38,38],[255,255,255],[130,130,130]];var c=p[Math.floor(Math.random()*p.length)];this.color='rgba('+c[0]+','+c[1]+','+c[2]+','+this.opacity+')';};
+Particle.prototype.update=function(){this.y-=this.speedY;this.x+=this.speedX;if(this.y<-10)this.reset(false);if(this.x<-10||this.x>canvas.width+10)this.x=Math.random()*canvas.width;};
+Particle.prototype.draw=function(){ctx.fillStyle=this.color;ctx.beginPath();ctx.arc(this.x,this.y,this.size,0,Math.PI*2);ctx.fill();};
+for(var i=0;i<55;i++)particles.push(new Particle());
+(function animateP(){ctx.clearRect(0,0,canvas.width,canvas.height);particles.forEach(function(p){p.update();p.draw();});requestAnimationFrame(animateP);})();
+window.addEventListener('resize',function(){canvas.width=window.innerWidth;canvas.height=window.innerHeight;},{passive:true});
+
+// ═══════════════════════════════════════════
+//  HEADER SCROLL
+// ═══════════════════════════════════════════
+window.addEventListener('scroll',function(){document.getElementById('header').classList.toggle('scrolled',window.scrollY>80);},{passive:true});
+
+// ═══════════════════════════════════════════
+//  TREE GENERATION (Shadewalker art)
+// ═══════════════════════════════════════════
+var treesEl=document.getElementById('art-trees');
+var treeData=[
+    {l:'3%', w:50,h:140},{l:'12%',w:30,h:100},{l:'22%',w:55,h:160},{l:'32%',w:35,h:110},
+    {l:'42%',w:60,h:180},{l:'52%',w:40,h:130},{l:'62%',w:65,h:190},{l:'72%',w:38,h:120},
+    {l:'82%',w:52,h:155},{l:'90%',w:35,h:105}
+];
+treeData.forEach(function(t){var el=document.createElement('div');el.className='art-tree';el.style.cssText='left:'+t.l+';width:'+t.w+'px;height:'+t.h+'px;opacity:'+(0.7+Math.random()*0.3)+';';treesEl.appendChild(el);});
+
+// ═══════════════════════════════════════════
+//  KNIGHT STARS
+// ═══════════════════════════════════════════
+var knightStars=document.getElementById('art-knight-stars');
+if(knightStars){
+    for(var ks=0;ks<40;ks++){var st=document.createElement('div');st.style.cssText='position:absolute;width:'+(Math.random()*2+0.5)+'px;height:'+(Math.random()*2+0.5)+'px;border-radius:50%;background:rgba(255,200,100,'+(0.3+Math.random()*0.5)+');top:'+Math.random()*60+'%;left:'+Math.random()*100+'%;';knightStars.appendChild(st);}
+}
+
+// ═══════════════════════════════════════════
+//  GLITCH DATA LINES (Unknown art)
+// ═══════════════════════════════════════════
+var glitchEl=document.getElementById('art-glitch');
+var hexChars='0123456789ABCDEF';
+function randHex(n){var s='';for(var i=0;i<n;i++)s+=hexChars[Math.floor(Math.random()*16)];return s;}
+for(var gl=0;gl<30;gl++){var dl=document.createElement('div');dl.className='art-data-line';dl.textContent=randHex(40);glitchEl.appendChild(dl);}
+// duplicate for seamless scroll
+for(var gl2=0;gl2<30;gl2++){var dl2=document.createElement('div');dl2.className='art-data-line';dl2.textContent=randHex(40);glitchEl.appendChild(dl2);}
+
+// ═══════════════════════════════════════════
+//  ORISON STARS
+// ═══════════════════════════════════════════
+var orisonStars=document.getElementById('orison-stars');
+for(var os=0;os<120;os++){var ostar=document.createElement('div');var osz=Math.random()*2+0.4;var oopacity=Math.random()*0.5+0.1;ostar.style.cssText='position:absolute;width:'+osz+'px;height:'+osz+'px;border-radius:50%;background:rgba(255,255,255,'+oopacity+');top:'+Math.random()*100+'%;left:'+Math.random()*100+'%;animation:starT '+(1.5+Math.random()*3).toFixed(1)+'s ease-in-out '+(Math.random()*3).toFixed(1)+'s infinite alternate;';orisonStars.appendChild(ostar);}
+// inject star twinkle keyframes
+var starStyle=document.createElement('style');
+starStyle.textContent='@keyframes starT{0%{opacity:var(--o,0.3);transform:scale(1)}100%{opacity:calc(var(--o,0.3)*0.2);transform:scale(0.5)}}';
+document.head.appendChild(starStyle);
+
+// ═══════════════════════════════════════════
+//  3D SYNTH BUILD
+// ═══════════════════════════════════════════
+var synth3d=document.getElementById('synth-3d');
+// Orbit rings
+var ringConf=[
+    {sz:200,dur:'18s',color:'rgba(160,80,255,0.35)'},
+    {sz:300,dur:'30s',color:'rgba(140,60,255,0.25)',reverse:true},
+    {sz:380,dur:'45s',color:'rgba(180,100,255,0.15)'}
+];
+ringConf.forEach(function(r){
+    var ring=document.createElement('div');
+    ring.style.cssText='position:absolute;width:'+r.sz+'px;height:'+r.sz+'px;border-radius:50%;border:1px solid '+r.color+';top:50%;left:50%;margin-left:'+(-(r.sz/2))+'px;margin-top:'+(-(r.sz/2))+'px;animation:ringSpin '+r.dur+' linear infinite'+(r.reverse?' reverse':'')+';';
+    var dot=document.createElement('div');
+    dot.style.cssText='position:absolute;width:7px;height:7px;border-radius:50%;background:rgba(200,130,255,0.8);top:-3.5px;left:50%;margin-left:-3.5px;box-shadow:0 0 14px rgba(200,130,255,1);';
+    ring.appendChild(dot);
+    synth3d.appendChild(ring);
+});
+var ringSpin=document.createElement('style');
+ringSpin.textContent='@keyframes ringSpin{from{transform:rotate(0deg)}to{transform:rotate(360deg)}}';
+document.head.appendChild(ringSpin);
+// Frequency bars arranged in a circle
+var barsWrap=document.createElement('div');
+barsWrap.style.cssText='position:absolute;top:50%;left:50%;width:0;height:0;transform-style:preserve-3d;';
+var BAR_COUNT=48;
+var BAR_RADIUS=160;
+for(var b=0;b<BAR_COUNT;b++){
+    var angle=(b/BAR_COUNT)*360;
+    var height=20+Math.abs(Math.sin(b/BAR_COUNT*Math.PI*4))*80+Math.random()*30;
+    var bar=document.createElement('div');
+    var dur=(0.5+Math.random()*1.5).toFixed(2);
+    var delay=(Math.random()*2).toFixed(2);
+    bar.style.cssText='position:absolute;width:6px;border-radius:3px 3px 0 0;height:'+height+'px;bottom:0;left:-3px;transform:rotate('+angle+'deg) translateX('+BAR_RADIUS+'px);transform-origin:3px '+height+'px;background:linear-gradient(to top,rgba(80,10,200,0.3),rgba(200,80,255,0.9));box-shadow:0 0 8px rgba(200,80,255,0.5);animation:barPulse'+b+' '+dur+'s ease-in-out '+delay+'s infinite;';
+    var keyf=document.createElement('style');
+    var sc=0.1+Math.random()*0.9;
+    keyf.textContent='@keyframes barPulse'+b+'{0%,100%{transform:rotate('+angle+'deg) translateX('+BAR_RADIUS+'px) scaleY(0.15);opacity:0.4}50%{transform:rotate('+angle+'deg) translateX('+BAR_RADIUS+'px) scaleY(1);opacity:1}}';
+    document.head.appendChild(keyf);
+    barsWrap.appendChild(bar);
+}
+synth3d.insertBefore(barsWrap,synth3d.lastChild);
+
+// EQ strip
+var eqEl=document.getElementById('orison-eq');
+var eqHeights=[8,14,22,30,40,35,25,18,28,42,50,38,22,32,44,30,16,24,36,48,40,26,18,28,38,22,12,20,30,44,36,24,32,46,28];
+eqHeights.forEach(function(h){var b=document.createElement('div');b.className='eq-bar-bg';b.style.height=h+'px';eqEl.appendChild(b);});
+
+// ═══════════════════════════════════════════
+//  3D CAROUSEL NAV
+// ═══════════════════════════════════════════
+var currentIdx=0;
+var numCards=3;
+var rotationPerCard=360/numCards; // 120deg
+var baseAngle=0;
+var slider=document.getElementById('game-slider');
+var isAnimating=false;
+
+function setCarousel(idx, animate){
+    currentIdx=((idx%numCards)+numCards)%numCards;
+    var targetY= -(currentIdx * rotationPerCard);
+    if(animate){
+        slider.style.transition='transform 0.7s cubic-bezier(0.4,0,0.2,1)';
+        slider.style.animation='none';
+        slider.style.transform='perspective(1200px) rotateX(-6deg) rotateY('+targetY+'deg)';
+        isAnimating=true;
+        setTimeout(function(){ isAnimating=false; },750);
     }
+    document.querySelectorAll('.carousel-dot').forEach(function(d,i){ d.classList.toggle('active',i===currentIdx); });
+}
 
-    // Nav link click handlers — data-target attribute drives scroll
-    document.querySelectorAll('.nav-links a[data-target]').forEach(function(a) {
-        a.addEventListener('click', function(e) {
-            e.preventDefault();
-            scrollToSection(this.getAttribute('data-target'));
-        });
+document.getElementById('carousel-prev').addEventListener('click',function(){
+    if(isAnimating) return;
+    setCarousel(currentIdx-1,true);
+});
+document.getElementById('carousel-next').addEventListener('click',function(){
+    if(isAnimating) return;
+    setCarousel(currentIdx+1,true);
+});
+document.querySelectorAll('.carousel-dot').forEach(function(dot){
+    dot.addEventListener('click',function(){
+        if(isAnimating) return;
+        setCarousel(parseInt(this.getAttribute('data-idx')),true);
     });
+});
 
-    // Logo scrolls back to top
-    document.getElementById('logo-home').addEventListener('click', function() {
-        window.scrollTo({ top: 0, behavior: 'smooth' });
+// Resume auto-spin after manual nav
+var autoSpinTimeout;
+function scheduleAutoSpin(){
+    clearTimeout(autoSpinTimeout);
+    autoSpinTimeout=setTimeout(function(){
+        slider.style.transition='';
+        slider.style.animation='gameCarousel 22s linear infinite';
+        // sync from current angle
+        var cssVar='rotateX(-6deg) rotateY('+(-(currentIdx*rotationPerCard))+'deg)';
+        slider.style.transform=cssVar;
+        setTimeout(function(){
+            slider.style.animation='gameCarousel 22s linear infinite';
+        },50);
+    },5000);
+}
+
+document.getElementById('carousel-prev').addEventListener('click',scheduleAutoSpin);
+document.getElementById('carousel-next').addEventListener('click',scheduleAutoSpin);
+
+// Shadewalker card click
+document.getElementById('g-shadewalker').addEventListener('click',function(){
+    window.location.href='./shadewalker';
+});
+
+// ORISON card click (not on button)
+document.getElementById('orison-card').addEventListener('click',function(e){
+    if(e.target.closest('#orison-cart-btn')) return;
+    window.location.href='./prolaris/index.html';
+});
+
+// ═══════════════════════════════════════════
+//  CART SYSTEM
+// ═══════════════════════════════════════════
+var cart=[];
+var PRODUCTS={
+    orison:{id:'orison',name:'ORISON',type:'VST Instrument · Wishlist',price:'TBA',numericPrice:0,thumb:'./orison/splash.png'}
+};
+
+function openCart(){ document.getElementById('cart-overlay').classList.add('open'); document.getElementById('cart-drawer').classList.add('open'); document.body.style.overflow='hidden'; }
+function closeCart(){ document.getElementById('cart-overlay').classList.remove('open'); document.getElementById('cart-drawer').classList.remove('open'); document.body.style.overflow=''; }
+
+function renderCart(){
+    var body=document.getElementById('cart-body');
+    var empty=document.getElementById('cart-empty');
+    var countEl=document.getElementById('cart-count');
+    var totalEl=document.getElementById('cart-total');
+    var checkoutBtn=document.getElementById('cart-checkout');
+    body.querySelectorAll('.cart-item,.cart-note').forEach(function(el){el.remove();});
+    if(cart.length===0){ empty.style.display='flex'; countEl.classList.remove('visible'); totalEl.textContent='$0.00'; checkoutBtn.disabled=true; checkoutBtn.textContent='PROCEED TO CHECKOUT'; return; }
+    empty.style.display='none'; countEl.textContent=cart.length; countEl.classList.add('visible'); checkoutBtn.disabled=false;
+    var hasWishlist=false;
+    cart.forEach(function(item){
+        if(item.numericPrice===0) hasWishlist=true;
+        var el=document.createElement('div'); el.className='cart-item';
+        el.innerHTML='<div class="cart-item-thumb"><img src="'+item.thumb+'" alt="'+item.name+'" onerror="this.parentElement.textContent=\'PRO\'"></div><div><div class="cart-item-name">'+item.name+'</div><div class="cart-item-type">'+item.type+'</div><button class="cart-item-remove" data-id="'+item.id+'">REMOVE</button></div><div class="cart-item-price">'+item.price+'</div>';
+        body.appendChild(el);
     });
+    body.querySelectorAll('.cart-item-remove').forEach(function(btn){ btn.addEventListener('click',function(){ removeFromCart(this.getAttribute('data-id')); }); });
+    if(hasWishlist){ var note=document.createElement('div'); note.className='cart-note'; note.textContent='ORISON is in development. Price TBA — wishlist now and you will be the first to know at launch.'; body.appendChild(note); totalEl.textContent='TBA'; checkoutBtn.textContent='NOTIFY ME AT LAUNCH'; }
+    else { totalEl.textContent='$0.00'; checkoutBtn.textContent='PROCEED TO CHECKOUT'; }
+}
 
-    // ═══════════════════════════════════════
-    //  SCROLL-REACTIVE BACKGROUND GRADIENT
-    // ═══════════════════════════════════════
-    var ZONES = [
-        { c1:[220,38,38],  pos1:'20% 30%', c2:[180,20,20],  pos2:'80% 70%', a1:0.13, a2:0.08 },
-        { c1:[99,102,241], pos1:'15% 25%', c2:[139,92,246], pos2:'85% 65%', a1:0.14, a2:0.10 },
-        { c1:[59,130,246], pos1:'25% 40%', c2:[124,58,237], pos2:'75% 60%', a1:0.12, a2:0.14 },
-        { c1:[220,38,38],  pos1:'20% 30%', c2:[180,20,20],  pos2:'80% 70%', a1:0.13, a2:0.08 }
-    ];
+function addToCart(id){ if(cart.find(function(i){return i.id===id;})) return; var p=PRODUCTS[id]; cart.push({id:p.id,name:p.name,type:p.type,price:p.price,numericPrice:p.numericPrice,thumb:p.thumb}); renderCart(); }
+function removeFromCart(id){ var idx=cart.findIndex(function(i){return i.id===id;}); if(idx>-1) cart.splice(idx,1); renderCart(); if(id==='orison') syncOrisonBtn(); }
+function syncOrisonBtn(){ var btn=document.getElementById('orison-cart-btn'); var inCart=!!cart.find(function(i){return i.id==='orison';}); if(inCart){btn.textContent='✓ WISHLISTED';btn.classList.add('in-cart');}else{btn.textContent='+ ADD TO WISHLIST';btn.classList.remove('in-cart');} }
+function handleCheckout(){ if(cart.some(function(i){return i.numericPrice===0;})){ alert('You are on the list. We will notify you the moment ORISON launches.'); cart.length=0; renderCart(); syncOrisonBtn(); closeCart(); } }
 
-    function lerp(a, b, t) { return a + (b - a) * t; }
-    function lerpZone(zA, zB, t) {
-        return {
-            c1: zA.c1.map(function(v,i){ return lerp(v, zB.c1[i], t); }),
-            c2: zA.c2.map(function(v,i){ return lerp(v, zB.c2[i], t); }),
-            a1: lerp(zA.a1, zB.a1, t),
-            a2: lerp(zA.a2, zB.a2, t),
-            pos1: zA.pos1,
-            pos2: zA.pos2
-        };
-    }
+document.getElementById('cart-open-btn').addEventListener('click',openCart);
+document.getElementById('cart-overlay').addEventListener('click',closeCart);
+document.getElementById('cart-close-btn').addEventListener('click',closeCart);
+document.getElementById('cart-checkout').addEventListener('click',handleCheckout);
+document.getElementById('orison-cart-btn').addEventListener('click',function(e){
+    e.stopPropagation();
+    var inCart=!!cart.find(function(i){return i.id==='orison';});
+    if(inCart){removeFromCart('orison');}else{addToCart('orison');openCart();}
+    syncOrisonBtn();
+});
 
-    function applyGradient(z) {
-        var r1=Math.round(z.c1[0]), g1=Math.round(z.c1[1]), b1=Math.round(z.c1[2]);
-        var r2=Math.round(z.c2[0]), g2=Math.round(z.c2[1]), b2=Math.round(z.c2[2]);
-        document.getElementById('bg-gradient').style.background =
-            'radial-gradient(ellipse at '+z.pos1+', rgba('+r1+','+g1+','+b1+','+z.a1.toFixed(3)+') 0%, transparent 50%),' +
-            'radial-gradient(ellipse at '+z.pos2+', rgba('+r2+','+g2+','+b2+','+z.a2.toFixed(3)+') 0%, transparent 50%)';
-    }
-
-    function updateGradient() {
-        var sections = [
-            document.getElementById('section-hero'),
-            document.getElementById('games'),
-            document.getElementById('audio'),
-            document.getElementById('about')
-        ];
-        var scroll = window.scrollY + window.innerHeight * 0.4;
-        var breaks = sections.map(function(s){ return s ? s.offsetTop : 0; });
-        var zi = 0;
-        for (var i=0; i<breaks.length; i++) { if (scroll >= breaks[i]) zi = i; }
-        var nextZi = Math.min(zi+1, ZONES.length-1);
-        var start = breaks[zi], end = breaks[nextZi] || document.body.scrollHeight;
-        var raw = (scroll - start) / Math.max(end-start, 1);
-        var t = raw < 0.5 ? 2*raw*raw : -1+(4-2*raw)*raw;
-        var clamped = Math.max(0, Math.min(1, t));
-        var zone = zi === nextZi ? ZONES[zi] : lerpZone(ZONES[zi], ZONES[nextZi], clamped);
-        applyGradient(zone);
-    }
-
-    applyGradient(ZONES[0]);
-    window.addEventListener('scroll', updateGradient, { passive: true });
-    window.addEventListener('resize', updateGradient, { passive: true });
-
-    // ═══════════════════════════════════════
-    //  PARTICLE CANVAS
-    // ═══════════════════════════════════════
-    var canvas = document.getElementById('particle-canvas');
-    var ctx = canvas.getContext('2d');
-    canvas.width = window.innerWidth;
-    canvas.height = window.innerHeight;
-
-    var particles = [];
-    function Particle() { this.reset(true); }
-    Particle.prototype.reset = function(initial) {
-        this.x = Math.random() * canvas.width;
-        this.y = initial ? Math.random() * canvas.height : canvas.height + 10;
-        this.size = Math.random() * 1.8 + 0.4;
-        this.speedY = Math.random() * 0.45 + 0.1;
-        this.speedX = (Math.random() - 0.5) * 0.25;
-        this.opacity = Math.random() * 0.22 + 0.06;
-        var p = [[220,38,38],[255,255,255],[130,130,130]];
-        var c = p[Math.floor(Math.random()*p.length)];
-        this.color = 'rgba('+c[0]+','+c[1]+','+c[2]+','+this.opacity+')';
-    };
-    Particle.prototype.update = function() {
-        this.y -= this.speedY;
-        this.x += this.speedX;
-        if (this.y < -10) this.reset(false);
-        if (this.x < -10 || this.x > canvas.width+10) this.x = Math.random()*canvas.width;
-    };
-    Particle.prototype.draw = function() {
-        ctx.fillStyle = this.color;
-        ctx.beginPath();
-        ctx.arc(this.x, this.y, this.size, 0, Math.PI*2);
-        ctx.fill();
-    };
-
-    for (var i=0; i<55; i++) particles.push(new Particle());
-
-    (function animateParticles() {
-        ctx.clearRect(0,0,canvas.width,canvas.height);
-        particles.forEach(function(p){ p.update(); p.draw(); });
-        requestAnimationFrame(animateParticles);
-    })();
-
-    window.addEventListener('resize', function() {
-        canvas.width = window.innerWidth;
-        canvas.height = window.innerHeight;
-    });
-
-    // ═══════════════════════════════════════
-    //  HEADER SCROLL
-    // ═══════════════════════════════════════
-    window.addEventListener('scroll', function() {
-        document.getElementById('header').classList.toggle('scrolled', window.scrollY > 80);
-    }, { passive: true });
-
-    // ═══════════════════════════════════════
-    //  LOCKED CARDS
-    // ═══════════════════════════════════════
-    document.querySelectorAll('.game-card.locked').forEach(function(card) {
-        card.addEventListener('click', function(e) { e.preventDefault(); e.stopPropagation(); });
-    });
-
-    // ═══════════════════════════════════════
-    //  SHADEWALKER CARD
-    // ═══════════════════════════════════════
-    document.getElementById('shadewalker-card').addEventListener('click', function() {
-        window.location.href = './shadewalker';
-    });
-
-    // ═══════════════════════════════════════
-    //  ORISON CARD — navigate on click
-    //  FIX: check folder exists, navigate correctly
-    // ═══════════════════════════════════════
-    document.getElementById('orison-card').addEventListener('click', function(e) {
-        if (e.target.closest('#orison-cart-btn')) return;
-        // Navigate to ORISON page (lives in prolaris folder)
-        window.location.href = './prolaris/index.html';
-    });
-
-    // ═══════════════════════════════════════
-    //  NEBULA STARS
-    // ═══════════════════════════════════════
-    var starsEl = document.getElementById('stars');
-    for (var s=0; s<80; s++) {
-        var star = document.createElement('div');
-        star.className = 'star';
-        var sz = Math.random()*2+0.5;
-        var op = Math.random()*0.6+0.1;
-        star.style.cssText = 'width:'+sz+'px;height:'+sz+'px;top:'+Math.random()*100+'%;left:'+Math.random()*100+'%;--so:'+op+';--sd:'+(1.5+Math.random()*3).toFixed(1)+'s;animation-delay:'+(Math.random()*3).toFixed(1)+'s;';
-        starsEl.appendChild(star);
-    }
-
-    // ═══════════════════════════════════════
-    //  WAVEFORM
-    // ═══════════════════════════════════════
-    var wf = document.getElementById('waveform');
-    var heights = [18,30,50,68,88,78,62,42,72,92,82,58,38,52,68,48,28,44,62,78,58,34,48,68,52,38,22,36,54,72,60,40,56,74,50];
-    heights.forEach(function(h, i) {
-        var bar = document.createElement('div');
-        bar.className = 'waveform-bar';
-        bar.style.height = h+'px';
-        bar.style.setProperty('--dur', (0.7+Math.random()*1.4)+'s');
-        bar.style.animationDelay = (i*0.04)+'s';
-        var bright = Math.floor(80+(h/95)*175);
-        bar.style.background = 'linear-gradient(to top, rgba(100,20,220,0.3), rgb('+(bright-30)+','+Math.floor(bright*0.4)+','+bright+'))';
-        bar.style.boxShadow = '0 0 6px rgba(180,100,255,'+(0.2+(h/95)*0.5)+')';
-        wf.appendChild(bar);
-    });
-
-    // ═══════════════════════════════════════
-    //  SHOPPING CART — FIX: all inline
-    //  onclick removed, using addEventListener
-    //  FIX: apostrophe in string was breaking JS
-    // ═══════════════════════════════════════
-    var cart = [];
-
-    var PRODUCTS = {
-        orison: {
-            id: 'orison',
-            name: 'ORISON',
-            type: 'VST Instrument · Wishlist',
-            price: 'TBA',
-            numericPrice: 0,
-            thumb: './orison/splash.png'
-        }
-    };
-
-    function openCart() {
-        document.getElementById('cart-overlay').classList.add('open');
-        document.getElementById('cart-drawer').classList.add('open');
-        document.body.style.overflow = 'hidden';
-    }
-
-    function closeCart() {
-        document.getElementById('cart-overlay').classList.remove('open');
-        document.getElementById('cart-drawer').classList.remove('open');
-        document.body.style.overflow = '';
-    }
-
-    function renderCart() {
-        var body = document.getElementById('cart-body');
-        var empty = document.getElementById('cart-empty');
-        var countEl = document.getElementById('cart-count');
-        var totalEl = document.getElementById('cart-total');
-        var checkoutBtn = document.getElementById('cart-checkout');
-
-        body.querySelectorAll('.cart-item, .cart-note').forEach(function(el){ el.remove(); });
-
-        if (cart.length === 0) {
-            empty.style.display = 'flex';
-            countEl.classList.remove('visible');
-            totalEl.textContent = '$0.00';
-            checkoutBtn.disabled = true;
-            checkoutBtn.textContent = 'PROCEED TO CHECKOUT';
-            return;
-        }
-
-        empty.style.display = 'none';
-        countEl.textContent = cart.length;
-        countEl.classList.add('visible');
-        checkoutBtn.disabled = false;
-
-        var hasWishlist = false;
-        cart.forEach(function(item) {
-            if (item.numericPrice === 0) hasWishlist = true;
-            var el = document.createElement('div');
-            el.className = 'cart-item';
-            el.innerHTML =
-                '<div class="cart-item-thumb">' +
-                    '<img src="' + item.thumb + '" alt="' + item.name + '" onerror="this.parentElement.textContent=\'PRO\'">' +
-                '</div>' +
-                '<div>' +
-                    '<div class="cart-item-name">' + item.name + '</div>' +
-                    '<div class="cart-item-type">' + item.type + '</div>' +
-                    '<button class="cart-item-remove" data-id="' + item.id + '">REMOVE</button>' +
-                '</div>' +
-                '<div class="cart-item-price">' + item.price + '</div>';
-            body.appendChild(el);
-        });
-
-        // Attach remove handlers
-        body.querySelectorAll('.cart-item-remove').forEach(function(btn) {
-            btn.addEventListener('click', function() {
-                removeFromCart(this.getAttribute('data-id'));
-            });
-        });
-
-        if (hasWishlist) {
-            var note = document.createElement('div');
-            note.className = 'cart-note';
-            note.textContent = 'ORISON is in development. Price TBA — wishlist now and you will be the first to know at launch.';
-            body.appendChild(note);
-            totalEl.textContent = 'TBA';
-            checkoutBtn.textContent = 'NOTIFY ME AT LAUNCH';
-        } else {
-            totalEl.textContent = '$0.00';
-            checkoutBtn.textContent = 'PROCEED TO CHECKOUT';
-        }
-    }
-
-    function addToCart(productId) {
-        if (cart.find(function(i){ return i.id === productId; })) return;
-        var product = PRODUCTS[productId];
-        cart.push({ id: product.id, name: product.name, type: product.type, price: product.price, numericPrice: product.numericPrice, thumb: product.thumb });
-        renderCart();
-    }
-
-    function removeFromCart(productId) {
-        var idx = cart.findIndex(function(i){ return i.id === productId; });
-        if (idx > -1) cart.splice(idx, 1);
-        renderCart();
-        if (productId === 'orison') syncOrisonBtnState();
-    }
-
-    function syncOrisonBtnState() {
-        var btn = document.getElementById('orison-cart-btn');
-        var inCart = !!cart.find(function(i){ return i.id === 'orison'; });
-        if (inCart) {
-            btn.textContent = '✓ WISHLISTED';
-            btn.classList.add('in-cart');
-        } else {
-            btn.textContent = '+ ADD TO WISHLIST';
-            btn.classList.remove('in-cart');
-        }
-    }
-
-    function handleCheckout() {
-        var hasWishlist = cart.some(function(i){ return i.numericPrice === 0; });
-        if (hasWishlist) {
-            alert('You are on the list. We will notify you the moment ORISON launches.');
-            cart.length = 0;
-            renderCart();
-            syncOrisonBtnState();
-            closeCart();
-        }
-    }
-
-    // ── Wire up all button events here — no inline onclick ──
-    document.getElementById('cart-open-btn').addEventListener('click', openCart);
-    document.getElementById('cart-overlay').addEventListener('click', closeCart);
-    document.getElementById('cart-close-btn').addEventListener('click', closeCart);
-    document.getElementById('cart-checkout').addEventListener('click', handleCheckout);
-
-    document.getElementById('orison-cart-btn').addEventListener('click', function(e) {
-        e.stopPropagation();
-        var inCart = !!cart.find(function(i){ return i.id === 'orison'; });
-        if (inCart) {
-            removeFromCart('orison');
-        } else {
-            addToCart('orison');
-            openCart();
-        }
-        syncOrisonBtnState();
-    });
-
-    renderCart();
-    </script>
+renderCart();
+</script>
 </body>
 </html>
