@@ -189,20 +189,13 @@
 
         /* THE 3D SLIDER */
         .game-slider {
-            width: 300px;
-            height: 420px;
+            width: 240px;
+            height: 340px;
             position: relative;
             transform-style: preserve-3d;
-            perspective: 1200px;
+            perspective: 1000px;
             --quantity: 3;
-            animation: gameCarousel 22s linear infinite;
             cursor: pointer;
-        }
-        .game-slider:hover { animation-play-state: paused; }
-
-        @keyframes gameCarousel {
-            from { transform: perspective(1200px) rotateX(-6deg) rotateY(0deg); }
-            to   { transform: perspective(1200px) rotateX(-6deg) rotateY(360deg); }
         }
 
         .game-slider .g-list {
@@ -212,7 +205,7 @@
 
         .game-slider .g-item {
             position: absolute; inset: 0;
-            transform: rotateY(calc((var(--pos) - 1) * (360deg / var(--quantity)))) translateZ(480px);
+            transform: rotateY(calc((var(--pos) - 1) * (360deg / var(--quantity)))) translateZ(400px);
             transform-style: preserve-3d;
             transition: filter 0.4s;
         }
@@ -285,6 +278,22 @@
         .art-scanlines {
             position: absolute; inset: 0; pointer-events: none;
             background: repeating-linear-gradient(0deg, transparent, transparent 2px, rgba(0,0,0,0.08) 2px, rgba(0,0,0,0.08) 4px);
+        }
+
+        /* Game icon overlay (e.g. Shadewalker icon.png) */
+        .art-logo-overlay {
+            position: absolute;
+            top: 50%; left: 50%;
+            transform: translate(-50%, -58%);
+            width: 90px; height: 90px;
+            object-fit: contain;
+            z-index: 4;
+            filter: drop-shadow(0 0 18px rgba(220,60,60,0.7));
+            animation: logoFloat 4s ease-in-out infinite;
+        }
+        @keyframes logoFloat {
+            0%,100%{transform:translate(-50%,-58%) translateY(0px)}
+            50%{transform:translate(-50%,-58%) translateY(-6px)}
         }
 
         /* Knight artwork */
@@ -612,7 +621,7 @@
         /* ═══════════════════════════════ RESPONSIVE */
         @media(max-width:1100px){ .synth-3d-wrap{display:none} .orison-info-panel{width:100%;padding:5rem 3rem} .orison-stage{min-height:auto} }
         @media(max-width:1024px){ .hero-title{font-size:4rem} .header{padding:1.5rem 2rem} .about{padding:4rem 2rem} .section-title{font-size:2.8rem} .orison-title{font-size:3.5rem} }
-        @media(max-width:768px){ .hero-title{font-size:2.8rem;letter-spacing:4px} .nav-links{display:none} .cart-drawer{width:100vw} .game-slider{width:240px;height:340px} }
+        @media(max-width:768px){ .hero-title{font-size:2.8rem;letter-spacing:4px} .nav-links{display:none} .cart-drawer{width:100vw} .game-slider{width:190px;height:280px} }
     </style>
 </head>
 <body>
@@ -691,11 +700,12 @@
                         <div class="g-card" data-href="./shadewalker">
                             <div class="g-art">
                                 <div class="g-art-inner art-shadewalker">
-                                    <div class="art-moon"></div>
+                                                    <div class="art-moon"></div>
                                     <div class="art-trees" id="art-trees"></div>
                                     <div class="art-fog"></div>
                                     <div class="art-silhouette"></div>
                                     <div class="art-scanlines"></div>
+                                    <img src="./shadewalker/icon.png" alt="Shadewalker" class="art-logo-overlay" onerror="this.style.display='none'">
                                 </div>
                             </div>
                             <div class="g-card-overlay"></div>
@@ -1003,61 +1013,94 @@ var eqHeights=[8,14,22,30,40,35,25,18,28,42,50,38,22,32,44,30,16,24,36,48,40,26,
 eqHeights.forEach(function(h){var b=document.createElement('div');b.className='eq-bar-bg';b.style.height=h+'px';eqEl.appendChild(b);});
 
 // ═══════════════════════════════════════════
-//  3D CAROUSEL NAV
+//  3D CAROUSEL — RAF-driven smooth rotation
+//  Auto-spins continuously; manual nav lerps
+//  to the nearest snap angle, then resumes.
 // ═══════════════════════════════════════════
-var currentIdx=0;
-var numCards=3;
-var rotationPerCard=360/numCards; // 120deg
-var baseAngle=0;
-var slider=document.getElementById('game-slider');
-var isAnimating=false;
+var NUM_CARDS      = 3;
+var STEP           = 360 / NUM_CARDS;   // 120 deg per card
+var AUTO_SPEED     = 0.022;             // deg per ms
+var LERP_FACTOR    = 0.072;             // smoothing (higher = snappier)
+var RESUME_DELAY   = 3200;              // ms before auto-spin resumes
 
-function setCarousel(idx, animate){
-    currentIdx=((idx%numCards)+numCards)%numCards;
-    var targetY= -(currentIdx * rotationPerCard);
-    if(animate){
-        slider.style.transition='transform 0.7s cubic-bezier(0.4,0,0.2,1)';
-        slider.style.animation='none';
-        slider.style.transform='perspective(1200px) rotateX(-6deg) rotateY('+targetY+'deg)';
-        isAnimating=true;
-        setTimeout(function(){ isAnimating=false; },750);
-    }
-    document.querySelectorAll('.carousel-dot').forEach(function(d,i){ d.classList.toggle('active',i===currentIdx); });
+var slider         = document.getElementById('game-slider');
+var currentAngle   = 0;                 // live display angle
+var targetAngle    = 0;                 // where we're heading
+var manualMode     = false;
+var resumeTimer    = null;
+var lastTS         = null;
+var activeDotIdx   = 0;
+
+function normalizeAngle(a){ return ((a % 360) + 360) % 360; }
+
+function updateDots(idx){
+    activeDotIdx = idx;
+    document.querySelectorAll('.carousel-dot').forEach(function(d,i){
+        d.classList.toggle('active', i === idx);
+    });
 }
 
-document.getElementById('carousel-prev').addEventListener('click',function(){
-    if(isAnimating) return;
-    setCarousel(currentIdx-1,true);
+function rafLoop(ts){
+    if(lastTS === null) lastTS = ts;
+    var dt = Math.min(ts - lastTS, 50); // cap dt to avoid big jumps on tab switch
+    lastTS = ts;
+
+    if(manualMode){
+        // Smooth lerp toward snap target
+        currentAngle += (targetAngle - currentAngle) * LERP_FACTOR;
+        if(Math.abs(targetAngle - currentAngle) < 0.08){
+            currentAngle = targetAngle;
+        }
+    } else {
+        // Continuous auto-rotation
+        currentAngle -= AUTO_SPEED * dt;
+        targetAngle   = currentAngle;   // keep in sync so resume is seamless
+
+        // Update dots based on closest card facing forward
+        var norm = normalizeAngle(-currentAngle);
+        var closest = Math.round(norm / STEP) % NUM_CARDS;
+        if(closest !== activeDotIdx) updateDots(closest);
+    }
+
+    slider.style.transform =
+        'perspective(1000px) rotateX(-6deg) rotateY(' + currentAngle + 'deg)';
+
+    requestAnimationFrame(rafLoop);
+}
+requestAnimationFrame(rafLoop);
+
+// Snap to a card index (shortest arc path)
+function snapToCard(idx){
+    manualMode = true;
+    clearTimeout(resumeTimer);
+
+    // Desired canonical angle for this card
+    var desired = -(idx * STEP);
+    // Find nearest equivalent to currentAngle (within ±180)
+    var diff = desired - currentAngle;
+    diff = ((diff % 360) + 540) % 360 - 180;
+    targetAngle = currentAngle + diff;
+
+    updateDots(idx);
+
+    resumeTimer = setTimeout(function(){
+        manualMode = false;
+    }, RESUME_DELAY);
+}
+
+document.getElementById('carousel-prev').addEventListener('click', function(){
+    var prev = ((activeDotIdx - 1) + NUM_CARDS) % NUM_CARDS;
+    snapToCard(prev);
 });
-document.getElementById('carousel-next').addEventListener('click',function(){
-    if(isAnimating) return;
-    setCarousel(currentIdx+1,true);
+document.getElementById('carousel-next').addEventListener('click', function(){
+    var next = (activeDotIdx + 1) % NUM_CARDS;
+    snapToCard(next);
 });
 document.querySelectorAll('.carousel-dot').forEach(function(dot){
-    dot.addEventListener('click',function(){
-        if(isAnimating) return;
-        setCarousel(parseInt(this.getAttribute('data-idx')),true);
+    dot.addEventListener('click', function(){
+        snapToCard(parseInt(this.getAttribute('data-idx')));
     });
 });
-
-// Resume auto-spin after manual nav
-var autoSpinTimeout;
-function scheduleAutoSpin(){
-    clearTimeout(autoSpinTimeout);
-    autoSpinTimeout=setTimeout(function(){
-        slider.style.transition='';
-        slider.style.animation='gameCarousel 22s linear infinite';
-        // sync from current angle
-        var cssVar='rotateX(-6deg) rotateY('+(-(currentIdx*rotationPerCard))+'deg)';
-        slider.style.transform=cssVar;
-        setTimeout(function(){
-            slider.style.animation='gameCarousel 22s linear infinite';
-        },50);
-    },5000);
-}
-
-document.getElementById('carousel-prev').addEventListener('click',scheduleAutoSpin);
-document.getElementById('carousel-next').addEventListener('click',scheduleAutoSpin);
 
 // Shadewalker card click
 document.getElementById('g-shadewalker').addEventListener('click',function(){
