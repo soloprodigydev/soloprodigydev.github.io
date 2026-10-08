@@ -1,0 +1,50 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Contact | UNSHADED</title>
+<meta name="description" content="Contact the UNSHADED team for support, bug reports, business inquiries and feedback.">
+<meta name="theme-color" content="#050408">
+<link rel="icon" href="../logo.png">
+<link rel="stylesheet" href="legal.css">
+</head>
+<body>
+<header>
+  <a class="brand pix" href="index.html">UNSHADED</a>
+  <nav aria-label="Site"><a href="index.html">The Game</a><a href="mods.html">Mods</a><a href="eula.html">EULA</a><a href="terms.html">Terms</a><a href="privacy.html">Privacy</a><a href="contact.html" aria-current="page">Contact</a><a href="../index.html">Portfolio</a></nav>
+</header>
+<main>
+<div class="center">
+<p class="meta">Contact</p>
+<h1>Get in touch</h1>
+<p class="lede" style="text-align:left">Need support? Found a bug? Have a business inquiry, or just want to say hi and share your thoughts on UNSHADED? We would love to hear from you.</p>
+<p class="meta" style="margin-top:2.5rem">Official support email</p>
+<button class="email" id="email" type="button">soloprodigydev@gmail.com</button>
+<p class="copy-hint">Click to copy</p>
+<p style="margin-top:2rem;color:var(--dim);font-style:italic">Replies may take a few days, especially during development crunch. Thanks for your patience.</p>
+</div>
+<div class="grid">
+  <div class="card"><span class="tag-label">01 / Bugs</span><h3>Bug reports</h3><p>Found a glitch? Help us squash it by sending a detailed report, with screenshots if you can.</p></div>
+  <div class="card"><span class="tag-label">02 / Business</span><h3>Business inquiries</h3><p>Interested in partnerships, press coverage or collaboration? Let's talk.</p></div>
+  <div class="card"><span class="tag-label">03 / Feedback</span><h3>General feedback</h3><p>We love hearing what players think. Your feedback helps shape the game's future.</p></div>
+</div>
+<p class="center" style="color:var(--dim)">Elsewhere: <a href="https://github.com/soloprodigydev">GitHub</a> &middot; <a href="https://beacons.ai/soloprodigy">Beacons</a></p>
+<div class="toast" id="toast" role="status">Email copied to clipboard</div>
+</main>
+<footer>
+  <div class="links"><a href="eula.html">EULA</a><a href="terms.html">Terms of Service</a><a href="privacy.html">Privacy Policy</a><a href="mods.html">Modding</a><a href="contact.html">Contact</a></div>
+  <div>&copy; 2026 UNSHADED by Solo Prodigy Dev. All rights reserved.</div>
+</footer>
+<script>
+(function(){
+  var e='soloprodigydev@gmail.com',b=document.getElementById('email'),t=document.getElementById('toast');
+  function ok(){t.classList.add('show');setTimeout(function(){t.classList.remove('show')},2500)}
+  b.addEventListener('click',function(){
+    if(navigator.clipboard&&navigator.clipboard.writeText){navigator.clipboard.writeText(e).then(ok,fb)}else fb();
+    function fb(){var a=document.createElement('textarea');a.value=e;document.body.appendChild(a);a.select();try{document.execCommand('copy');ok()}catch(x){}document.body.removeChild(a)}
+  });
+})();
+</script>
+</body>
+</html>

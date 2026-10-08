@@ -1,0 +1,468 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>UNSHADED | A Story-Driven Mystery</title>
+<meta name="description" content="UNSHADED is a story-driven mystery set in the Kingdom of Seren. Memories show fragments, never answers, and the world remembers what you do.">
+<meta name="theme-color" content="#050408">
+<link rel="icon" href="../logo.png">
+<style>
+@font-face{font-family:Avenir;src:local('AvenirNextWorld-Light'),url(../fonts/AvenirNextWorld-Light.woff) format('woff');font-weight:300;font-display:swap}
+@font-face{font-family:Avenir;src:local('AvenirNextWorld-Demi'),url(../fonts/AvenirNextWorld-Demi.woff) format('woff');font-weight:600;font-display:swap}
+@font-face{font-family:Trajan;src:local('TrajanPro-Regular'),url(../fonts/TrajanPro-Regular.woff) format('woff');font-weight:400;font-display:swap}
+@font-face{font-family:Pixelopolis;src:url(../fonts/Pixelopolis_9000.woff) format('woff');font-display:swap}
+@font-face{font-family:Plex;src:url(../fonts/IBMPlexMono-Regular.woff) format('woff');font-weight:400;font-display:swap}
+@font-face{font-family:Plex;src:url(../fonts/IBMPlexMono-SemiBold.woff) format('woff');font-weight:600;font-display:swap}
+@font-face{font-family:Dotum;src:url(../fonts/dotumche-pixel.woff) format('woff');font-display:swap}
+
+/*
+  FONT SYSTEM  (same as the portfolio)
+  Avenir Demi    headings          h1-h3, .hd
+  Avenir Light   body              default
+  Plex           UI / metadata     .mono, nav, labels
+  Pixelopolis    UNSHADED brand    .pix
+  Trajan         in-world text     .world   (echoes, whispers, dialogue)
+  Dotum          the Ancient       .ancient
+*/
+@property --acc{syntax:'<color>';inherits:true;initial-value:#8b5cf6}
+@property --acc2{syntax:'<color>';inherits:true;initial-value:#f4f1ff}
+@property --acc3{syntax:'<color>';inherits:true;initial-value:#4b2a9e}
+:root{--ink:#050408;--bone:#f1ecfa;--dim:#8a829f;--line:rgba(139,92,246,.2);--acc:#8b5cf6;--acc2:#f4f1ff;--acc3:#4b2a9e;--glow:#b79cff}
+*{margin:0;padding:0;box-sizing:border-box}
+html{scroll-behavior:smooth}
+body{background:var(--ink);color:var(--bone);font:300 16px/1.75 Avenir,'Avenir Next',system-ui,sans-serif;overflow-x:hidden}
+a{color:var(--glow)}
+:focus-visible{outline:2px solid var(--glow);outline-offset:3px}
+button{font:inherit;color:inherit;background:none;border:0;cursor:pointer}
+.pix{font-family:Pixelopolis,monospace;-webkit-font-smoothing:none;font-weight:400}
+h1,h2,h3,.hd{font-family:Avenir,'Avenir Next',system-ui,sans-serif;font-weight:600;line-height:1.15}
+.mono,header nav a,.eyebrow,.stamp,.tabs button,.meta,footer{font-family:Plex,monospace;font-weight:400}
+.world{font-family:Trajan,'Trajan Pro',Georgia,serif;font-weight:400;letter-spacing:.02em}
+.ancient{font-family:Dotum,Plex,monospace;color:#0ABF00}
+.wrap{width:100%;max-width:1100px;margin:0 auto;padding:0 1.5rem}
+.eyebrow{font-size:.78rem;letter-spacing:.2em;text-transform:uppercase;color:var(--glow);margin-bottom:1rem;display:flex;align-items:center;gap:.9rem}
+.eyebrow::after{content:"";width:48px;height:1px;background:var(--acc);opacity:.6}
+h2{font-size:clamp(1.9rem,4.6vw,3.1rem);color:var(--acc2);margin-bottom:1.2rem;max-width:20ch}
+.lead{font-size:1.2rem;color:#d6cfeb;max-width:58ch}
+section{position:relative;padding:6.5rem 0}
+.rv{opacity:0;transform:translateY(22px);transition:opacity .8s,transform .8s cubic-bezier(.2,.8,.2,1)}
+.rv.in{opacity:1;transform:none}
+
+/* header */
+header{position:fixed;top:0;left:0;right:0;z-index:50;display:flex;justify-content:space-between;align-items:center;gap:.6rem 2rem;flex-wrap:wrap;padding:1rem 2rem;background:linear-gradient(rgba(5,4,8,.92),rgba(5,4,8,0));transition:background .4s}
+header.solid{background:rgba(5,4,8,.9);backdrop-filter:blur(14px);-webkit-backdrop-filter:blur(14px);border-bottom:1px solid var(--line)}
+header .brand{font-size:1.05rem;letter-spacing:.12em;color:#fff;text-decoration:none}
+header nav{display:flex;flex-wrap:wrap;gap:.1rem 1.5rem}
+header nav a{color:var(--dim);text-decoration:none;font-size:.82rem;transition:color .25s}
+header nav a:hover,header nav a.on{color:#fff}
+header nav a.on{text-decoration:underline;text-decoration-color:var(--acc);text-underline-offset:6px}
+
+/* hero */
+.hero{min-height:100svh;display:flex;align-items:center;position:relative;overflow:hidden;padding:7rem 0 4rem}
+#sky{position:absolute;inset:0;width:100%;height:100%;image-rendering:pixelated;image-rendering:crisp-edges;z-index:0}
+.hero::after{content:"";position:absolute;inset:0;z-index:1;pointer-events:none;background:linear-gradient(90deg,rgba(5,4,8,.85) 0%,rgba(5,4,8,.45) 45%,transparent 75%),linear-gradient(transparent 70%,var(--ink))}
+.hero .wrap{position:relative;z-index:2}
+.stamp{display:inline-block;font-size:.72rem;letter-spacing:.22em;text-transform:uppercase;color:var(--glow);border:1px solid var(--glow);padding:.35rem .8rem;transform:rotate(-2.5deg);margin-bottom:1.6rem}
+h1.pix{font-size:clamp(3rem,12vw,8.5rem);letter-spacing:.04em;line-height:1;color:transparent;background:linear-gradient(100deg,var(--acc),var(--acc3) 55%,var(--acc2));-webkit-background-clip:text;background-clip:text;filter:drop-shadow(0 0 30px rgba(139,92,246,.45));animation:rise 2.2s ease both}
+@keyframes rise{from{opacity:0;filter:blur(16px)}}
+.hero .tagline{font-size:clamp(1.3rem,3vw,2rem);color:var(--acc2);margin:1.2rem 0 .8rem;font-weight:300}
+.hero .sub{max-width:52ch;color:#cfc7e6;margin-bottom:2rem}
+.meta{font-size:.78rem;color:var(--dim);letter-spacing:.08em;display:flex;flex-wrap:wrap;gap:.3rem 1.2rem;margin-top:2rem}
+.btns{display:flex;flex-wrap:wrap;gap:.8rem}
+.btn{font:400 .8rem Plex,monospace;letter-spacing:.14em;text-transform:uppercase;text-decoration:none;padding:.9rem 1.7rem;border:1px solid var(--acc);color:var(--acc2);border-radius:4px;transition:background .25s,box-shadow .25s,transform .25s;display:inline-block}
+.btn:hover{background:rgba(139,92,246,.28);box-shadow:0 0 30px rgba(139,92,246,.35);transform:translateY(-2px)}
+.btn.solid{background:var(--acc);color:#fff}
+.btn.solid:hover{background:#9d78ff}
+.btn[aria-disabled=true]{opacity:.55;pointer-events:none}
+.scroll{position:absolute;bottom:1.6rem;left:50%;transform:translateX(-50%);z-index:2;width:1px;height:46px;background:linear-gradient(var(--glow),transparent);animation:drop 2.2s ease-in-out infinite}
+@keyframes drop{0%{transform:translateX(-50%) scaleY(0);transform-origin:top}50%{transform:translateX(-50%) scaleY(1);transform-origin:top}51%{transform-origin:bottom}100%{transform:translateX(-50%) scaleY(0);transform-origin:bottom}}
+
+/* pillars strip */
+.pillars{display:grid;grid-template-columns:repeat(3,1fr);border-top:1px solid var(--line);border-bottom:1px solid var(--line)}
+.pillars div{padding:2.2rem 1.6rem;border-right:1px solid var(--line)}
+.pillars div:last-child{border-right:0}
+.pillars h3{font-size:1.15rem;color:var(--acc2);margin-bottom:.4rem}
+.pillars p{font-size:.95rem;color:#bdb4d8}
+
+/* case */
+.case{display:grid;grid-template-columns:minmax(0,.9fr) minmax(0,1.1fr);gap:3.5rem;align-items:start;margin-top:2.5rem}
+.case .intro p{color:#d0c8e6;margin-bottom:1.1rem}
+.case .intro .world{font-size:1.15rem;color:var(--acc2);border-left:3px solid var(--acc);padding-left:1rem;margin:1.6rem 0}
+.file{background:rgba(20,14,38,.6);border:1px solid var(--line);border-radius:10px;overflow:hidden}
+.file header{all:unset}
+.fhead{display:flex;justify-content:space-between;gap:1rem;flex-wrap:wrap;padding:.9rem 1.3rem;border-bottom:1px solid var(--line);font:400 .74rem Plex,monospace;letter-spacing:.14em;text-transform:uppercase;color:var(--dim)}
+.tabs{display:grid;grid-template-columns:repeat(3,1fr);border-bottom:1px solid var(--line)}
+.tabs button{padding:.9rem .4rem;font-size:.78rem;letter-spacing:.1em;text-transform:uppercase;color:var(--dim);border-right:1px solid var(--line);transition:background .25s,color .25s}
+.tabs button:last-child{border-right:0}
+.tabs button:hover{color:#fff}
+.tabs button[aria-selected=true]{color:#fff;background:rgba(139,92,246,.16);box-shadow:inset 0 -2px var(--acc)}
+.panel{padding:1.6rem 1.4rem 1.8rem;min-height:300px}
+.panel h3{font-size:1.3rem;color:var(--acc2);margin-bottom:.4rem}
+.panel>p{color:#c9c1e0;margin-bottom:1.1rem}
+.echo-line{font-size:1.1rem;color:var(--acc2);background:rgba(139,92,246,.1);border-left:3px solid var(--acc);padding:.9rem 1.1rem;margin-bottom:1.2rem;border-radius:0 6px 6px 0}
+.echo-line.locked{color:var(--dim);font-style:italic;background:rgba(255,255,255,.03);border-color:#2a2538}
+.panel h4{font:400 .72rem Plex,monospace;letter-spacing:.18em;text-transform:uppercase;color:var(--glow);margin-bottom:.5rem}
+.panel ul{list-style:none}
+.panel li{position:relative;padding-left:1.4rem;margin-bottom:.4rem;color:#d0c8e6}
+.panel li::before{content:"?";position:absolute;left:0;font-family:Plex,monospace;color:var(--acc)}
+
+/* loop */
+.loop{display:grid;grid-template-columns:repeat(4,1fr);gap:1px;background:var(--line);border:1px solid var(--line);border-radius:10px;overflow:hidden;margin-top:2.6rem}
+.loop article{background:var(--ink);padding:1.8rem 1.4rem;position:relative}
+.loop article::before{content:"";position:absolute;inset:0;background:radial-gradient(circle at 20% 0,rgba(139,92,246,.18),transparent 60%);opacity:0;transition:opacity .4s}
+.loop article:hover::before{opacity:1}
+.loop .n{font:400 .75rem Plex,monospace;color:var(--glow);letter-spacing:.2em;margin-bottom:1.6rem;display:block}
+.loop h3{font-size:1.3rem;color:var(--acc2);margin-bottom:.5rem;position:relative}
+.loop p{font-size:.95rem;color:#bdb4d8;position:relative}
+.loopnote{margin-top:1.4rem;font-size:.95rem;color:var(--dim);max-width:70ch}
+
+/* memory demo */
+.mem{background:linear-gradient(180deg,transparent,rgba(75,42,158,.14) 40%,transparent)}
+.stage{margin-top:2.4rem;display:grid;grid-template-columns:minmax(0,1.2fr) minmax(0,.8fr);gap:2rem;align-items:stretch}
+.scene{background:rgba(10,7,20,.8);border:1px solid var(--line);border-radius:10px;padding:1.8rem 1.6rem;display:flex;flex-direction:column;gap:1.1rem;min-height:340px}
+.scene .where{font:400 .72rem Plex,monospace;letter-spacing:.18em;text-transform:uppercase;color:var(--dim)}
+.scene .say{font-size:1.25rem;color:var(--acc2);flex:1}
+.scene .say small{display:block;margin-top:.8rem;font:300 .9rem Avenir,system-ui,sans-serif;color:var(--dim);letter-spacing:0}
+.choices{display:grid;gap:.6rem}
+.choices button{text-align:left;padding:.8rem 1rem;border:1px solid var(--line);border-radius:6px;color:#d6cfeb;transition:border-color .25s,background .25s,transform .25s}
+.choices button:hover{border-color:var(--acc);background:rgba(139,92,246,.14);transform:translateX(4px)}
+.ledger2{background:rgba(20,14,38,.5);border:1px solid var(--line);border-radius:10px;padding:1.4rem}
+.ledger2 h3{font:400 .72rem Plex,monospace;letter-spacing:.18em;text-transform:uppercase;color:var(--glow);margin-bottom:1rem}
+.ledger2 dl{display:grid;gap:.9rem}
+.ledger2 dt{font:400 .74rem Plex,monospace;color:var(--dim);letter-spacing:.1em;text-transform:uppercase}
+.ledger2 dd{color:#d6cfeb;font-size:.98rem}
+.ledger2 .note{margin-top:1.2rem;font-size:.85rem;color:var(--dim)}
+.reset{font:400 .72rem Plex,monospace;letter-spacing:.14em;text-transform:uppercase;color:var(--dim);text-decoration:underline;margin-top:.4rem;text-align:left;width:max-content}
+.reset:hover{color:#fff}
+
+/* regions */
+.regions{transition:background 1.2s}
+#seren{background:radial-gradient(ellipse 80% 60% at 70% 30%,color-mix(in oklch,var(--acc3) 38%,transparent),transparent 70%)}
+.rwrap{display:grid;grid-template-columns:minmax(0,.7fr) minmax(0,1.3fr);gap:2.5rem;margin-top:2.6rem}
+.rlist{display:grid;gap:.6rem;align-content:start}
+.rlist button{display:flex;align-items:center;gap:.9rem;text-align:left;padding:1rem 1.1rem;border:1px solid var(--line);border-radius:8px;transition:border-color .3s,background .3s}
+.rlist button:hover{border-color:var(--acc)}
+.rlist button[aria-selected=true]{border-color:var(--acc);background:color-mix(in oklch,var(--acc) 14%,transparent)}
+.rlist .sw{display:flex}
+.rlist .sw u{width:12px;height:28px}
+.rlist .sw u:first-child{border-radius:3px 0 0 3px}.rlist .sw u:last-child{border-radius:0 3px 3px 0}
+.rlist span.hd{font-size:1.05rem}
+.rpanel{border:1px solid var(--line);border-radius:10px;padding:2rem 1.8rem;background:color-mix(in oklch,var(--ink) 70%,transparent);backdrop-filter:blur(6px);-webkit-backdrop-filter:blur(6px);min-height:340px;display:flex;flex-direction:column;gap:1rem}
+.rpanel h3{font-size:clamp(2rem,4vw,2.8rem);color:var(--acc2);transition:color .6s}
+.rpanel .kind{font:400 .74rem Plex,monospace;letter-spacing:.18em;text-transform:uppercase;color:var(--acc)}
+.rpanel p{color:#d6cfeb;max-width:56ch}
+.rpanel .whisper{margin-top:auto;font-size:1.15rem;color:var(--acc);border-top:1px solid var(--line);padding-top:1.1rem}
+.rpanel .scene-note{font-size:.9rem;color:var(--dim)}
+.rpanel .whisper.ancient{color:#0ABF00}
+#seren h2{color:#f4f1ff}
+#seren .eyebrow{color:var(--acc)}
+
+/* echoes */
+.echoes{display:grid;gap:.9rem;margin-top:2.4rem;max-width:62ch}
+.echoes li{list-style:none;display:flex;gap:1rem;padding:1rem 1.2rem;border-left:2px solid #2a2538;background:rgba(20,14,38,.5);color:#9a92b5;font-style:italic;transition:border-color .6s,color .6s}
+.echoes li b{font:400 .8rem Plex,monospace;font-style:normal;color:#7a7295}
+.echoes li.on{border-color:var(--acc);color:var(--bone);font-style:normal}
+.echoes li.on b{color:var(--glow)}
+.echoes li span{font-family:Trajan,'Trajan Pro',Georgia,serif;font-style:normal}
+.hintline{margin-top:1.2rem;color:var(--dim);font-size:.9rem}
+
+/* details */
+.spec{width:100%;border-collapse:collapse;margin-top:2.2rem}
+.spec tr{border-bottom:1px solid var(--line)}
+.spec tr:first-child{border-top:1px solid var(--line)}
+.spec td{padding:1.1rem 0;vertical-align:top}
+.spec td:first-child{font:400 .74rem Plex,monospace;letter-spacing:.18em;text-transform:uppercase;color:var(--glow);width:200px;padding-right:1rem}
+.dot{display:inline-block;width:7px;height:7px;border-radius:50%;background:var(--acc);margin-right:.6rem;animation:pulse 2s ease-in-out infinite}
+@keyframes pulse{0%,100%{box-shadow:0 0 0 0 rgba(139,92,246,.6)}50%{box-shadow:0 0 0 6px rgba(139,92,246,0)}}
+.cta{margin-top:3.5rem;border:1px solid rgba(139,92,246,.35);background:rgba(139,92,246,.07);border-radius:12px;padding:2.4rem 2rem;display:flex;flex-wrap:wrap;gap:1.5rem 3rem;align-items:center;justify-content:space-between}
+.cta h3{font-size:1.7rem;color:var(--acc2)}
+.cta p{color:#cfc7e6;margin-top:.3rem}
+
+footer{border-top:1px solid var(--line);padding:2.4rem 1.5rem;text-align:center;font-size:.8rem;color:var(--dim)}
+footer .links{display:flex;flex-wrap:wrap;justify-content:center;gap:.4rem 1.6rem;margin-bottom:.9rem}
+footer a{color:var(--dim);text-decoration:none}footer a:hover{color:#fff}
+
+@media(max-width:900px){
+  header{background:rgba(5,4,8,.94);border-bottom:1px solid var(--line)}
+  .case,.stage,.rwrap{grid-template-columns:1fr}
+  .loop{grid-template-columns:1fr 1fr}
+  .pillars{grid-template-columns:1fr}.pillars div{border-right:0;border-bottom:1px solid var(--line)}.pillars div:last-child{border-bottom:0}
+  .hero::after{background:linear-gradient(rgba(5,4,8,.55),rgba(5,4,8,.75) 60%,var(--ink))}
+}
+@media(max-width:560px){
+  header{padding:.8rem 1rem}section{padding:4.5rem 0}.loop{grid-template-columns:1fr}.spec td:first-child{width:120px}
+  .tabs button{font-size:.68rem;letter-spacing:.04em}
+}
+@media(prefers-reduced-motion:reduce){*,::after{animation:none!important;transition:none!important}html{scroll-behavior:auto}.rv{opacity:1;transform:none}}
+</style>
+</head>
+<body>
+
+<header id="top">
+  <a class="brand pix" href="index.html">UNSHADED</a>
+  <nav aria-label="Page">
+    <a href="#case">The case</a><a href="#play">How it plays</a><a href="#memory">Memory</a><a href="#seren">Seren</a><a href="#echoes">Echoes</a><a href="#details">Details</a><a href="../index.html">Portfolio</a>
+  </nav>
+</header>
+
+<!-- ============ HERO ============ -->
+<div class="hero">
+  <canvas id="sky" aria-hidden="true"></canvas>
+  <div class="wrap">
+    <span class="stamp">In development</span>
+    <h1 class="pix">UNSHADED</h1>
+    <p class="tagline">Find out what actually happened.</p>
+    <p class="sub">A story-driven mystery set in the Kingdom of Seren. Investigate with memories that show fragments, never answers, in a world that remembers everything you do.</p>
+    <div class="btns">
+      <a class="btn solid" href="#case">Open the case</a>
+      <a class="btn" href="#" aria-disabled="true">Steam page coming soon</a>
+    </div>
+    <div class="meta"><span>Story-driven mystery</span><span>Solo Prodigy Dev</span><span>Release: when it's ready</span></div>
+  </div>
+  <div class="scroll" aria-hidden="true"></div>
+</div>
+
+<div class="pillars">
+  <div class="rv"><h3>Fragments, not answers</h3><p>Your Echoes of the Iris show pieces of the past. They never tell you who is right.</p></div>
+  <div class="rv"><h3>Everyone has a reason to lie</h3><p>Witnesses hold grudges. Neighbours protect secrets. The truth is whatever survives the doubt.</p></div>
+  <div class="rv"><h3>Seren remembers</h3><p>People keep track of what you say and do, and they change how they treat you because of it.</p></div>
+</div>
+
+<!-- ============ THE CASE ============ -->
+<section id="case">
+  <div class="wrap">
+    <div class="eyebrow rv">Case file 001</div>
+    <h2 class="rv">Grain goes missing. Nobody tells the truth.</h2>
+    <div class="case">
+      <div class="intro rv">
+        <p class="lead">It starts small, in a quiet valley. Grain disappears from the granary, and a kingdom already split by war has no patience left for small things.</p>
+        <p>A stranger was seen near the granary. A witness has a grudge. Everyone you meet has something to protect, and a reason to point you somewhere else.</p>
+        <p class="world">&ldquo;Echoes show fragments of the past, never answers.&rdquo;</p>
+        <p>You are not handed a culprit. You gather what people say, what the Echoes show, and what each person stands to lose, then decide for yourself what happened.</p>
+      </div>
+
+      <div class="file rv" aria-label="Case file">
+        <div class="fhead"><span>Case 001 &middot; The granary</span><span>Status: open</span></div>
+        <div class="tabs" role="tablist" aria-label="Threads in the case">
+          <button role="tab" aria-selected="true" aria-controls="panel" id="t0" data-i="0">01 Sighting</button>
+          <button role="tab" aria-selected="false" aria-controls="panel" id="t1" data-i="1">02 Witness</button>
+          <button role="tab" aria-selected="false" aria-controls="panel" id="t2" data-i="2">03 Paper</button>
+        </div>
+        <div class="panel" id="panel" role="tabpanel" aria-live="polite"></div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ============ HOW IT PLAYS ============ -->
+<section id="play">
+  <div class="wrap">
+    <div class="eyebrow rv">Method</div>
+    <h2 class="rv">Investigate. Listen. Decide. Be remembered.</h2>
+    <p class="lead rv">UNSHADED is built around one loop, and every part of it pushes back on you.</p>
+    <div class="loop">
+      <article class="rv"><span class="n">01</span><h3>Investigate</h3><p>Walk Seren's roads, question its people, and look closely at what they would rather you didn't.</p></article>
+      <article class="rv"><span class="n">02</span><h3>Listen</h3><p>Use the Echoes of the Iris to hear what a place remembers: a glimpse, a sentence, a thing left behind. Never the whole picture.</p></article>
+      <article class="rv"><span class="n">03</span><h3>Decide</h3><p>No narrator names the guilty. Weigh the fragments against what each person stands to lose, and commit to a conclusion.</p></article>
+      <article class="rv"><span class="n">04</span><h3>Be remembered</h3><p>Seren keeps count. People change what they tell you, and what they hide, based on what you have already done.</p></article>
+    </div>
+    <p class="loopnote rv">Because the Echoes are partial and the people are biased, two players can walk the same road, hear the same fragment, and come away certain of different things.</p>
+  </div>
+</section>
+
+<!-- ============ MEMORY DEMO ============ -->
+<section id="memory" class="mem">
+  <div class="wrap">
+    <div class="eyebrow rv">Seren remembers</div>
+    <h2 class="rv">Try it. This page will remember too.</h2>
+    <p class="lead rv">A small taste of the idea: you walk into a tavern, you do one thing, and that choice follows you. Leave, come back, and see.</p>
+    <div class="stage rv">
+      <div class="scene" id="scene" aria-live="polite"></div>
+      <aside class="ledger2">
+        <h3>What Seren knows about you</h3>
+        <dl>
+          <div><dt>Reputation</dt><dd id="repu">Unknown. No one has met you yet.</dd></div>
+          <div><dt>Last seen</dt><dd id="seen">Nowhere.</dd></div>
+        </dl>
+        <p class="note">Illustrative scene, not from the game. Your choice is saved in this browser only, and nowhere else.</p>
+        <button class="reset" id="reset" hidden>Forget me</button>
+      </aside>
+    </div>
+  </div>
+</section>
+
+<!-- ============ SEREN ============ -->
+<section id="seren">
+  <div class="wrap">
+    <div class="eyebrow rv">The Kingdom of Seren</div>
+    <h2 class="rv">One kingdom. Four memories.</h2>
+    <p class="lead rv">Each region has its own colour, its own mood, and its own way of lying to you.</p>
+    <div class="rwrap rv">
+      <div class="rlist" role="tablist" aria-label="Regions" id="rlist"></div>
+      <div class="rpanel" id="rpanel" role="tabpanel" aria-live="polite"></div>
+    </div>
+  </div>
+</section>
+
+<!-- ============ ECHOES ============ -->
+<section id="echoes">
+  <div class="wrap">
+    <div class="eyebrow rv">Echoes of the Iris</div>
+    <h2 class="rv">What the Iris has shown so far.</h2>
+    <p class="lead rv">Three fragments of the granary case are hidden on the portfolio page. The ones you have found appear here.</p>
+    <ol class="echoes rv" id="echoList" aria-label="Echoes found"></ol>
+    <p class="hintline rv" id="echoHint"></p>
+  </div>
+</section>
+
+<!-- ============ DETAILS ============ -->
+<section id="details">
+  <div class="wrap">
+    <div class="eyebrow rv">Details</div>
+    <h2 class="rv">The short version.</h2>
+    <table class="spec rv">
+      <tr><td>Status</td><td><span class="dot"></span>In active development</td></tr>
+      <tr><td>Genre</td><td>Story-driven mystery</td></tr>
+      <tr><td>Setting</td><td>The Kingdom of Seren: Ashbourne, Constantina, Westfall and Blackwood</td></tr>
+      <tr><td>Developer</td><td>Solo Prodigy Dev</td></tr>
+      <tr><td>Store</td><td>Steam page coming soon</td></tr>
+      <tr><td>Release</td><td>TBA. Ships when it's ready.</td></tr>
+    </table>
+    <div class="cta rv">
+      <div><h3>Follow the case.</h3><p>Questions, bugs, feedback, or press? Come say hello.</p></div>
+      <div class="btns"><a class="btn solid" href="contact.html">Contact</a><a class="btn" href="mods.html">Modding</a><a class="btn" href="../index.html">Portfolio</a></div>
+    </div>
+  </div>
+</section>
+
+<footer>
+  <div class="links"><a href="eula.html">EULA</a><a href="terms.html">Terms of Service</a><a href="privacy.html">Privacy Policy</a><a href="mods.html">Modding</a><a href="contact.html">Contact</a></div>
+  <div>&copy; 2026 UNSHADED by Solo Prodigy Dev. All rights reserved.</div>
+</footer>
+
+<script>
+const $=s=>document.querySelector(s),$$=s=>[...document.querySelectorAll(s)];
+const reduce=matchMedia('(prefers-reduced-motion:reduce)').matches;
+/* same storage keys as the portfolio page (uns_*) so progress carries over */
+const store={get(k,d){try{return JSON.parse(localStorage.getItem('uns_'+k))??d}catch(e){return d}},set(k,v){try{localStorage.setItem('uns_'+k,JSON.stringify(v))}catch(e){}},del(k){try{localStorage.removeItem('uns_'+k)}catch(e){}}};
+
+/* ---------- header + reveal + active nav ---------- */
+const hdr=$('#top');
+addEventListener('scroll',()=>hdr.classList.toggle('solid',scrollY>40),{passive:true});
+const io=new IntersectionObserver(es=>es.forEach(e=>{if(e.isIntersecting){e.target.classList.add('in');io.unobserve(e.target)}}),{threshold:.12});
+$$('.rv').forEach(el=>io.observe(el));
+const links=$$('header nav a[href^="#"]');
+const so=new IntersectionObserver(es=>es.forEach(e=>{if(e.isIntersecting)links.forEach(a=>a.classList.toggle('on',a.getAttribute('href')==='#'+e.target.id))}),{rootMargin:'-45% 0px -50% 0px'});
+$$('section[id]').forEach(s=>so.observe(s));
+
+/* ---------- hero: the Iris, drawn in pixels, looks at your cursor ---------- */
+(function(){
+  const c=$('#sky'),g=c.getContext('2d');let W,H,PS=4,stars=[],motes=[],mx=null,my=null;
+  const rnd=(a,b)=>a+Math.random()*(b-a),lim=(v,m)=>Math.max(-m,Math.min(m,v));
+  const R=(x,y,w,h,col)=>{g.fillStyle=col;g.fillRect(Math.round(x),Math.round(y),Math.max(1,Math.round(w)),Math.max(1,Math.round(h)))};
+  function size(){const r=c.getBoundingClientRect();W=Math.ceil(r.width/PS);H=Math.ceil(r.height/PS);c.width=W;c.height=H;
+    stars=[...Array(Math.round(W*H/220))].map(()=>({x:rnd(0,W),y:rnd(0,H*.85),ph:rnd(0,6),p:Math.random()<.2}));
+    motes=[...Array(40)].map(()=>({x:rnd(0,W),y:rnd(0,H),v:rnd(.05,.25),ph:rnd(0,6)}))}
+  function frame(t){
+    g.clearRect(0,0,W,H);
+    const bands=['#050408','#0a0614','#180d32','#2f1a66'];for(let y=0;y<H;y+=3){const u=y/H*3,i=Math.min(2,Math.floor(u)),f=u-i,A=bands[i],B=bands[i+1];
+      const m=(a,b)=>Math.round(parseInt(A.slice(a,a+2),16)+(parseInt(B.slice(a,a+2),16)-parseInt(A.slice(a,a+2),16))*f);R(0,y,W,3,`rgb(${m(1)},${m(3)},${m(5)})`)}
+    stars.forEach(s=>{g.globalAlpha=reduce?.7:.3+.7*Math.abs(Math.sin(t/900+s.ph));R(s.x,s.y,1,1,s.p?'#b79cff':'#f4f1ff')});g.globalAlpha=1;
+    /* the eye sits to the right on wide screens, high and centred on narrow ones */
+    const wide=W>H*.9,cx=wide?W*.7:W*.5,cy=wide?H*.42:H*.2,rx=Math.round(Math.min(W*(wide?.26:.4),H*.9)),ry=Math.round(rx*.42);
+    const px=mx===null?Math.sin(t/3000)*.5:lim((mx/PS-cx)/(W*.5),1),py=my===null?Math.sin(t/2200)*.25:lim((my/PS-cy)/(H*.5),1);
+    const ph=(t%6500)/6500,h=ry*(ph>.96?Math.abs(Math.cos((ph-.96)/.04*Math.PI)):1);
+    const ix=cx+px*rx*.3,iy=cy+py*ry*.45,ir=Math.round(ry*.9);
+    const lid=u=>Math.round(h*(1-Math.pow(Math.abs(u),1.7)));
+    /* soft violet glow behind it */
+    const q=g.createRadialGradient(cx,cy,0,cx,cy,rx*1.6);q.addColorStop(0,'rgba(139,92,246,.28)');q.addColorStop(1,'rgba(139,92,246,0)');g.fillStyle=q;g.fillRect(cx-rx*1.7,cy-rx*1.7,rx*3.4,rx*3.4);
+    for(let dx=-rx;dx<=rx;dx++){const half=lid(dx/rx);if(half<1)continue;R(cx+dx,cy-half,1,half*2+1,'#1b1033')}
+    const ring=(rad,col,sq)=>{for(let x=-rad;x<=rad;x++){const col2=Math.round(ix)+x,u=(col2-cx)/rx;if(Math.abs(u)>=1)continue;const half=lid(u),d=Math.round(Math.sqrt(rad*rad-x*x)*sq),y0=Math.max(-half,Math.round(iy)-Math.round(cy)-d),y1=Math.min(half,Math.round(iy)-Math.round(cy)+d);if(y1>=y0)R(col2,Math.round(cy)+y0,1,y1-y0+1,col)}};
+    ring(ir,'#4b2a9e',1);ring(Math.round(ir*.72),'#8b5cf6',1);ring(Math.round(ir*.4),'#b79cff',1);ring(2,'#050408',ir/2);
+    R(ix-ir*.45,iy-ir*.45,2,2,'#fff');
+    for(let dx=-rx;dx<=rx;dx++){const half=lid(dx/rx);if(half<1)continue;R(cx+dx,cy-half-1,1,1,'#f4f1ff');R(cx+dx,cy+half+1,1,1,'#6a4cc4')}
+    /* hills + rising motes */
+    g.fillStyle='#1d1040';for(let x=0;x<W;x++){const y=Math.round(H*.86+Math.sin(x*.03+2)*5);g.fillRect(x,y,1,H-y)}
+    g.fillStyle='#0b0618';for(let x=0;x<W;x++){const y=Math.round(H*.92+Math.sin(x*.05+5)*4);g.fillRect(x,y,1,H-y)}
+    motes.forEach(m=>{if(!reduce){m.y-=m.v;if(m.y<-3){m.y=H+3;m.x=rnd(0,W)}}g.globalAlpha=.4+.5*Math.sin(t/500+m.ph);R(m.x,m.y,1,1,'#b79cff')});g.globalAlpha=1;
+    if(!reduce&&!document.hidden)requestAnimationFrame(frame)}
+  size();addEventListener('resize',()=>{size();if(reduce)frame(0)});
+  addEventListener('pointermove',e=>{mx=e.clientX;my=e.clientY});
+  document.addEventListener('visibilitychange',()=>{if(!document.hidden&&!reduce)requestAnimationFrame(frame)});
+  reduce?frame(0):requestAnimationFrame(frame);
+})();
+
+/* ---------- case file ---------- */
+const THREADS=[
+ {t:'The sighting',lead:'A stranger was seen near the granary on the night the grain went missing.',q:['Who was near the granary that night?','What were they carrying, if anything?','Why were they afraid?'],e:0},
+ {t:'The witness',lead:'Someone swears they know who did it. Someone else swears they are not to be trusted.',q:['What was the witness doing out that late?','What do they gain by speaking up?','What do they lose if they are wrong?'],e:1},
+ {t:'The paper trail',lead:'In a place where little is written down, something was. Writing outlasts memory.',q:['What was written, and by whom?','Who was it meant to reach?','Why did it end up somewhere else?'],e:2}
+];
+const F=['A woman by the granary after dark. Her hands were empty. They would not stop shaking.',
+'A man swears he saw her take it. He has never said what he was doing out that late.',
+'A strongbox, and a letter that was never meant to arrive.'];
+const found=()=>{const f=store.get('found',[]);return Array.isArray(f)?f:[]};
+function showThread(i){
+  const T=THREADS[i],has=found().includes(T.e);
+  $$('.tabs button').forEach(b=>b.setAttribute('aria-selected',+b.dataset.i===i));
+  $('#panel').innerHTML=`<h3>${T.t}</h3><p>${T.lead}</p>`+
+   (has?`<div class="echo-line world">${F[T.e]}</div>`:`<div class="echo-line locked world">An Echo here has not been heard. <a href="../index.html#about">Find it on the portfolio page.</a></div>`)+
+   `<h4>Still unanswered</h4><ul>${T.q.map(x=>`<li>${x}</li>`).join('')}</ul>`;
+  $('#panel').setAttribute('aria-labelledby','t'+i)}
+$$('.tabs button').forEach(b=>b.onclick=()=>showThread(+b.dataset.i));
+showThread(0);
+
+/* ---------- memory demo: the choice is stored, and the tavern knows you next time ---------- */
+const CH={
+ round:{label:'Buy a round for the whole room.',rep:'Generous. Possibly trying too hard.',next:'&ldquo;Back already? Sit. The room has been telling the story of your round all morning. Half of it is even true.&rdquo;',sub:'People are more willing to talk to you. Someone will want something in return.'},
+ quiet:{label:'Pay for your drink, say nothing, and leave.',rep:'Quiet. Hard to read.',next:'&ldquo;You again. Said nothing last time, and that made people nervous. A silent stranger is worse than a loud one.&rdquo;',sub:'No one has a reason to like you, or a reason to hate you. Yet.'},
+ accuse:{label:'Point at the man by the fire and call him a thief.',rep:'Accuser. Dangerous to be near.',next:'&ldquo;Three people stopped drinking here the night you left. The man by the fire has not been back. I would not ask my questions loudly, if I were you.&rdquo;',sub:'Doors close. The man by the fire now has a reason to hate you, and a story to tell about you.'}
+};
+const scene=$('#scene');
+function drawScene(){
+  const k=store.get('tavern',null);
+  if(!k||!CH[k]){
+    $('#repu').textContent='Unknown. No one has met you yet.';$('#seen').textContent='Nowhere.';$('#reset').hidden=true;
+    scene.innerHTML=`<div class="where">Ashbourne &middot; The tavern</div>
+     <div class="say world">The tavern goes quiet as you step inside. A fire, a few farmers, and a man by the hearth who will not meet your eye.<small>What do you do?</small></div>
+     <div class="choices">${Object.entries(CH).map(([id,c])=>`<button data-c="${id}">${c.label}</button>`).join('')}</div>`;
+    $$('.choices button').forEach(b=>b.onclick=()=>{store.set('tavern',b.dataset.c);drawScene();scene.querySelector('.say')?.focus?.()});
+  }else{
+    const c=CH[k];
+    $('#repu').textContent=c.rep;$('#seen').textContent='Ashbourne, in the tavern.';$('#reset').hidden=false;
+    scene.innerHTML=`<div class="where">Ashbourne &middot; The tavern &middot; The next day</div>
+     <div class="say world">${c.next}<small>${c.sub}</small></div>
+     <div class="where" style="color:var(--glow)">Seren remembers. This page did too.</div>`}
+}
+$('#reset').onclick=()=>{store.del('tavern');drawScene()};
+drawScene();
+
+/* ---------- regions ---------- */
+const RG=[
+ {n:'Ashbourne',k:'Farmland &middot; Markets &middot; The tavern',c:['#6dbf2a','#f0d33a','#050802'],names:['green','yellow','black'],d:'Farms, markets, and a tavern where everyone knows your name. Peaceful, for now.',s:'Golden harvest light, windmills and bunting, and the sense that every smile is guarding something.',w:'The harvest smells of smoke this year.',a:['#6dbf2a','#f0d33a','#2f6b1f','#050802']},
+ {n:'Constantina',k:'Capital &middot; Cathedrals &middot; Industry',c:['#d4202e','#f3efe8','#050405'],names:['red','white','black'],d:'A gothic capital of cathedrals and factories. Power lives here, and so does the poverty beside it.',s:'Empty streets under red banners, chimneys that never stop, and a city that watches itself.',w:'The chimneys never stop. Nobody is out to hear them.',a:['#d4202e','#f3efe8','#7a0f18','#050405']},
+ {n:'Westfall',k:'Frontier &middot; Citadel &middot; The Schism',c:['#8a929c','#8fb0d6','#06080b'],names:['grey','faint blue','black'],d:'A frontier citadel worn down by war. Here the Schism is not history. People remember it.',s:'Cold, damaged and isolated. The people here do not need an Echo to remember what happened.',w:'The wind here carries names.',a:['#8a929c','#8fb0d6','#4a525c','#06080b']},
+ {n:'Blackwood',k:'Forest &middot; Ancient &middot; Unmapped',c:['#2a7a52','#3b82ff','#020605'],names:['dark green','blue','black'],d:'A forest so old the sunlight gives up. Something was here long before Seren.',s:'Deep shade, still water, and a quiet that feels like being listened to.',w:'Something older than the kingdom watches. Not me.',a:['#2a7a52','#3b82ff','#0f4a35','#020605'],anc:1}
+];
+const rl=$('#rlist'),rp=$('#rpanel'),sec=$('#seren');
+RG.forEach((r,i)=>{const b=document.createElement('button');b.setAttribute('role','tab');b.dataset.i=i;
+  b.innerHTML=`<span class="sw">${r.c.map(x=>`<u style="background:${x}"></u>`).join('')}</span><span class="hd">${r.n}</span>`;
+  b.onclick=()=>pickRegion(i);rl.appendChild(b)});
+function pickRegion(i){const r=RG[i];
+  $$('#rlist button').forEach((b,j)=>b.setAttribute('aria-selected',j===i));
+  sec.style.setProperty('--acc',r.a[0]);sec.style.setProperty('--acc2',r.a[1]);sec.style.setProperty('--acc3',r.a[2]);
+  rp.innerHTML=`<span class="kind">${r.k}</span><h3 class="hd">${r.n}</h3><p>${r.d}</p><p class="scene-note">${r.s}</p>
+   <p class="scene-note mono">Palette: ${r.names.join(' / ')}</p>
+   <p class="whisper ${r.anc?'ancient':'world'}">&ldquo;${r.w}&rdquo;</p>`}
+pickRegion(0);
+
+/* ---------- echoes found on the portfolio page ---------- */
+function drawEchoes(){const f=found();
+  $('#echoList').innerHTML=F.map((x,i)=>{const on=f.includes(i);return `<li class="${on?'on':''}"><b>${String(i+1).padStart(2,'0')}</b><span>${on?x:'Not yet heard.'}</span></li>`}).join('');
+  $('#echoHint').textContent=f.length>=3?'You have heard all three. The Iris has more to show.':f.length?`${f.length} of 3 heard. The rest are hidden in the text on the portfolio page.`:'None heard yet. Two are hidden in the text on the portfolio page, and one is in its footer.'}
+drawEchoes();
+addEventListener('storage',()=>{drawEchoes();showThread(+($('.tabs [aria-selected=true]').dataset.i))});
+</script>
+</body>
+</html>
