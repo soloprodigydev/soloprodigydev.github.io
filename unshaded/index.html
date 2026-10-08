@@ -538,7 +538,7 @@ const Snd={on:false,ctx:null,m:4,
     freqs.forEach((f,i)=>[1,2.01,3.9].forEach((mu,j)=>{const o=c.createOscillator(),g=c.createGain(),s=t+i*.09;o.type='sine';o.frequency.value=f*mu;
       g.gain.setValueAtTime(0,s);g.gain.linearRampToValueAtTime(vol/(j+1)/(1+i*.2),s+.01);g.gain.exponentialRampToValueAtTime(.0001,s+dur/(j+1));
       o.connect(g);g.connect(this.master);g.connect(this.fx);o.start(s);o.stop(s+dur+.1)}))},
-  tick(){if(!this.on)return;const c=this.ctx,t=c.currentTime,o=c.createOscillator(),g=c.createGain();o.type='sine';o.frequency.value=660;
+  tick(){if(!this.on||(typeof Sfx!=='undefined'&&Sfx.ok.click))return;const c=this.ctx,t=c.currentTime,o=c.createOscillator(),g=c.createGain();o.type='sine';o.frequency.value=660;
     g.gain.setValueAtTime(.05,t);g.gain.exponentialRampToValueAtTime(.0001,t+.12);o.connect(g);g.connect(this.master);o.start(t);o.stop(t+.15)},
   holdStart(){if(!this.on)return;const c=this.ctx,o=c.createOscillator(),g=c.createGain(),f=c.createBiquadFilter();o.type='sawtooth';o.frequency.value=110;f.type='lowpass';f.frequency.value=200;
     g.gain.value=0;g.gain.setTargetAtTime(.06,c.currentTime,.1);o.connect(f);f.connect(g);g.connect(this.master);o.start();this.h={o,g,f}},
@@ -548,13 +548,26 @@ const Snd={on:false,ctx:null,m:4,
 /* ---------- soundtrack: the real OST, from the music/ folder ---------- */
 const DIRS=['music/','../music/'];/* folders to look in, in order */
 const TRACKS={
- home:{f:'Do_You_Remember.ogg',t:'Do You Remember',s:'Piano'},
- quiet:{f:'A_Quiet_Place.ogg',t:'A Quiet Place',s:'Ashbourne Valley OST'},
+ home:{f:'Do_You_Remember.mp3',t:'Do You Remember',s:'Piano'},
+ quiet:{f:'A_Quiet_Place.mp3',t:'A Quiet Place',s:'Ashbourne Valley OST'},
  below:{f:'The_Quiet_Below.mp3',t:'The Quiet Below',s:'The Depths of Blackwood OST'}};
 /* which track plays in each region [Ashbourne, Constantina, Westfall, Blackwood], and how muffled it is. Swap in new tracks here. */
 const REGION_TRACK=['quiet','home','home','below'],REGION_TONE=[20000,20000,2600,20000];
 const RATE={round:1.03,quiet:.97,accuse:.92};
 /* live level of the music, read by the hero eye, the kingdom scenes, the glow on the title and the header bars */
+/* UI sounds: click.mp3 and hover.mp3, looked for next to the music (or in sfx/, or the page folder) */
+const SFX_DIRS=['music/','../music/','','../','sfx/','../sfx/'];
+const Sfx={ok:{},pool:{},i:{},
+  load(){['click','hover'].forEach(n=>{if(this.pool[n])return;let d=0;const a=new Audio();a.preload='auto';
+    const next=()=>{if(d>=SFX_DIRS.length){console.warn('UI sound not found: '+n+'.mp3');return}a.src=SFX_DIRS[d++]+n+'.mp3'};
+    a.addEventListener('error',next);
+    a.addEventListener('canplaythrough',()=>{if(this.pool[n])return;const src=a.src;this.pool[n]=[a,...[1,2,3].map(()=>{const x=new Audio(src);x.preload='auto';return x})];this.ok[n]=true},{once:true});next()})},
+  play(n,v){if(!Snd.on||!this.ok[n])return;const p=this.pool[n],i=this.i[n]=((this.i[n]||0)+1)%p.length,a=p[i];a.volume=Math.min(1,v*Mus.vol/.8);try{a.currentTime=0}catch(e){}a.play().catch(()=>{})}};
+(function(){if(matchMedia('(hover:none)').matches)return;
+  const HOV='.btn:not([aria-disabled=true]),button:not(.listen),header nav a,.rail a,footer a,.twin>div';let last=null,t0=0;
+  addEventListener('pointerover',e=>{const el=e.target.closest&&e.target.closest(HOV);if(!el||el===last)return;last=el;const n=performance.now();if(n-t0<70)return;t0=n;Sfx.play('hover',.35)},{passive:true});
+  addEventListener('pointerout',e=>{if(last&&!last.contains(e.relatedTarget))last=null},{passive:true});
+  addEventListener('click',e=>{const el=e.target.closest&&e.target.closest('a[href],button,.btn');if(!el||el.closest('.listen')||el.getAttribute('aria-disabled')==='true')return;Sfx.play('click',.6)})})();
 const Energy={v:0,kick:0,pk:.2,run:false};
 const Mus={on:false,cur:null,vol:+store.get('vol',.8)||.8,duck:1,el:{},g:{},pt:{},fade:{},dir:{},ready:false,routed:false,
   init(){if(this.ready||!Snd.ctx)return;this.ready=true;const c=Snd.ctx;this.routed=location.protocol!=='file:';
@@ -566,7 +579,7 @@ const Mus={on:false,cur:null,vol:+store.get('vol',.8)||.8,duck:1,el:{},g:{},pt:{
         else this.fail(k,a.currentSrc||a.src)});
       if(this.routed){const s=c.createMediaElementSource(a),g=c.createGain();g.gain.value=0;s.connect(g);g.connect(this.bus);this.g[k]=g}else{a.volume=0;this.fade[k]=0}});
     if(!this.routed)setInterval(()=>Object.keys(this.el).forEach(k=>{const a=this.el[k];a.volume=Math.max(0,Math.min(1,a.volume+(this.fade[k]-a.volume)*.12))}),60)},
-  start(){this.init();if(!this.ready)return;this.on=true;this.rate();if(Snd.pad)Snd.pad.gain.setTargetAtTime(0,Snd.ctx.currentTime,.6);syncZone();this.apply();energyStart()},
+  start(){this.init();if(!this.ready)return;this.on=true;Sfx.load();this.rate();if(Snd.pad)Snd.pad.gain.setTargetAtTime(0,Snd.ctx.currentTime,.6);syncZone();this.apply();energyStart()},
   stop(){this.on=false;this.apply();this.cur=null;$('#np').classList.remove('show')},
   want(k,tone){if(k!==this.cur){this.cur=k;this.announce(k)}
     if(this.lp)this.lp.frequency.setTargetAtTime(tone,Snd.ctx.currentTime,.8);this.apply()},
