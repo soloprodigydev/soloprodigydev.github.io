@@ -91,7 +91,7 @@ header nav a.on{text-decoration:underline;text-decoration-color:var(--acc);text-
 /* hero: the page is in shade, your cursor is the light */
 .hero{min-height:100svh;display:flex;align-items:center;position:relative;overflow:hidden;padding:7rem 0 4rem;touch-action:pan-y}
 #sky{position:absolute;inset:0;width:100%;height:100%;image-rendering:pixelated;image-rendering:crisp-edges;z-index:0}
-.hero::after{content:"";position:absolute;inset:0;z-index:1;pointer-events:none;background:linear-gradient(90deg,rgba(5,4,8,.85) 0%,rgba(5,4,8,.45) 45%,transparent 75%),linear-gradient(transparent 70%,var(--ink))}
+.hero::after{content:"";position:absolute;inset:0;z-index:1;pointer-events:none;background:radial-gradient(ellipse 85% 75% at 60% 45%,transparent 40%,rgba(5,4,8,.7) 100%),linear-gradient(90deg,rgba(5,4,8,.72) 0%,rgba(5,4,8,.3) 45%,transparent 75%),linear-gradient(transparent 70%,var(--ink))}
 .whispers{position:absolute;inset:0;z-index:2;pointer-events:none;-webkit-mask-image:radial-gradient(circle 200px at var(--lx,30%) var(--ly,60%),#000 12%,transparent 100%);mask-image:radial-gradient(circle 200px at var(--lx,30%) var(--ly,60%),#000 12%,transparent 100%)}
 .whispers p{position:absolute;max-width:26ch;font-size:clamp(.95rem,1.5vw,1.3rem);color:var(--acc2);text-shadow:0 0 18px rgba(183,156,255,.8)}
 .whispers p.ancient{color:#0ABF00;text-shadow:0 0 14px rgba(10,191,0,.7);font-size:clamp(1rem,1.6vw,1.4rem)}
@@ -199,7 +199,7 @@ h1.pix{font-size:clamp(3rem,12vw,8.5rem);letter-spacing:.04em;line-height:1;colo
 /* the kingdom: full-bleed pixel worlds */
 #seren{padding:0;min-height:max(100svh,780px);display:flex;flex-direction:column;overflow:hidden;transition:--acc .9s,--acc2 .9s,--acc3 .9s}
 #land{position:absolute;inset:0;width:100%;height:100%;image-rendering:pixelated;image-rendering:crisp-edges;z-index:0}
-#seren .veil{position:absolute;inset:0;z-index:1;pointer-events:none;background:linear-gradient(90deg,rgba(5,4,8,.8),rgba(5,4,8,.15) 60%,transparent),linear-gradient(rgba(5,4,8,.85),transparent 22%,transparent 50%,rgba(5,4,8,.88))}
+#seren .veil{position:absolute;inset:0;z-index:1;pointer-events:none;background:radial-gradient(ellipse 85% 75% at 50% 45%,transparent 45%,rgba(5,4,8,.72) 100%),linear-gradient(90deg,rgba(5,4,8,.55),rgba(5,4,8,.08) 60%,transparent),linear-gradient(rgba(5,4,8,.85),transparent 22%,transparent 50%,rgba(5,4,8,.88))}
 .blink{position:absolute;inset:0;z-index:4;pointer-events:none;overflow:hidden}
 .blink i{position:absolute;left:-5%;right:-5%;height:51%;background:#020104;transform:scaleY(0)}
 .blink i:first-child{top:0;transform-origin:top;border-radius:0 0 50% 50%/0 0 14% 14%}
@@ -333,6 +333,117 @@ footer a{color:var(--dim);text-decoration:none}footer a:hover{color:#fff}
   .rg{padding-top:5.5rem}.rpanel{padding:1.4rem 1.2rem}
 }
 @media(prefers-reduced-motion:reduce){*,::after{animation:none!important;transition:none!important}html{scroll-behavior:auto}.rv{opacity:1;transform:none}}
+
+/* ============ CINEMATIC LAYER ============ */
+.plate{position:absolute;inset:0;z-index:0;overflow:hidden;translate:0 var(--py,0px);scale:1.08;animation:push 40s ease-in-out infinite alternate;will-change:translate,scale}
+@keyframes push{from{scale:1.06}to{scale:1.14}}
+.plate canvas{transform-origin:50% 55%}
+.grain{position:absolute;inset:-50%;z-index:3;pointer-events:none;opacity:.075;mix-blend-mode:overlay;background-image:url("data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' width='220' height='220'><filter id='n'><feTurbulence type='fractalNoise' baseFrequency='.9' numOctaves='2' stitchTiles='stitch'/><feColorMatrix values='0 0 0 0 1 0 0 0 0 1 0 0 0 0 1 0 0 0 .9 0'/></filter><rect width='100%' height='100%' filter='url(%23n)'/></svg>");animation:grain .9s steps(1) infinite}
+@keyframes grain{0%{transform:translate(0,0)}17%{transform:translate(-5%,4%)}34%{transform:translate(4%,-6%)}51%{transform:translate(-3%,-3%)}68%{transform:translate(6%,5%)}85%{transform:translate(-6%,2%)}}
+.curtain{position:absolute;inset:0;z-index:6;background:#000;pointer-events:none;animation:curtain 3.2s .15s cubic-bezier(.4,0,.2,1) forwards}
+@keyframes curtain{to{opacity:0}}
+/* focus-pull: things sharpen into view as you scroll to them (the lore archive keeps its own reveal) */
+.rv{filter:blur(7px);transition:opacity .9s,transform .9s cubic-bezier(.2,.8,.2,1),filter 1.1s}
+.rv.in{filter:none}
+.lore .rv{filter:none}
+/* the Ancient: a low murmur at the edge of the screen */
+#ancient{position:fixed;left:1.2rem;bottom:1rem;max-width:min(18rem,calc(100vw - 2.4rem));z-index:4;font:400 .66rem/1.5 Dotum,Plex,monospace;color:#0ABF00;opacity:0;filter:blur(2px);pointer-events:none;mix-blend-mode:screen;transition:opacity 3s,filter 3s}
+#ancient.show{opacity:.2;filter:none;animation:drift 9s ease-in-out infinite}
+#ancient.show.echoed{opacity:.75;color:var(--glow);font-style:italic}
+@keyframes drift{50%{transform:translate(6px,-4px)}}
+@media(prefers-reduced-motion:reduce){.curtain{display:none}.rv{filter:none}.plate{scale:1.04}}
+
+/* ============ LORE: full-screen credits over the living artwork ============ */
+dialog.lore{overflow:hidden;background:#000}
+#loreArt{position:absolute;inset:0;width:100%;height:100%;image-rendering:pixelated;image-rendering:crisp-edges;z-index:0}
+.lore .plate{z-index:0}
+.lore .fx{z-index:1}
+.lore .scrim{position:fixed;inset:0;z-index:1;pointer-events:none;background:radial-gradient(ellipse 90% 80% at 35% 50%,transparent 45%,rgba(5,4,8,.55) 100%),linear-gradient(270deg,rgba(5,4,8,.84) 0,rgba(5,4,8,.62) 32%,rgba(5,4,8,.14) 58%,transparent 72%)}
+.lore .grain{z-index:2}
+.lore .lw{position:fixed;z-index:4;top:0;bottom:0;right:clamp(.8rem,5vw,6rem);left:auto;width:min(580px,92vw);max-width:none;margin:0;padding:84vh 1.2rem 64vh;overflow-y:auto;overflow-x:hidden;scrollbar-width:none;overscroll-behavior:contain;outline:0;
+  -webkit-mask-image:linear-gradient(transparent 0,#000 14%,#000 86%,transparent 100%);mask-image:linear-gradient(transparent 0,#000 14%,#000 86%,transparent 100%)}
+.lore .lw::-webkit-scrollbar{display:none}
+.lore .lw *{text-shadow:0 2px 18px rgba(0,0,0,.95),0 0 4px rgba(0,0,0,.75)}
+.lore .lw .btn{text-shadow:none}
+.lore h2{font-size:clamp(2.4rem,5.2vw,4.2rem);margin:.9rem 0 .5rem}
+.lore .tag{font-size:1.35rem}
+.lore .scn{font-size:.95rem}
+.lore .rule{margin:2.2rem 0 2.4rem}
+.lp{font-size:1.1rem;line-height:1.85}
+.lp.lead{font-size:1.24rem}
+.lp.beat{font-size:1.3rem;margin:2.2rem 0}
+.lore .twin{grid-template-columns:1fr;gap:1.8rem;margin:2.4rem 0}
+.lore .twin>div{border:0;border-left:2px solid color-mix(in srgb,var(--acc) 60%,transparent);border-radius:0;background:none;padding:0 0 0 1.1rem}
+.lore .twin>div:hover{transform:none;border-left-color:var(--acc)}
+.lore .q p{font-size:clamp(1.4rem,2.6vw,2rem)}
+.lore .lnav{margin-top:2.4rem}
+/* back button: top-left, always there, never in the way */
+.lore .lback{position:fixed;top:1.1rem;left:1.2rem;z-index:6;display:inline-flex;align-items:center;gap:.75rem;font:400 .78rem Plex,monospace;letter-spacing:.16em;text-transform:uppercase;color:#fff;padding:.7rem 1.15rem;border:1px solid color-mix(in srgb,var(--acc) 75%,transparent);border-radius:999px;background:rgba(5,4,8,.5);backdrop-filter:blur(8px);-webkit-backdrop-filter:blur(8px);box-shadow:0 0 28px -8px var(--acc);transition:background .25s,box-shadow .25s,transform .25s}
+.lore .lback .arr{display:inline-block;font-size:1rem;line-height:1;transition:transform .25s}
+.lore .lback small{font:400 .62rem Plex,monospace;letter-spacing:.14em;color:var(--dim);border:1px solid rgba(255,255,255,.18);border-radius:4px;padding:.12rem .4rem}
+.lore .lback:hover{background:color-mix(in srgb,var(--acc) 28%,rgba(5,4,8,.5));box-shadow:0 0 36px -4px var(--acc)}
+.lore .lback:hover .arr{transform:translateX(-5px)}
+.lore .lplay{position:fixed;left:1.2rem;bottom:1.2rem;z-index:6;display:inline-flex;align-items:center;gap:.6rem;font:400 .68rem Plex,monospace;letter-spacing:.16em;text-transform:uppercase;color:var(--dim);padding:.55rem .95rem;border:1px solid rgba(255,255,255,.14);border-radius:999px;background:rgba(5,4,8,.45);backdrop-filter:blur(8px);-webkit-backdrop-filter:blur(8px);transition:color .25s,border-color .25s}
+.lore .lplay:hover{color:#fff;border-color:var(--acc)}
+.lore .lplay i{font-style:normal;font-size:.62rem;letter-spacing:0}
+@media(max-width:760px){
+  .lore .lw{right:0;left:0;width:auto;margin:0 auto;padding:78vh 1.3rem 62vh}
+  .lore .scrim{background:linear-gradient(0deg,rgba(5,4,8,.88),rgba(5,4,8,.62) 55%,rgba(5,4,8,.25))}
+  .lore .lback small{display:none}.lore .lplay{bottom:.8rem;left:.8rem}
+}
+@media(prefers-reduced-motion:reduce){.lore .lplay{display:none}.lore .lw{padding-top:9rem}}
+
+/* ============ LORE v2: archive records, smoother roll, softer hand-offs ============ */
+:root{--book:'Iowan Old Style','Palatino Linotype',Palatino,'Book Antiqua',Georgia,serif}
+dialog.lore{transition:--acc 1.4s ease,--acc2 1.4s ease,--acc3 1.4s ease}
+#seren{transition:--acc 1.2s ease,--acc2 1.2s ease,--acc3 1.2s ease}
+dialog.lore[open]{animation:loreIn 1.5s cubic-bezier(.45,.05,.15,1) both}
+dialog.lore.out{animation:loreOut .6s ease forwards}
+/* the text starts near the top of the page and travels down the record */
+.lore .lw{padding:max(8.5rem,17vh) 1.2rem 72vh}
+.lore .lin{will-change:transform;backface-visibility:hidden}
+.lore .lbody{transition:opacity .6s ease,filter .6s ease,transform .6s ease}
+.lore .lw.leave .lbody{opacity:0;filter:blur(8px);transform:translateY(-14px)}
+.lore .lw.swap{animation:none}
+.lore .lw.swap .lbody{animation:lbIn 1.4s cubic-bezier(.2,.7,.2,1) both}
+.lore .lw.first .lbody{animation-delay:.6s}
+@keyframes lbIn{from{opacity:0;filter:blur(10px);transform:translateY(18px)}}
+.lore .rv{opacity:0;transform:translateY(14px);transition:opacity 1.5s ease,transform 1.5s cubic-bezier(.2,.7,.2,1)}
+.lore .rv.in{opacity:1;transform:none}
+/* an archive record, like a page from an old catalogue */
+.lore .rec{margin:0}
+.lore .rh{margin:0 0 1.1rem}
+.lore .rh .no{display:flex;align-items:center;gap:.9rem;font:400 .7rem Plex,monospace;letter-spacing:.26em;text-transform:uppercase;color:var(--acc);margin-bottom:.55rem}
+.lore .rh .no::after{content:"";flex:1;height:1px;background:linear-gradient(90deg,color-mix(in srgb,var(--acc) 60%,transparent),transparent)}
+.lore .rh h3{font-size:clamp(1.3rem,2.7vw,1.85rem);line-height:1.2;letter-spacing:.07em;text-transform:uppercase;color:var(--acc2);font-weight:400}
+.lore dl.meta{display:grid;gap:.4rem;margin:0 0 1.6rem;padding:.8rem 0;border-top:1px solid color-mix(in srgb,var(--acc) 35%,transparent);border-bottom:1px solid color-mix(in srgb,var(--acc) 35%,transparent)}
+.lore dl.meta div{display:grid;grid-template-columns:8.6rem 1fr;gap:.8rem;align-items:baseline}
+.lore dl.meta dt{font:400 .64rem Plex,monospace;letter-spacing:.18em;text-transform:uppercase;color:var(--dim)}
+.lore dl.meta dd{font:400 .84rem Plex,monospace;letter-spacing:.04em;color:var(--acc2);margin:0}
+.lore .inscr{margin:0 0 1.8rem;padding:1.1rem 1.3rem 1.1rem 1.5rem;border-left:2px solid var(--acc);background:linear-gradient(90deg,color-mix(in srgb,var(--acc) 15%,transparent),transparent 85%)}
+.lore .inscr p{font-family:var(--book);font-style:italic;font-size:1.22rem;line-height:1.6;color:var(--acc2);margin:0 0 .55rem}
+.lore .inscr p:last-child{margin:0}
+.lore .rb p{font-family:var(--book);font-size:1.12rem;line-height:1.85;color:#d9d2ee;margin:0 0 .95rem}
+.lore .rb p.dc::first-letter{font-family:Trajan,'Trajan Pro',Georgia,serif;float:left;font-size:3.4rem;line-height:.82;padding:.3rem .6rem 0 0;color:var(--acc)}
+.lore .rb strong{font-weight:700;color:var(--acc2)}
+.lore .rb em{font-style:normal;font-family:Plex,monospace;font-size:.86em;letter-spacing:.14em;color:var(--acc);border:1px solid color-mix(in srgb,var(--acc) 55%,transparent);padding:.05em .45em;border-radius:3px;white-space:nowrap}
+.lore .rec.note{padding:1.5rem 1.4rem 1.2rem;border:1px dashed color-mix(in srgb,var(--acc) 55%,transparent);background:rgba(5,4,8,.4)}
+.lore .rec.note .rh .no{color:var(--dim)}
+.lore .stamp2{display:inline-block;font:400 .66rem/1.5 Plex,monospace;letter-spacing:.18em;text-transform:uppercase;color:var(--acc);border:1px solid var(--acc);padding:.4rem .75rem;margin:0 0 1.2rem;border-radius:2px;transform:rotate(-1deg)}
+.lore .orn{height:1px;margin:3.2rem 0;position:relative;background:linear-gradient(90deg,transparent,color-mix(in srgb,var(--acc) 40%,transparent),transparent)}
+.lore .orn::after{content:"\25C6";position:absolute;left:50%;top:50%;translate:-50% -50%;padding:0 .9rem;font-size:.55rem;color:var(--acc);background:transparent;text-shadow:none}
+.lore .endmark{display:flex;flex-direction:column;align-items:center;gap:.7rem;margin:4rem 0 2.4rem;color:var(--dim)}
+.lore .endmark i{width:9px;height:9px;border:1px solid var(--acc);transform:rotate(45deg)}
+.lore .endmark small{font:400 .64rem Plex,monospace;letter-spacing:.22em;text-transform:uppercase}
+@media(max-width:760px){.lore .lw{padding:max(7.5rem,16vh) 1.3rem 68vh}.lore dl.meta div{grid-template-columns:6.6rem 1fr}}
+.blink.go i{animation:lid 1.1s cubic-bezier(.5,0,.5,1)}
+
+/* back + pause: text only, no pill, easy to see */
+.lore .lback,.lore .lplay{border:0;border-radius:0;background:none;box-shadow:none;backdrop-filter:none;-webkit-backdrop-filter:none;padding:.5rem .3rem;color:#fff;font-weight:600;font-size:.82rem;letter-spacing:.2em;text-shadow:0 0 14px rgba(0,0,0,.95),0 2px 6px rgba(0,0,0,.95),0 0 2px #000;opacity:.95;transition:color .25s,text-shadow .25s,opacity .25s}
+.lore .lback small{border:0;padding:0;margin-left:.2rem;font-size:.7rem;color:rgba(255,255,255,.7)}
+.lore .lback .arr{font-size:1.15rem}
+.lore .lplay i{font-size:.7rem}
+.lore .lback:hover,.lore .lplay:hover{background:none;box-shadow:none;color:var(--acc2);opacity:1;text-shadow:0 0 18px var(--acc),0 2px 6px rgba(0,0,0,.95)}
 </style>
 </head>
 <body>
@@ -351,11 +462,12 @@ footer a{color:var(--dim);text-decoration:none}footer a:hover{color:#fff}
 <div class="aura" id="aura" aria-hidden="true"></div>
 <div class="np" id="np" aria-live="polite"><i aria-hidden="true"></i><div><small>Now playing</small><b id="npT"></b><small id="npS"></small></div></div>
 <div class="sndask" id="sndask" role="region" aria-label="Sound"><span>This page has a soundtrack.</span><button class="btn solid" id="askYes" type="button">Sound on</button><button class="x" id="askNo" type="button" aria-label="Dismiss">&#10005;</button></div>
+<div id="ancient" role="status" aria-live="polite"></div>
 <nav class="rail" id="rail" aria-label="Chapters"></nav>
 
 <!-- ============ HERO ============ -->
 <div class="hero" id="hero">
-  <canvas id="sky" aria-hidden="true"></canvas>
+  <div class="plate" aria-hidden="true"><canvas id="sky"></canvas></div><div class="grain" aria-hidden="true"></div>
   <div class="whispers" id="whispers" aria-hidden="true">
     <p class="world" style="left:6%;top:76%">Echoes show fragments of the past, never answers.</p>
     <p class="world" style="right:7%;top:19%;text-align:right">Everyone has a reason to lie.</p>
@@ -381,6 +493,7 @@ footer a{color:var(--dim);text-decoration:none}footer a:hover{color:#fff}
   </div>
   <p class="lamp-hint" id="lampHint">Move the light. Click the Iris.</p>
   <div class="scroll" aria-hidden="true"></div>
+  <div class="curtain" id="curtain" aria-hidden="true"></div>
 </div>
 
 <div class="pillars">
@@ -439,8 +552,8 @@ footer a{color:var(--dim);text-decoration:none}footer a:hover{color:#fff}
 
 <!-- ============ SEREN ============ -->
 <section id="seren" data-label="Seren">
-  <canvas id="land" aria-hidden="true"></canvas>
-  <div class="veil"></div>
+  <div class="plate" aria-hidden="true"><canvas id="land"></canvas></div>
+  <div class="veil"></div><div class="grain" aria-hidden="true"></div>
   <div class="blink" id="blink" aria-hidden="true"><i></i><i></i></div>
   <div class="wrap rg">
     <div class="eyebrow">The Kingdom of Seren</div>
@@ -452,9 +565,12 @@ footer a{color:var(--dim);text-decoration:none}footer a:hover{color:#fff}
 </section>
 
 <dialog class="lore" id="lore" aria-labelledby="loreT">
-  <div class="fx" aria-hidden="true"></div><div class="lbar" id="lbar" aria-hidden="true"></div>
-  <button class="lclose" id="lclose" type="button">Close &#10005;</button>
-  <div class="lw" id="lw"></div>
+  <div class="plate" aria-hidden="true"><canvas id="loreArt"></canvas></div>
+  <div class="fx" aria-hidden="true"></div><div class="scrim" aria-hidden="true"></div><div class="grain" aria-hidden="true"></div>
+  <div class="lbar" id="lbar" aria-hidden="true"></div>
+  <button class="lback" id="lclose" type="button" aria-label="Back to Seren"><span class="arr" aria-hidden="true">&larr;</span><span>Back</span><small aria-hidden="true">Esc</small></button>
+  <button class="lplay" id="lplay" type="button" aria-pressed="false"></button>
+  <div class="lw" id="lw" tabindex="-1"><div class="lin" id="lin"></div></div>
 </dialog>
 
 <!-- ============ HOW IT PLAYS ============ -->
@@ -538,7 +654,7 @@ const Snd={on:false,ctx:null,m:4,
     freqs.forEach((f,i)=>[1,2.01,3.9].forEach((mu,j)=>{const o=c.createOscillator(),g=c.createGain(),s=t+i*.09;o.type='sine';o.frequency.value=f*mu;
       g.gain.setValueAtTime(0,s);g.gain.linearRampToValueAtTime(vol/(j+1)/(1+i*.2),s+.01);g.gain.exponentialRampToValueAtTime(.0001,s+dur/(j+1));
       o.connect(g);g.connect(this.master);g.connect(this.fx);o.start(s);o.stop(s+dur+.1)}))},
-  tick(){if(!this.on||(typeof Sfx!=='undefined'&&Sfx.ok.click))return;const c=this.ctx,t=c.currentTime,o=c.createOscillator(),g=c.createGain();o.type='sine';o.frequency.value=660;
+  tick(){return;const c=this.ctx,t=c.currentTime,o=c.createOscillator(),g=c.createGain();o.type='sine';o.frequency.value=660;
     g.gain.setValueAtTime(.05,t);g.gain.exponentialRampToValueAtTime(.0001,t+.12);o.connect(g);g.connect(this.master);o.start(t);o.stop(t+.15)},
   holdStart(){if(!this.on)return;const c=this.ctx,o=c.createOscillator(),g=c.createGain(),f=c.createBiquadFilter();o.type='sawtooth';o.frequency.value=110;f.type='lowpass';f.frequency.value=200;
     g.gain.value=0;g.gain.setTargetAtTime(.06,c.currentTime,.1);o.connect(f);f.connect(g);g.connect(this.master);o.start();this.h={o,g,f}},
@@ -625,58 +741,425 @@ const links=$$('header nav a[href^="#"]'),rl2=$$('#rail a');
 const so=new IntersectionObserver(es=>es.forEach(e=>{if(e.isIntersecting){links.forEach(a=>a.classList.toggle('on',a.getAttribute('href')==='#'+e.target.id));rl2.forEach(a=>a.classList.toggle('on',a.dataset.t===e.target.id))}}),{rootMargin:'-45% 0px -50% 0px'});
 $$('section[id],#hero').forEach(s=>so.observe(s));
 
-/* ---------- hero: the Iris looks at you, and the shade hides things ---------- */
-(function(){
-  const hero=$('#hero'),c=$('#sky'),g=c.getContext('2d'),hint=$('#lampHint');
-  let W,H,PS=4,stars=[],motes=[],ptr=null,lastMove=-1e9,lx=0,ly=0,vis=true,running=false,T0=null,pulse=0,ripples=[];
-  const rnd=(a,b)=>a+Math.random()*(b-a),lim=(v,m)=>Math.max(-m,Math.min(m,v));
-  const R=(x,y,w,h,col)=>{g.fillStyle=col;g.fillRect(Math.round(x),Math.round(y),Math.max(1,Math.round(w)),Math.max(1,Math.round(h)))};
-  function size(){const r=c.getBoundingClientRect();W=Math.ceil(r.width/PS);H=Math.ceil(r.height/PS);c.width=W;c.height=H;
-    stars=[...Array(Math.round(W*H/220))].map(()=>({x:rnd(0,W),y:rnd(0,H*.85),ph:rnd(0,6),p:Math.random()<.2}));
-    motes=[...Array(40)].map(()=>({x:rnd(0,W),y:rnd(0,H),v:rnd(.05,.25),ph:rnd(0,6)}));
-    if(lx===0&&ly===0){lx=r.width*.35;ly=r.height*.6}}
-  function frame(t){
-    if(T0===null)T0=t;
-    const rect=c.getBoundingClientRect();
-    const live=ptr&&t-lastMove<5000;
-    /* the light: your pointer, or a slow wander when you are not moving it */
-    const tx=live?ptr.x-rect.left:rect.width*(.5+.32*Math.sin(t/2900)),ty=live?ptr.y-rect.top:rect.height*(.55+.28*Math.sin(t/2100));
-    lx+=(tx-lx)*.14;ly+=(ty-ly)*.14;hero.style.setProperty('--lx',lx.toFixed(1)+'px');hero.style.setProperty('--ly',ly.toFixed(1)+'px');
-    g.clearRect(0,0,W,H);
-    const bands=['#050408','#0a0614','#180d32','#2f1a66'];for(let y=0;y<H;y+=3){const u=y/H*3,i=Math.min(2,Math.floor(u)),f=u-i,A=bands[i],B=bands[i+1];
-      const m=(a,b)=>Math.round(parseInt(A.slice(a,a+2),16)+(parseInt(B.slice(a,a+2),16)-parseInt(A.slice(a,a+2),16))*f);R(0,y,W,3,`rgb(${m(1)},${m(3)},${m(5)})`)}
-    stars.forEach(s=>{g.globalAlpha=reduce?.7:.3+.7*Math.abs(Math.sin(t/900+s.ph));R(s.x,s.y,1,1,s.p?'#b79cff':'#f4f1ff')});g.globalAlpha=1;
-    const wide=W>H*.9,cx=wide?W*.7:W*.5,cy=wide?H*.42:H*.2,rx=Math.round(Math.min(W*(wide?.26:.4),H*.9)),ry=Math.round(rx*.42);
-    const mx=live?(ptr.x-rect.left)/PS:null,my=live?(ptr.y-rect.top)/PS:null;
-    const px=mx===null?Math.sin(t/3000)*.5:lim((mx-cx)/(W*.5),1),py=my===null?Math.sin(t/2200)*.25:lim((my-cy)/(H*.5),1);
-    /* the eye opens at load, blinks now and then, and widens when clicked */
-    const age=reduce?9e3:t-T0,wake=Math.min(1,Math.max(0,(age-300)/2300)),op=wake*wake*(3-2*wake);
-    const ph=(t%6500)/6500,blink=ph>.96?Math.abs(Math.cos((ph-.96)/.04*Math.PI)):1;
-    pulse*=.94;pulse=Math.max(pulse,Energy.kick);const h=ry*op*blink*(1+pulse*.22);
-    const ix=cx+px*rx*.3,iy=cy+py*ry*.45,ir=Math.round(ry*.9*(1+pulse*.18));
-    const lid=u=>Math.round(h*(1-Math.pow(Math.abs(u),1.7)));
-    const q=g.createRadialGradient(cx,cy,0,cx,cy,rx*1.6);q.addColorStop(0,`rgba(139,92,246,${.28*op+pulse*.3})`);q.addColorStop(1,'rgba(139,92,246,0)');g.fillStyle=q;g.fillRect(cx-rx*1.7,cy-rx*1.7,rx*3.4,rx*3.4);
-    for(let dx=-rx;dx<=rx;dx++){const half=lid(dx/rx);if(half<1)continue;R(cx+dx,cy-half,1,half*2+1,'#1b1033')}
-    const ring=(rad,col,sq)=>{for(let x=-rad;x<=rad;x++){const col2=Math.round(ix)+x,u=(col2-cx)/rx;if(Math.abs(u)>=1)continue;const half=lid(u),d=Math.round(Math.sqrt(rad*rad-x*x)*sq),y0=Math.max(-half,Math.round(iy)-Math.round(cy)-d),y1=Math.min(half,Math.round(iy)-Math.round(cy)+d);if(y1>=y0)R(col2,Math.round(cy)+y0,1,y1-y0+1,col)}};
-    if(op>.02){ring(ir,'#4b2a9e',1);ring(Math.round(ir*.72),'#8b5cf6',1);ring(Math.round(ir*.4),'#b79cff',1);ring(2,'#050408',ir/2);R(ix-ir*.45,iy-ir*.45,2,2,'#fff')}
-    for(let dx=-rx;dx<=rx;dx++){const half=lid(dx/rx);if(half<1)continue;R(cx+dx,cy-half-1,1,1,'#f4f1ff');R(cx+dx,cy+half+1,1,1,'#6a4cc4')}
-    /* click ripples */
-    ripples=ripples.filter(r=>t-r<1400);ripples.forEach(r=>{const a=(t-r)/1400,rad=a*W*.55;g.globalAlpha=(1-a)*.8;for(let k=0;k<360;k+=2){const ang=k*Math.PI/180;R(cx+Math.cos(ang)*rad,cy+Math.sin(ang)*rad*.5,1,1,'#b79cff')}});g.globalAlpha=1;
-    g.fillStyle='#1d1040';for(let x=0;x<W;x++){const y=Math.round(H*.86+Math.sin(x*.03+2)*5);g.fillRect(x,y,1,H-y)}
-    g.fillStyle='#0b0618';for(let x=0;x<W;x++){const y=Math.round(H*.92+Math.sin(x*.05+5)*4);g.fillRect(x,y,1,H-y)}
-    motes.forEach(m=>{if(!reduce){m.y-=m.v;if(m.y<-3){m.y=H+3;m.x=rnd(0,W)}}g.globalAlpha=.4+.5*Math.sin(t/500+m.ph);R(m.x,m.y,1,1,'#b79cff')});g.globalAlpha=1;
+
+/* ---------- the Ancient + secrets (same storage keys as the portfolio) ---------- */
+const box=$('#ancient');let token=0,hideT,lastSay=0;
+function say(text,mode='',force){const n=Date.now();if(!force&&n-lastSay<90000)return;lastSay=n;const t=++token;box.className=mode+' show';clearTimeout(hideT);hideT=setTimeout(()=>box.classList.remove('show'),Math.max(6000,text.length*110));box.textContent='';
+  if(reduce){box.textContent=text;return}
+  let i=0;(function stp(){if(t!==token)return;box.textContent=text.slice(0,++i);if(i<text.length)setTimeout(stp,60)})()}
+let secrets=store.get('secrets',[]);if(!Array.isArray(secrets))secrets=[];
+function secret(k,msg){if(!secrets.includes(k)){secrets.push(k);store.set('secrets',secrets)}say(msg,'echoed',1)}
+
+/* ============ WORLD ENGINE ============
+   The portfolio's pixel world, copied over as-is: same scenes, same lighting, same lamp, same wind, same click toys.
+   createWorld(canvas, host element, {names:[scenes to build], start, idle, onSize}) makes one living canvas. */
+function createWorld(wc,host,opts){
+const g=wc.getContext('2d'),lc=document.createElement('canvas'),lg=lc.getContext('2d');
+let W=1,H=1,PS=4,burst=0,fade=1,lw=0,lh=0,snap=null,fadeT0=0;const FADE_MS=1700;
+const mouse={x:-999,y:-999,vx:0,vy:0},lamp={x:0,y:0},lights=[];
+const rnd=(a,b)=>a+Math.random()*(b-a),lim=(v,m)=>Math.max(-m,Math.min(m,v)),pick=a=>a[Math.floor(Math.random()*a.length)];
+const hexa=h=>[1,3,5].map(i=>parseInt(h.slice(i,i+2),16));
+const mixc=(a,b,t)=>{const A=hexa(a),B=hexa(b);return `rgb(${A.map((v,i)=>Math.round(v+(B[i]-v)*t)).join(',')})`};
+const R=(x,y,w,h,c)=>{g.fillStyle=c;g.fillRect(Math.round(x),Math.round(y),Math.max(1,Math.round(w)),Math.max(1,Math.round(h)))};
+function disc(cx,cy,r,c){cx=Math.round(cx);cy=Math.round(cy);for(let dy=-r;dy<=r;dy++){const w=Math.floor(Math.sqrt(r*r-dy*dy));R(cx-w,cy+dy,w*2+1,1,c)}}
+function line(x0,y0,x1,y1,c){x0=Math.round(x0);y0=Math.round(y0);x1=Math.round(x1);y1=Math.round(y1);const dx=Math.abs(x1-x0),dy=-Math.abs(y1-y0),sx=x0<x1?1:-1,sy=y0<y1?1:-1;let e=dx+dy,n=0;g.fillStyle=c;for(;;){g.fillRect(x0,y0,1,1);if((x0===x1&&y0===y1)||++n>300)break;const e2=2*e;if(e2>=dy){e+=dy;x0+=sx}if(e2<=dx){e+=dx;y0+=sy}}}
+function sky(st,top,bot){const n=st.length-1;for(let y=top;y<bot;y+=3){const u=(y-top)/(bot-top)*n,i=Math.min(n-1,Math.floor(u));R(0,y,W,3,mixc(st[i],st[i+1],u-i))}}
+const rY=(b,a,f,s,x)=>b+Math.sin(x*f+s)*a+Math.sin(x*f*2.3+s*2)*a*.4;
+function ridge(b,a,f,s,c){g.fillStyle=c;for(let x=0;x<W;x++){const y=Math.round(rY(b,a,f,s,x));g.fillRect(x,y,1,H-y)}}
+function ell(cx,cy,rx,ry,c,a){g.globalAlpha=a;for(let dy=-ry;dy<=ry;dy++){const h=Math.round(rx*Math.sqrt(1-(dy/ry)*(dy/ry)));R(cx-h,cy+dy,h*2,1,c)}g.globalAlpha=1}
+const wind=t=>.9+Math.sin(t/2600)*.5+Math.sin(t/830)*.2+burst;
+const near=(x,y,r)=>mouse.x<-900?0:Math.max(0,1-Math.hypot(mouse.x-x,mouse.y-y)/r);
+const wrapP=p=>{if(p.x>W+4)p.x=-4;if(p.x<-4)p.x=W+4;if(p.y>H+4)p.y=-4;if(p.y<-4)p.y=H+4};
+function gust(p,r,f){if(mouse.x<-900)return;const dx=p.x-mouse.x,dy=p.y-mouse.y,d=Math.hypot(dx,dy);if(d<r&&d>.01){const k=1-d/r;p.vx=lim(p.vx+dx/d*f*k+mouse.vx*.05*k,5);p.vy=lim(p.vy+dy/d*f*k+mouse.vy*.05*k,5)}}
+function lighting(dark,ink){lg.globalCompositeOperation='source-over';lg.clearRect(0,0,W,H);lg.fillStyle=`rgba(${ink},${dark})`;lg.fillRect(0,0,W,H);lg.globalCompositeOperation='destination-out';
+  for(const L of lights){const q=lg.createRadialGradient(L.x,L.y,0,L.x,L.y,L.r);q.addColorStop(0,`rgba(0,0,0,${L.a})`);q.addColorStop(1,'rgba(0,0,0,0)');lg.fillStyle=q;lg.fillRect(L.x-L.r,L.y-L.r,L.r*2,L.r*2)}
+  g.drawImage(lc,0,0);g.globalCompositeOperation='lighter';
+  for(const L of lights){if(!L.c)continue;const q=g.createRadialGradient(L.x,L.y,0,L.x,L.y,L.r);q.addColorStop(0,`rgba(${L.c},${L.a*.3})`);q.addColorStop(1,`rgba(${L.c},0)`);g.fillStyle=q;g.fillRect(L.x-L.r,L.y-L.r,L.r*2,L.r*2)}
+  g.globalCompositeOperation='source-over'}
+
+function torn(x,y,col,edge,t,ph,w){const amp=(.6+w*.5)+near(x+7,y,36)*2;R(x,y-2,1,18,'#030405');
+  for(let i=1;i<=14;i++){const off=Math.sin(t/150-i*.65+ph)*(1+i*.35)*amp*.6,h=Math.max(2,9-((i*.55)|0)-(i%4===0?3:0));R(x+i,y+off,1,h,col);R(x+i,y+off+h-1,1,1,edge)}}
+
+/* FOLK: tiny pixel people. One helper for crowds, so each region just says how they behave.
+   makeFolk(how many, ground y, how deep the crowd is, scarf colours, walk speed)
+   drawFolk options: body colour, shy (back away from cursor), cheer (hop + wave), eyes (glowing eyes that look at you) */
+function makeFolk(n,y,depth,cols,sp=.1){return [...Array(n)].map(()=>({x:rnd(0,W),y:y+rnd(0,depth),vx:rnd(-sp,sp),c:pick(cols),up:0}))}
+function drawFolk(list,t,o){list.forEach(p=>{
+  p.x+=p.vx;if(p.x<-3)p.x=W+3;if(p.x>W+3)p.x=-3;
+  const n=near(p.x,p.y-6,o.r||36);
+  if(o.shy&&n>0)p.x+=(p.x<mouse.x?-1:1)*n*.5;
+  p.up+=((o.cheer&&(n>.2||burst>1.3)?1:0)-p.up)*.2;
+  const hop=p.up>.5?Math.abs(Math.sin(t/110+p.x))*2:0,x=Math.round(p.x),y=Math.round(p.y-hop);
+  R(x,y-5,2,5,o.body);R(x,y-7,2,2,o.body);R(x,y-4,2,1,p.c);
+  if(o.eyes){g.globalAlpha=.3+n*.7;R(x,y-6,2,1,o.eyes);g.globalAlpha=1}
+  if(p.up>.5){R(x-1,y-8,1,3,o.body);R(x+2,y-8,1,3,o.body)}})}
+
+/* CLICK POPS: every click throws a puff in the colours of the current scene */
+const POP={unshaded:['#b79cff','#f4f1ff'],ashbourne:['#6dbf2a','#f0d33a','#2f6b1f'],constantina:['#d4202e','#f3efe8'],westfall:['#9aa5b1','#8fb0d6'],blackwood:['#3b82ff','#3fd08a']};
+/* TWEEN: slide a number from a to b over ms milliseconds, calling fn(value) every frame.
+   ease.out = fast then slow. ease.back = overshoots a little then settles (bouncy). */
+const ease={out:t=>1-Math.pow(1-t,3),back:t=>1+2.7*Math.pow(t-1,3)+1.7*Math.pow(t-1,2),soft:t=>1-Math.pow(1-t,4)};
+function tween(a,b,ms,fn,e=ease.out){if(reduce)return fn(b);const t0=performance.now();(function f(now){const k=Math.min(1,(now-t0)/ms);fn(a+(b-a)*e(k));if(k<1)requestAnimationFrame(f)})(t0)}
+let pops=[];
+function pop(x,y){for(let i=0;i<22;i++){const a=rnd(0,6.28),v=rnd(.5,2.6);pops.push({x,y,vx:Math.cos(a)*v,vy:Math.sin(a)*v-1,life:1,c:pick(POP[sceneName])})}burst=Math.min(2.2,burst+.8)}
+function drawPops(){pops=pops.filter(p=>{p.vy+=sceneName==='blackwood'?-.01:.06;p.vx*=.97;p.x+=p.vx;p.y+=p.vy;p.life-=.02;if(p.life<=0)return false;g.globalAlpha=Math.min(1,p.life);R(p.x,p.y,p.s||1,p.s||1,p.c);g.globalAlpha=1;return true})}
+const SC={
+/* ---------- UNSHADED: black, purple, white. A watching iris, stars, rising motes ---------- */
+unshaded:{dark:.5,ink:'5,4,8',glow:'139,92,246',
+ wakeK(t){if(this.t0==null)this.t0=t;if(reduce)return 1;const a=Math.min(1,Math.max(0,(t-this.t0-300)/2300));return a*a*(3-2*a)},
+ click(px,py,t){if(Math.abs(px-this.cx)<this.cw&&Math.abs(py-this.cy)<this.cw*.45){this.sq=t;secret('eye','It does not like being poked.')}},
+ init(){this.s=[...Array(Math.round(W*H/240))].map(()=>({x:rnd(0,W),y:rnd(0,H*.8),ph:rnd(0,6),p:Math.random()<.2}));
+  this.m=[...Array(50)].map(()=>({x:rnd(0,W),y:rnd(H*.3,H),vx:0,vy:rnd(-.25,-.05),ph:rnd(0,6)}))},
+ draw(t){const w=wind(t);sky(['#050408','#0a0614','#180d32','#2f1a66'],0,H);
+  this.s.forEach(s=>{g.globalAlpha=.3+.7*Math.abs(Math.sin(t/900+s.ph));R(s.x,s.y,1,1,s.p?'#b79cff':'#f4f1ff')});g.globalAlpha=1;
+  const cx=Math.round(W*(this.cxf??.5)),cy=Math.round(H*(this.cyf??.34)),rx=Math.round(Math.min(W,H*1.8)*(this.rxf??.2)),ry=Math.round(rx*.42);
+  /* where it looks: your cursor, or a slow wander when idle */
+  const lx=mouse.x<-900?Math.sin(t/3000)*.5:lim((mouse.x-cx)/(W*.5),1),ly=mouse.x<-900?Math.sin(t/2200)*.25:lim((mouse.y-cy)/(H*.5),1);
+  /* blink: shuts for a moment every 6.5 seconds */
+  const ph=(t%6500)/6500,h=ry*this.wakeK(t)*(1+Energy.v*.12)*(ph>.96?Math.abs(Math.cos((ph-.96)/.04*Math.PI)):1)*(this.sq&&t-this.sq<500?Math.abs(Math.cos((t-this.sq)/500*Math.PI)):1);
+  const ix=cx+lx*rx*.3,iy=cy+ly*ry*.45,ir=Math.round(ry*.9);
+  const lid=u=>Math.round(h*(1-Math.pow(Math.abs(u),1.7)));            /* almond shape: how tall the eye is at this column */
+  g.globalAlpha=.8;
+  for(let dx=-rx;dx<=rx;dx++){const half=lid(dx/rx);if(half<1)continue;R(cx+dx,cy-half,1,half*2+1,'#1b1033')}   /* the white of the eye (dark purple) */
+  const ring=(rad,c,sq)=>{for(let x=-rad;x<=rad;x++){const col=Math.round(ix)+x,u=(col-cx)/rx;if(Math.abs(u)>=1)continue;const half=lid(u),d=Math.round(Math.sqrt(rad*rad-x*x)*sq),y0=Math.max(-half,Math.round(iy)-cy-d),y1=Math.min(half,Math.round(iy)-cy+d);if(y1>=y0)R(col,cy+y0,1,y1-y0+1,c)}};
+  ring(ir,'#4b2a9e',1);ring(Math.round(ir*.72),'#8b5cf6',1);ring(Math.round(ir*.4),'#b79cff',1);
+  ring(2,'#050408',ir/2);                                              /* the slit pupil */
+  R(ix-ir*.45,iy-ir*.45,2,2,'#fff');                                   /* the shine */
+  for(let dx=-rx;dx<=rx;dx++){const half=lid(dx/rx);if(half<1)continue;R(cx+dx,cy-half-1,1,1,'#f4f1ff');R(cx+dx,cy+half+1,1,1,'#6a4cc4')}  /* lid line */
+  g.globalAlpha=1;
+  lights.push({x:cx,y:cy,r:rx*1.6,a:.35,c:'139,92,246'});this.cw=rx;this.cy=cy;this.cx=cx;
+  ridge(H*.78,6,.03,2,'#1d1040');ridge(H*.86,5,.05,5,'#0b0618');
+  this.m.forEach(m=>{gust(m,26,.7);m.vx+=(w*.15-m.vx)*.03;m.x+=m.vx;m.y+=m.vy;m.vy+=(-.12-m.vy)*.02;if(m.y<-4){m.y=H+4;m.x=rnd(0,W)}wrapP(m);g.globalAlpha=.4+.5*Math.sin(t/500+m.ph);R(m.x,m.y,1,1,'#b79cff');g.globalAlpha=1})}},
+
+/* ---------- ASHBOURNE: black, green, yellow. Golden harvest, birds, leaves, wheat, windmill, bunting ---------- */
+ashbourne:{dark:.42,ink:'3,5,2',glow:'240,211,58',
+ click(px,py){if(Math.hypot(px-this.mx,py-this.mh)<26){this.spin=.6;secret('mill','The mill remembers being busy.')}},
+ init(){this.a=0;this.fk=makeFolk(26,H-15,5,['#f0d33a','#6dbf2a','#c9d84a']);
+  this.st=[...Array(Math.ceil(W/2))].map((_,i)=>({x:i*2+(i%3),h:rnd(10,20),ph:rnd(0,6),d:Math.random()})).sort((a,b)=>b.d-a.d);
+  this.b=[...Array(18)].map(()=>({x:rnd(0,W),y:rnd(H*.12,H*.4),vx:rnd(.6,1.2),vy:0,ph:rnd(0,6)}));
+  this.l=[...Array(70)].map(()=>({x:rnd(0,W),y:rnd(0,H),vx:rnd(.2,.6),vy:rnd(.1,.4),r:rnd(0,6),c:Math.random()<.5?'#6dbf2a':Math.random()<.6?'#f0d33a':'#2f6b1f'}))},
+ draw(t){const w=wind(t);
+  sky(['#050802','#10240a','#2f5a14','#8fae2a','#f0d33a'],0,Math.round(H*.8));
+  const sx=W*.72,sy=H*.64;disc(sx,sy,Math.round(H*.07),'#f6e05a');lights.push({x:sx,y:sy,r:H*.6,a:.55,c:'240,211,58'});
+  ridge(H*.66,5,.03,1,'#1d4010');ridge(H*.72,6,.045,4,'#0e2308');
+  /* windmill: spins faster in wind and when you wave near it */
+  const mx=Math.round(W*.2),mb=Math.round(rY(H*.72,6,.045,4,mx)),mh=mb-26;this.mx=mx;this.mh=mh;this.spin=(this.spin||0)*.97;
+  for(let k=0;k<26;k++)R(mx-(8-k*.12)/2,mb-k,8-k*.12,1,'#030501');
+  this.a+=.012*w+near(mx,mh,40)*.08+this.spin;
+  for(let k=0;k<4;k++){const q=this.a+k*Math.PI/2;line(mx,mh,mx+Math.cos(q)*20,mh+Math.sin(q)*20,'#030501')}
+  /* bunting between two poles, pennants flutter and snap near the cursor */
+  const x0=Math.round(W*.06),x1=Math.round(W*.6),y0=Math.round(H*.16);
+  R(x0,y0-3,2,34,'#030501');R(x1,y0-3,2,34,'#030501');
+  for(let x=x0;x<x1;x++)R(x,y0+Math.sin((x-x0)/(x1-x0)*Math.PI)*12,1,1,'#44631f');
+  for(let i=1;i<(x1-x0)/8;i++){const px=x0+i*8,py=y0+Math.sin(i*8/(x1-x0)*Math.PI)*12,sw=Math.sin(t/260+i*.8)*1.2*w+near(px,py,30)*Math.sin(t/70+i)*2.5,c=['#f0d33a','#6dbf2a','#c9d84a'][i%3];
+   for(let k=0;k<5;k++)R(px-(5-k)/2+sw*k/4,py+1+k,5-k,1,c)}
+  /* birds flock toward each other and scatter from the cursor */
+  let fx=0,fy=0;this.b.forEach(b=>{fx+=b.x;fy+=b.y});fx/=this.b.length;fy/=this.b.length;
+  this.b.forEach(b=>{/* calm cursor = birds come close to look, fast cursor = they scatter */
+   if(mouse.x>-900&&burst<.5&&Math.hypot(mouse.x-b.x,mouse.y-b.y)<110){b.vx+=(mouse.x-b.x)*.0015;b.vy+=(mouse.y-b.y)*.002}
+   gust(b,burst>1?70:40,burst>1?3:2.2);b.vx=lim(b.vx+(1.2*w-b.vx)*.03+lim((fx-b.x)*.0006,.1),4);b.vy+=(Math.sin(t/900+b.ph)*.25-b.vy)*.05+lim((fy-b.y)*.001,.08);b.x+=b.vx;b.y+=b.vy;wrapP(b);
+   const f=Math.round(Math.sin(t/(b.vx>2.5?60:120)+b.ph)*2);R(b.x-2,b.y-f,1,1,'#030501');R(b.x-1,b.y-f/2,1,1,'#030501');R(b.x,b.y,1,1,'#030501');R(b.x+1,b.y-f/2,1,1,'#030501');R(b.x+2,b.y-f,1,1,'#030501')});
+  /* wheat bends with the wind and parts around the cursor */
+  this.st.forEach(s=>{const back=s.d>.55,hh=back?s.h*.75:s.h,base=H-(back?5:2),n=near(s.x,base-hh,26),off=Math.sin(t/520+s.x*.15+s.ph)*1.5+w*2.2+(s.x>mouse.x?1:-1)*n*5,c1=back?'#1d4010':'#2f6b1f';
+   for(let k=0;k<4;k++){const u=k/4;R(s.x+off*u*u,base-hh*u-hh/4,1,hh/4+1,k<2?c1:'#3f8a22')}
+   R(s.x+off,base-hh-3,2,4,back?'#b8a328':'#f0d33a')});
+  R(0,H-2,W,2,'#030501');
+  drawFolk(this.fk,t,{body:'#030501',cheer:1,r:40}); /* villagers wave when you pass */
+  /* leaves ride the gusts you make */
+  this.l.forEach(l=>{gust(l,26,.8);l.vx+=(.55*w-l.vx)*.03;l.vy+=(.35-l.vy)*.03;l.x+=l.vx;l.y+=l.vy+Math.sin(t/400+l.r)*.15;l.r+=.08;wrapP(l);const f=Math.sin(l.r)>0;R(l.x,l.y,f?2:1,f?1:2,l.c)})}},
+
+/* ---------- CONSTANTINA: black, red, white. Power, industry, empty streets under red banners ---------- */
+constantina:{dark:.5,ink:'5,4,5',glow:'212,32,46',
+ init(){this.bl=[];let x=-6;while(x<W){const w=Math.round(rnd(10,22)),h=Math.round(rnd(H*.16,H*.46));this.bl.push({x,w,h,s:Math.random()<.3,f:Math.random()});x+=w+(Math.random()<.4?3:0)}
+  this.far=[];x=0;while(x<W){const w=Math.round(rnd(14,30));this.far.push({x,w,h:Math.round(rnd(H*.25,H*.55))});x+=w}
+  this.ch=[.14,.5,.83].map(f=>({x:Math.round(W*f),h:Math.round(H*.42)}));this.sm=[];this.sa=0;
+  this.bn=[.08,.33,.62,.9].map((f,i)=>({x:Math.round(W*f),y:Math.round(H*.2+(i%2)*H*.05),ph:i}));},
+ draw(t){const w=wind(t),gy=H-18;
+  sky(['#050405','#14060b','#4a0b15','#a31824','#e03a40'],0,H);
+  disc(W*.22,H*.24,Math.round(H*.045),'#f3efe8');lights.push({x:W*.22,y:H*.24,r:H*.5,a:.35,c:'243,239,232'},{x:W/2,y:H*.8,r:W*.6,a:.5,c:'212,32,46'});
+  this.far.forEach(b=>R(b.x,gy-b.h,b.w,b.h,'#2b0810'));
+  if(t-this.sa>180){this.sa=t;this.ch.forEach(c=>this.sm.push({x:c.x+1,y:gy-c.h,vx:0,vy:-.35,s:2,a:.5}))}
+  this.ch.forEach(c=>R(c.x,gy-c.h,3,c.h,'#050405'));
+  this.sm=this.sm.filter(k=>{gust(k,24,.5);k.vx+=(w*.35-k.vx)*.03;k.x+=k.vx;k.y+=k.vy;k.s+=.03;k.a-=.004;if(k.a<=0)return false;g.globalAlpha=k.a;R(k.x,k.y,k.s,k.s,'#6a2a30');g.globalAlpha=1;return true});
+  this.bl.forEach(b=>{const y=gy-b.h;R(b.x,y,b.w,b.h,'#050405');R(b.x,y,1,b.h,'#3a0a12');
+   if(b.s)for(let k=0;k<14;k++){const sw=Math.max(1,b.w-k*(b.w/12));R(b.x+(b.w-sw)/2,y-k,sw,1,'#050405')}
+   for(let wy=y+4;wy<gy-6;wy+=6)for(let wx=b.x+2;wx<b.x+b.w-2;wx+=4)if(((wx*7+wy*13+Math.floor(t/2400+b.f*5))%5)<2)R(wx,wy,2,3,((wx+wy)%8<4)?'#f3efe8':'#d4202e')});
+  R(0,gy,W,18,'#1a0508');R(0,gy,W,1,'#8f1520');
+  /* banners: cloth ripples, flares up when you pass */
+  this.bn.forEach(bn=>{R(bn.x,bn.y-3,1,52,'#050405');R(bn.x,bn.y-3,12,1,'#3a0a12');
+   for(let r=0;r<34;r++){const off=Math.sin(t/280-r*.22+bn.ph)*(.8+r*.06)*(.6+w*.6)+near(bn.x+6,bn.y+r,34)*Math.sin(t/60+r*.5)*2.5;
+    if(r<30)R(bn.x+1+off,bn.y+r,10,1,'#d4202e');else{R(bn.x+1+off,bn.y+r,3,1,'#d4202e');R(bn.x+8+off,bn.y+r,3,1,'#d4202e')}
+    if(r>=6&&r<20)R(bn.x+5+off,bn.y+r,2,1,'#f3efe8');if(r>=12&&r<14)R(bn.x+2+off,bn.y+r,8,1,'#f3efe8')}});}},
+
+/* ---------- WESTFALL: black, grey, faint blue. Cold, damaged, isolated ---------- */
+westfall:{dark:.5,ink:'5,7,10',glow:'111,143,184',
+ click(px,py){if(Math.hypot(px-W*.8,py-H*.2)<H*.07){burst=2.2;secret('moon','The wind carries names. It just said yours.')}},
+ init(){this.fk=makeFolk(7,H-19,3,['#6f8fb8','#8a929c'],.05);this.f=[...Array(140)].map(()=>({x:rnd(0,W),y:rnd(0,H),vx:rnd(1,2.5),vy:rnd(.1,.5),b:Math.random()<.15,c:Math.random()<.5?'#9aa5b1':'#dfe9f5'}));
+  this.s=[...Array(16)].map(()=>({x:rnd(0,W),y:rnd(5,H-30),l:rnd(14,40),v:rnd(2,5)}));
+  this.sp=[...Array(14)].map(()=>({x:rnd(0,W),h:rnd(10,24),lean:rnd(-.5,.5),ph:rnd(0,6)}))},
+ draw(t){const w=wind(t);
+  sky(['#06080b','#10151b','#2a323b','#5a6672','#8ea0b2'],0,H);
+  disc(W*.8,H*.2,Math.round(H*.05),'#c4d6e8');lights.push({x:W*.8,y:H*.2,r:H*.55,a:.5,c:'120,160,210'});
+  ridge(H*.62,8,.025,3,'#1c2128');
+  const cx=Math.round(W/2),by=H-16,ww=Math.round(W*.34),wt=by-Math.round(H*.22);
+  R(cx-ww/2,wt,ww,by-wt,'#080a0d');for(let x=cx-ww/2;x<cx+ww/2;x+=6)R(x,wt-3,3,3,'#080a0d');R(cx-ww/2,wt,1,by-wt,'#1f2a38');
+  [cx-ww/2-5,cx+ww/2-5].forEach(tx=>{const tt=by-Math.round(H*.42);R(tx,tt,10,by-tt,'#080a0d');for(let x=tx;x<tx+10;x+=4)R(x,tt-3,2,3,'#080a0d');R(tx,tt,1,by-tt,'#1f2a38')});
+  const kt=by-Math.round(H*.52);R(cx-9,kt,18,by-kt,'#080a0d');for(let k=0;k<12;k++)R(cx-9+k*.7,kt-k,18-k*1.4,1,'#080a0d');R(cx-9,kt,1,by-kt,'#1f2a38');
+  R(cx-4,by-12,8,12,'#0e1620');R(cx-3,by-13,6,1,'#0e1620');
+  g.globalAlpha=.5+.4*Math.sin(t/600);R(cx-2,by-Math.round(H*.4),2,4,'#6f8fb8');R(cx+3,by-Math.round(H*.3),2,4,'#6f8fb8');g.globalAlpha=1;
+  [-10,10].forEach(o=>{const bx=cx+o,fh=3+Math.round(Math.sin(t/90+bx)+Math.sin(t/57+bx*2));R(bx,by-11,1,11,'#030405');R(bx-1,by-12,3,1,'#030405');R(bx-1,by-12-fh,3,fh,'#6f8fb8');R(bx,by-13-fh,1,2,'#cfe0f5');lights.push({x:bx,y:by-14,r:H*.2,a:.5,c:'111,143,184'})});
+  torn(cx-ww/2,by-Math.round(H*.42)-3,'#7a838d','#6f8fb8',t,0,w);torn(cx+ww/2,by-Math.round(H*.42)-3,'#7a838d','#6f8fb8',t,1.5,w);torn(cx-5,kt-14,'#9aa5b1','#6f8fb8',t,3,w);
+  ridge(H*.86,3,.06,1,'#0b0e12');R(0,by,W,H-by,'#07090c');
+  this.sp.forEach(s=>{const sw=Math.sin(t/900+s.ph)*.4+s.lean;line(s.x,H-2,s.x+sw*s.h*.6,H-2-s.h,'#030405')});
+  drawFolk(this.fk,t,{body:'#030405',shy:1,r:50}); /* isolated: they back away from you */
+  /* wind streaks and drifting ash, shoved aside by the cursor */
+  this.s.forEach(s=>{s.x+=s.v*w;if(s.x>W+40)s.x=-40;g.globalAlpha=.14;R(s.x,s.y+Math.sin(s.x/20+t/500)*2,s.l,1,'#8fb0d6');g.globalAlpha=1});
+  this.f.forEach(f=>{gust(f,24,1);f.vx+=(2*w-f.vx)*.02;f.vy+=(.25-f.vy)*.02;f.x+=f.vx;f.y+=f.vy+Math.sin(t/300+f.x*.1)*.1;wrapP(f);R(f.x,f.y,f.b?2:1,1,f.c)})}},
+
+/* ---------- BLACKWOOD ----------
+   dark green, black, blue. big old tree w/ a door in it, a pool, and stuff that watches you.
+   (rewrote this whole section, its WAY bigger now lol. try clicking everything)
+   things to try: knock on the door, poke the owl, click the mushrooms, click the lily pads, click the air */
+blackwood:{dark:.68,ink:'2,6,5',glow:'59,130,255',
+
+ init(){
+  const gy=this.gy=Math.round(H*.84);   // ground line. everything under it is the pool
+  this.tx=W/2;                          // tree x, it moves a bit with the mouse
+  this.knocks=0; this.knockGlow=0;
+  this.doorOpen=0;                      // 0 = shut, 1 = open (gets tweened)
+  this.ripples=[]; this.spirits=[]; this.spores=[];
+  this.shroomHits=0; this.target=null;
+  this.moonX=Math.round(W*.2);
+
+  // 3 layers of trees so the parallax looks deep
+  this.far=[...Array(Math.ceil(W/16))].map((_,i)=>({x:i*16+rnd(0,10),w:Math.round(rnd(2,5))}));
+  this.mid=[...Array(Math.ceil(W/46))].map((_,i)=>({x:i*46+rnd(0,26),w:Math.round(rnd(6,11))}));
+  this.near=[.03,.2,.8,.96].map(f=>({x:W*f,w:Math.round(rnd(10,16))}));
+  this.rays=[.1,.3,.7,.9].map(f=>({x:W*f,w:rnd(4,9)}));
+  this.fog=[...Array(9)].map(()=>({x:rnd(0,W),y:rnd(H*.4,gy),rx:rnd(50,120),ry:rnd(5,12),v:rnd(.02,.08)}));
+  this.fern=[...Array(Math.ceil(W/4))].map((_,i)=>({x:i*4+rnd(0,3),h:rnd(5,15),ph:rnd(0,6)}));
+  this.vines=[...Array(12)].map(()=>({x:rnd(4,W-4),len:Math.round(rnd(14,46))}));
+  this.flies=[...Array(60)].map(()=>({x:rnd(0,W),y:rnd(H*.2,gy),vx:rnd(-.2,.2),vy:rnd(-.2,.2),ph:rnd(0,6),c:Math.random()<.6?'#6fa8ff':'#3fd08a'}));
+  this.leaves=[...Array(24)].map(()=>({x:rnd(0,W),y:rnd(0,gy),r:rnd(0,6),c:Math.random()<.5?'#0f4a35':'#2a7a52'}));
+  this.watchers=makeFolk(5,gy,0,['#3b82ff'],0);   // the folk that just stand there. creepy
+  // NEW STUFF
+  this.eyes=[...Array(6)].map(()=>({x:rnd(10,W-10),y:rnd(H*.3,gy-10),a:0,ph:rnd(0,6)}));   // eyes in the dark trees
+  this.shrooms=[...Array(9)].map(()=>({x:rnd(6,W-6),px:0,s:Math.round(rnd(2,4)),glow:0,c:Math.random()<.5?'#3b82ff':'#3fd08a'}));
+  this.pads=[.18,.36,.62,.8].map(f=>({x:W*f,y:gy+(H-gy)*rnd(.35,.7),bloom:0}));
+  this.owl={x:0,y:0,mode:'sit',back:0,flap:0};
+ },
+
+ // click on the air and all the fireflies go there for a few secs
+ swarm(px,py,t){this.target={x:px,y:py,until:t+2500}},
+
+ click(px,py,t){
+  const gy=this.gy,o=this.owl;
+  // 1. the door. knock 3 times and it opens
+  if(Math.abs(px-this.tx)<10&&py>gy-34&&py<gy+2){
+   this.knockGlow=1.2;this.knocks++;
+   if(this.knocks%3===0){
+    secret('knock','...Who knocks at my door?');
+    tween(0,1,600,v=>this.doorOpen=v,ease.back);               // door swings open (bouncy)
+    setTimeout(()=>tween(1,0,900,v=>this.doorOpen=v),4500);     // and shuts again later
+    for(let i=0;i<30;i++)this.spirits.push({x:this.tx+rnd(-3,3),y:gy-12,vx:rnd(-.6,.6),vy:rnd(-1.4,-.3),l:1});
+   }
+   return;
   }
-  function loop(t){if(!vis||document.hidden){running=false;return}frame(t);requestAnimationFrame(loop)}
-  function kick(){if(!running&&!reduce){running=true;requestAnimationFrame(loop)}}
-  size();addEventListener('resize',()=>{size();if(reduce)frame(0)});
-  new IntersectionObserver(es=>{vis=es[0].isIntersecting;kick()}).observe(hero);
-  document.addEventListener('visibilitychange',kick);
+  // 2. the owl
+  if(o.mode==='sit'&&Math.hypot(px-o.x,py-(o.y-6))<9){o.mode='fly';secret('owl','Whoo. Rude.');return}
+  // 3. mushrooms
+  for(const m of this.shrooms){
+   if(Math.abs(px-m.px)<m.s+3&&py>gy-m.s*2-6&&py<gy+1){
+    m.glow=1;this.shroomHits++;
+    for(let i=0;i<10;i++)this.spores.push({x:m.px,y:gy-m.s*2,vx:rnd(-.5,.5),vy:rnd(-1,-.3),l:1,c:m.c});
+    if(this.shroomHits===8)secret('shrooms','They taste like static. Do not eat them.');
+    return;
+   }
+  }
+  // 4. lily pads
+  for(const p of this.pads){
+   if(Math.hypot((px-p.x)/8,(py-p.y)/4)<1){
+    tween(p.bloom,p.bloom>.5?0:1,600,v=>p.bloom=v,ease.back);
+    this.ripples.push({x:p.x,y:p.y,r:1});return;
+   }
+  }
+  // 5. otherwise: water = ripple, air = fireflies come to you
+  if(py>gy)this.ripples.push({x:px,y:py,r:1});else this.swarm(px,py,t);
+ },
+
+ draw(t){this.drawAll(t,wind(t),this.gy,Math.round(W*.045))},
+
+ drawAll(t,w,gy,tw){
+  const mxp=mouse.x<-900?0:(mouse.x-W/2)/W,tx=this.tx=Math.round(W/2-mxp*14);
+  sky(['#020605','#04120d','#061c14','#0a2a22'],0,gy);
+
+  // the moon (it peeks thru the trees)
+  const my=Math.round(H*.17),mr=Math.round(H*.05);
+  ell(this.moonX,my,mr*3,mr*3,'#3b82ff',.05);ell(this.moonX,my,mr*2,mr*2,'#6fa8ff',.08);
+  disc(this.moonX,my,mr,'#cfe3ff');disc(this.moonX-mr*.3,my-mr*.2,Math.round(mr*.3),'#a9c4e8');
+  lights.push({x:this.moonX,y:my,r:H*.4,a:.4,c:'111,168,255'});
+
+  // god rays
+  this.rays.forEach((s,i)=>{const sw=Math.sin(t/2200+i*2)*8;g.globalAlpha=.07+.03*Math.sin(t/1500+i);for(let y=0;y<gy;y++)R(s.x+y*.35+sw,y,s.w+y*.06,1,'#3b82ff');g.globalAlpha=1});
+
+  // trees back to front. they slide at different speeds = parallax
+  this.far.forEach(f=>R(f.x-mxp*3,0,f.w,gy,'#03150f'));
+  // eyes hiding in the far trees. they vanish if you get close
+  this.eyes.forEach(e=>{
+   const close=near(e.x,e.y,38)>0;
+   e.a+=((close?0:.9*(Math.sin(t/1700+e.ph)>-.6?1:0))-e.a)*.08;
+   if(e.a>.02){g.globalAlpha=e.a;R(e.x-2,e.y,1,1,'#6fa8ff');R(e.x+2,e.y,1,1,'#6fa8ff');g.globalAlpha=1}
+  });
+  this.fog.forEach(f=>{f.x+=f.v+w*.04;if(f.x>W+120)f.x=-120;ell(f.x,f.y,f.rx,f.ry,'#2a6a5a',.07)});
+  this.mid.forEach(m=>{const x=m.x-mxp*9;R(x,0,m.w,gy,'#052a1c');R(x,0,1,gy,'#0a3a28');for(let y=0;y<gy;y+=6)R(x+Math.floor(y*5+m.x)%m.w,y,1,3,'#0a3a28')});
+
+  // THE OLD TREE. trunk gets wider at the bottom, roots go out on the ground
+  for(let y=0;y<gy;y++){const wd=Math.round(tw+Math.pow(y/gy,5)*tw*1.4),x=tx-wd/2;R(x,y,wd,1,'#041a12');R(x,y,2,1,'#0f4a35');R(x+wd-2,y,2,1,'#010805');if(y%5===0)R(x+3+Math.floor(y*7)%Math.max(1,wd-6),y,1,3,'#0a3a28')}
+  [-1,1].forEach(sd=>{for(let k=0;k<44;k++){const y=gy-Math.round(14*Math.exp(-k/11));R(tx+sd*(tw*.5+k*1.5)-1,y,3,gy-y+1,'#041a12')}});
+
+  // branch + owl
+  const by=Math.round(gy*.3),o=this.owl;
+  R(tx-tw*2.6,by,tw*2.2,3,'#041a12');R(tx-tw*2.6,by,tw*2.2,1,'#0f4a35');
+  if(o.mode==='sit'){o.x=Math.round(tx-tw*1.9);o.y=by}
+  if(o.mode==='fly'){o.x+=1.7;o.y-=.5+Math.sin(t/90)*.4;o.flap=Math.sin(t/60)*4;if(o.x>W+10){o.mode='gone';o.back=t+7000}}
+  if(o.mode==='gone'&&t>o.back){o.mode='sit'}
+  if(o.mode!=='gone'){
+   ell(o.x,o.y-5,4,5,'#010805',1);R(o.x-4,o.y-11,1,2,'#010805');R(o.x+3,o.y-11,1,2,'#010805');
+   if(o.mode==='fly'){line(o.x-3,o.y-5,o.x-10,o.y-5+o.flap,'#010805');line(o.x+3,o.y-5,o.x+10,o.y-5+o.flap,'#010805')}
+   const blink=(t%4200)<150,lx=lim((mouse.x-o.x)/40,1);   // eyes follow the mouse
+   if(!blink){R(o.x-3,o.y-8,2,2,'#9cc4ff');R(o.x+1,o.y-8,2,2,'#9cc4ff');R(o.x-3+(lx>0?1:0),o.y-8,1,2,'#020805');R(o.x+1+(lx>0?1:0),o.y-8,1,2,'#020805')}
+  }
+
+  // the door: glows more when you are near or knock on it
+  const hy=gy-28,pu=Math.min(1.3,.45+.2*Math.sin(t/900)+near(tx,hy+14,70)*.45+this.knockGlow),d=this.doorOpen;this.knockGlow*=.95;
+  for(let x=-5;x<=5;x++){const top=hy+Math.round(Math.pow(Math.abs(x)/5,2)*6);R(tx+x,top,1,gy-top,'#020805')}
+  const dw=3+Math.round(d*2);   // glowing part gets wider when the door is open
+  g.globalAlpha=Math.min(1,pu);for(let x=-dw;x<=dw;x++){const top=hy+3+Math.round(Math.pow(Math.abs(x)/dw,2)*4);R(tx+x,top,1,gy-top,Math.abs(x)<2?'#9cc4ff':'#3b82ff')}g.globalAlpha=1;
+  if(d>.05){g.globalAlpha=Math.min(.35,d*.35);for(let k=0;k<14;k++)R(tx-dw-k,gy-1+k*.15,dw*2+k*2,1,'#6fa8ff');g.globalAlpha=1}   // light spills out on the floor
+  if(pu>.9&&Math.sin(t/500)>-.7){R(tx-2,hy+10,1,3,'#020805');R(tx+2,hy+10,1,3,'#020805')}   // something looks back
+  for(let i=0;i<12;i++){const a=i/12*6.283+t/4000;g.globalAlpha=Math.min(1,.2+pu*.5*(Math.sin(t/400+i)*.5+.7));R(tx+Math.cos(a)*12,hy-8+Math.sin(a)*12,1,2,'#6fa8ff')}g.globalAlpha=1;   // rune ring
+  lights.push({x:tx,y:hy+14,r:40+pu*50+d*50,a:Math.min(.9,pu),c:'59,130,255'});
+
+  // canopy + vines
+  for(let x=0;x<W;x+=2){const ch=10+Math.sin(x*.07+t/2500)*4+Math.sin(x*.19)*3;R(x,0,2,ch,'#020a07');R(x,ch,2,1,'#0f4a35')}
+  this.vines.forEach(v=>{let vx=v.x;for(let k=0;k<v.len;k++){vx=v.x+Math.sin(t/700+v.x+k*.12)*(1+k*.1)*(.5+w*.5)+(v.x>mouse.x?1:-1)*near(v.x,k,30)*5*k/v.len;R(vx,k,1,1,'#0a3a28')}R(vx,v.len,2,2,'#3b82ff')});
+
+  // falling leaves
+  this.leaves.forEach(l=>{gust(l,24,.8);l.x+=Math.sin(t/500+l.r)*.3+w*.2;l.y+=.25;l.r+=.05;if(l.y>gy){l.y=-3;l.x=rnd(0,W)}wrapP(l);R(l.x,l.y,Math.sin(l.r)>0?2:1,1,l.c)});
+
+  // the pool
+  R(0,gy,W,H-gy,'#020f12');
+  for(let y=gy+3;y<H;y+=3){g.globalAlpha=.18;const off=Math.sin(y*.9+t/600)*8;for(let x=-20+off;x<W;x+=40)R(x,y,16,1,'#3b82ff')}
+  g.globalAlpha=.25;R(tx-tw/2,gy+2,tw,Math.round((H-gy)*.8),'#0a3a28');g.globalAlpha=Math.min(.5,pu*.4);R(tx-3+Math.sin(t/300)*1.5,gy+3,7,Math.round((H-gy)*.7),'#3b82ff');
+  g.globalAlpha=.25;for(let y=gy+2;y<H;y+=2)R(this.moonX+Math.sin(y+t/400)*3-4,y,8+Math.sin(y*.5+t/300)*2,1,'#cfe3ff');g.globalAlpha=1;   // moon reflection
+  R(0,gy,W,2,'#010403');
+  // lily pads. click to make them bloom. all 4 = secret
+  this.pads.forEach(p=>{
+   const py=p.y+Math.sin(t/900+p.x)*.6;
+   ell(p.x,py,7,2,'#0f4a35',1);R(p.x,py-1,7,1,'#020f12');
+   if(p.bloom>.02){g.globalAlpha=Math.min(1,p.bloom);R(p.x-1,py-3,3,2,'#9cc4ff');R(p.x,py-4,1,1,'#fff');g.globalAlpha=1;lights.push({x:p.x,y:py-2,r:18*p.bloom,a:.5*p.bloom,c:'156,196,255'})}
+  });
+  if(!secrets.includes('pads')&&this.pads.every(p=>p.bloom>.95))secret('pads','Four flowers open. The water remembers the shape of the moon.');
+
+  if(mouse.x>-900&&mouse.y>gy&&Math.hypot(mouse.vx,mouse.vy)>.8&&t-(this.rt||0)>120){this.rt=t;this.ripples.push({x:mouse.x,y:mouse.y,r:1})}
+  this.ripples=this.ripples.filter(q=>{q.r+=.5;if(q.r>30)return false;g.globalAlpha=(1-q.r/30)*.7;for(let a=0;a<6.283;a+=.12)R(q.x+Math.cos(a)*q.r,q.y+Math.sin(a)*q.r*.35,1,1,'#6fa8ff');g.globalAlpha=1;return true});
+
+  // ferns lean away from you, the watchers just stand and stare
+  this.fern.forEach(f=>{const off=Math.sin(t/600+f.x*.2+f.ph)*1.5+w*1.5+(f.x>mouse.x?1:-1)*near(f.x,gy-f.h,24)*4;for(let k=0;k<3;k++){const u=k/3;R(f.x+off*u*u,gy-f.h*u-f.h/3,1,f.h/3+1,k<2?'#062a1c':'#0f4a35')}if(f.ph<1)R(f.x+off,gy-f.h-1,1,1,'#6fa8ff')});
+  drawFolk(this.watchers,t,{body:'#010403',eyes:'#6fa8ff',r:70});
+
+  // glowing mushrooms: get brighter when you go near, click for spores
+  this.shrooms.forEach(m=>{
+   const x=m.px=Math.round(m.x-mxp*12);
+   m.glow=Math.max(m.glow*.97,near(x,gy-m.s,26)*.8);
+   R(x,gy-m.s,1,m.s,'#0a3a28');
+   g.globalAlpha=.35+m.glow*.65;
+   for(let dx=-m.s;dx<=m.s;dx++){const h=Math.round(Math.sqrt(m.s*m.s-dx*dx)*.6);R(x+dx,gy-m.s-h,1,h+1,m.c)}
+   g.globalAlpha=1;
+   if(m.glow>.1)lights.push({x,y:gy-m.s,r:10+m.glow*22,a:m.glow*.6,c:m.c==='#3b82ff'?'59,130,255':'63,208,138'});
+  });
+  this.spores=this.spores.filter(s=>{s.x+=s.vx+Math.sin(t/200+s.y)*.2;s.y+=s.vy;s.l-=.012;if(s.l<=0)return false;g.globalAlpha=s.l;R(s.x,s.y,1,1,s.c);g.globalAlpha=1;return true});
+
+  // spirits from knocking float up
+  this.spirits=this.spirits.filter(sp=>{sp.x+=sp.vx+Math.sin(t/200+sp.y)*.2;sp.y+=sp.vy;sp.l-=.008;if(sp.l<=0)return false;g.globalAlpha=sp.l;R(sp.x,sp.y,2,2,'#9cc4ff');g.globalAlpha=1;lights.push({x:sp.x,y:sp.y,r:12,a:sp.l*.5,c:'111,168,255'});return true});
+
+  // fireflies. go toward the cursor, or toward wherever you last clicked
+  const hunting=this.target&&t<this.target.until;
+  this.flies.forEach((f,i)=>{
+   const dx=mouse.x-f.x,dy=mouse.y-f.y,dist=Math.hypot(dx,dy);
+   if(mouse.x>-900&&dist<80&&dist>1){f.vx+=dx/dist*.04;f.vy+=dy/dist*.04}
+   if(hunting){f.vx+=(this.target.x-f.x)*.0015;f.vy+=(this.target.y-f.y)*.0015}
+   f.vx=lim(f.vx*.98+rnd(-.05,.05),hunting?2.6:1.4);f.vy=lim(f.vy*.98+rnd(-.05,.05),hunting?2.6:1.4);
+   f.x+=f.vx;f.y+=f.vy;if(f.y>gy-4)f.vy=-.4;wrapP(f);
+   const a=.35+.6*Math.sin(t/400+f.ph);
+   g.globalAlpha=a*.25;R(f.x-1,f.y-1,3,3,f.c);g.globalAlpha=a;R(f.x,f.y,1,1,f.c);g.globalAlpha=a*.3;R(f.x,gy+(gy-f.y)*.3,1,1,f.c);g.globalAlpha=1;
+   if(i%5===0)lights.push({x:f.x,y:f.y,r:14,a:a*.5,c:'111,168,255'});
+  });
+
+  // nearest layer: big dark trunks at the edges + grass, so the whole thing feels deeper
+  this.near.forEach(n=>{const x=n.x-mxp*20;R(x,0,n.w,H,'#010403');R(x+n.w-2,0,1,H,'#052a1c')});
+  for(let x=0;x<W;x+=7){const h=7+(x*13)%9,sw=Math.sin(t/700+x)*1.5+w;line(x,H,x+sw+2,H-h,'#010403');line(x+3,H,x+3+sw-1,H-h+3,'#010403')}
+ }
+}
+};
+let sceneName=opts.start,scene=SC[sceneName],vis=false,running=false,lastF=0,ptrT=-1e9,lastY=scrollY;
+function setScene(n){if(n===sceneName||!SC[n])return;sceneName=n;scene=SC[n];
+  if(reduce||!wc.width){renderOnce();return}
+  /* crossfade: keep a frozen copy of the last frame and dissolve it away over the new scene */
+  snap=snap||document.createElement('canvas');snap.width=wc.width;snap.height=wc.height;snap.getContext('2d').drawImage(wc,0,0);fade=0;fadeT0=performance.now();
+  tween(1.07,1,2000,v=>wc.style.transform='scale('+v+')',ease.soft)}
+function step(t){if(!lc.width||!lc.height||!wc.width||!wc.height)return;lights.length=0;scene.draw(t);drawPops();
+  const tx=mouse.x>-900?mouse.x:W/2+Math.cos(t/2300)*W*.3,ty=mouse.y>-900?mouse.y:H*.45+Math.sin(t/1900)*H*.15;lamp.x+=(tx-lamp.x)*.2;lamp.y+=(ty-lamp.y)*.2;
+  lights.push({x:lamp.x,y:lamp.y,r:Math.round(H*.2),a:.9,c:scene.glow});
+  lighting(scene.dark,scene.ink);
+  if(fade<1&&snap){const k=Math.min(1,(performance.now()-fadeT0)/FADE_MS);fade=k;g.globalAlpha=1-k*k*(3-2*k);g.drawImage(snap,0,0);g.globalAlpha=1}}
+function renderOnce(){fade=1;step(0)}
+function size(){const r=host.getBoundingClientRect();lw=r.width;lh=r.height;PS=r.width<700?3:Math.max(4,Math.round(r.width/380));
+  W=Math.max(2,Math.ceil(r.width/PS));H=Math.max(2,Math.ceil(r.height/PS));
+  wc.width=lc.width=W;wc.height=lc.height=H;g.imageSmoothingEnabled=false;opts.names.forEach(n=>SC[n].init());lamp.x=W/2;lamp.y=H/2;
+  opts.onSize&&opts.onSize(SC,W,H);if(reduce)renderOnce()}
+function loop(t){if(!vis||document.hidden){running=false;return}requestAnimationFrame(loop);if(opts.pauseWhen&&opts.pauseWhen())return;if(t-lastF<32)return;lastF=t;
+  burst=Math.min(2.2,burst+Energy.kick*.35);burst*=.94;mouse.vx*=.8;mouse.vy*=.8;
+  if(opts.idle&&mouse.x>-900&&t-ptrT>opts.idle)mouse.x=mouse.y=-999;step(t)}
+function kick(){if(!running&&!reduce&&vis){running=true;requestAnimationFrame(loop)}}
+size();let sw=host.getBoundingClientRect().width,sh=host.getBoundingClientRect().height;
+new ResizeObserver(()=>{const r=host.getBoundingClientRect();if(Math.abs(r.width-sw)>2||Math.abs(r.height-sh)>150){sw=r.width;sh=r.height;size()}}).observe(host);
+new IntersectionObserver(es=>{vis=es[0].isIntersecting;kick()},{rootMargin:'100px'}).observe(host);
+document.addEventListener('visibilitychange',kick);
+/* pointer: drives the lamp, the wind and the folk */
+const inHost=(x,y)=>{const r=host.getBoundingClientRect();return x>=r.left&&x<=r.right&&y>=r.top&&y<=r.bottom};
+function track(x,y){if(!inHost(x,y)){mouse.x=mouse.y=-999;return}const r=wc.getBoundingClientRect(),px=(x-r.left)/r.width*W,py=(y-r.top)/r.height*H;
+  if(mouse.x>-900){mouse.vx=px-mouse.x;mouse.vy=py-mouse.y;burst=Math.min(2.2,burst+Math.hypot(mouse.vx,mouse.vy)*.012)}mouse.x=px;mouse.y=py;ptrT=performance.now()}
+addEventListener('pointermove',e=>track(e.clientX,e.clientY),{passive:true});
+addEventListener('touchmove',e=>{const t=e.touches[0];if(t)track(t.clientX,t.clientY)},{passive:true});
+document.addEventListener('mouseleave',()=>{mouse.x=mouse.y=-999});addEventListener('touchend',()=>{mouse.x=mouse.y=-999});
+addEventListener('scroll',()=>{if(vis)burst=Math.min(2.2,burst+Math.abs(scrollY-lastY)*.004);lastY=scrollY},{passive:true});
+/* click: scene toys + a puff of colour */
+addEventListener('click',e=>{if(reduce||!vis||!inHost(e.clientX,e.clientY))return;if(e.target.closest&&e.target.closest(opts.skip||'a,button,input,dialog,header,.rpanel,.rtabs,.sndask,.np,#ancient'))return;
+  const r=wc.getBoundingClientRect(),px=(e.clientX-r.left)/r.width*W,py=(e.clientY-r.top)/r.height*H;
+  if(scene.click)scene.click(px,py,performance.now());tween(1.02,1,350,v=>wc.style.transform='scale('+v+')');pop(px,py)});
+
+return{setScene,SC,get scene(){return sceneName}}}
+
+/* ---------- hero: the portfolio's Iris world, plus the lamp that reveals the whispers ---------- */
+(function(){
+  const hero=$('#hero'),hint=$('#lampHint'),cu=$('#curtain');let ptr=null,lastMove=-1e9,lx=0,ly=0,vis=true,run=false;
+  createWorld($('#sky'),hero,{names:['unshaded'],start:'unshaded',idle:5000,pauseWhen:()=>loreOpen,onSize(SC,W,H){const u=SC.unshaded,wide=W>H*.9;u.cxf=wide?.7:.5;u.cyf=wide?.42:.2;u.rxf=wide?.2:.34}});
+  function lampLoop(t){if(!vis||document.hidden){run=false;return}
+    const r=hero.getBoundingClientRect(),live=ptr&&t-lastMove<5000;
+    const tx=live?ptr.x-r.left:r.width*(.5+.32*Math.sin(t/2900)),ty=live?ptr.y-r.top:r.height*(.55+.28*Math.sin(t/2100));
+    lx+=(tx-lx)*.14;ly+=(ty-ly)*.14;hero.style.setProperty('--lx',lx.toFixed(1)+'px');hero.style.setProperty('--ly',ly.toFixed(1)+'px');requestAnimationFrame(lampLoop)}
+  function kick(){if(!run&&!reduce){run=true;requestAnimationFrame(lampLoop)}}
+  const r0=hero.getBoundingClientRect();lx=r0.width*.35;ly=r0.height*.6;
+  new IntersectionObserver(es=>{vis=es[0].isIntersecting;kick()}).observe(hero);document.addEventListener('visibilitychange',kick);
   addEventListener('pointermove',e=>{ptr={x:e.clientX,y:e.clientY};lastMove=performance.now();hint.classList.add('hide');
-    if(reduce){const r=c.getBoundingClientRect();hero.style.setProperty('--lx',(e.clientX-r.left)+'px');hero.style.setProperty('--ly',(e.clientY-r.top)+'px')}},{passive:true});
-  hero.addEventListener('pointerdown',e=>{if(e.target.closest('a,button'))return;pulse=1;ripples.push(performance.now());Snd.chime([196,293.7],.09,3.2);hint.classList.add('hide');if(reduce)frame(0)});
+    if(reduce){const r=hero.getBoundingClientRect();hero.style.setProperty('--lx',(e.clientX-r.left)+'px');hero.style.setProperty('--ly',(e.clientY-r.top)+'px')}},{passive:true});
+  hero.addEventListener('pointerdown',e=>{if(e.target.closest('a,button'))return;Snd.chime([196,293.7],.09,3.2);hint.classList.add('hide')});
   if(matchMedia('(hover:none)').matches)hint.textContent='Drag to cast light. Tap the Iris.';
-  reduce?frame(0):kick();
+  cu&&cu.addEventListener('animationend',()=>cu.remove());
+  reduce?(()=>{hero.style.setProperty('--lx',lx+'px');hero.style.setProperty('--ly',ly+'px')})():kick();
 })();
+
 
 /* ---------- the case: hold to listen ---------- */
 const THREADS=[
@@ -755,10 +1238,10 @@ drawScene();
 
 /* ---------- the kingdom: four pixel worlds ---------- */
 const RG=[
- {n:'Ashbourne',t:"Ashbourne Valley",tag:"The valley remembers.",b:"A peaceful countryside city built around generations of farming, trade and community.",lore:["Ashbourne is one of the oldest continuously inhabited settlements in Seren, built around the fertile valley and the rivers that run through it. Unlike Constantina and Westfall, it was never primarily founded as a seat of political or military power.", "For centuries, Ashbourne served as an agricultural and trading centre. Farmers from the surrounding countryside brought crops, livestock, and materials into the city, while merchants carried goods along the old roads connecting the valley to the rest of Seren.", "Because of its distance from the kingdom's political centre, Ashbourne developed a strong local identity. Families often lived in the valley for generations, and many of its traditions existed long before the modern kingdom took shape.", "The city was largely spared from the worst of the early conflict between Constantina and Westfall. This made Ashbourne a place where refugees, travellers, and people trying to escape the war could find some degree of safety.", "That safety, however, has never meant complete isolation. The conflict has gradually reached the valley through displaced families, returning soldiers, political arguments, and shortages of supplies.", ["Seen from outside", "To outsiders, Ashbourne represents the peaceful side of Seren.", "Lived from within", "To the people who live there, it is simply home."]],q:"What is worth protecting?",k:'Farmland &middot; Markets &middot; The tavern',c:['#6dbf2a','#f0d33a','#050802'],names:['green','yellow','black'],d:'Farms, markets, and a tavern where everyone knows your name. Peaceful, for now.',s:'Golden harvest light, windmills and bunting, and the sense that every smile is guarding something.',w:'The harvest smells of smoke this year.',a:['#6dbf2a','#f0d33a','#2f6b1f','#050802']},
- {n:'Constantina',t:"Constantina",tag:"The heart of Seren.",b:"The capital of the kingdom: cathedrals, monuments and factories, and the largest city in Seren.",lore:["Constantina began as a major settlement at the centre of Seren's political and economic network, eventually becoming the seat of the kingdom's government.", "Over generations, the city expanded far beyond its original boundaries. Grand cathedrals, government buildings, monuments, bridges, markets, and enormous residential districts transformed Constantina into the largest city in Seren.", "Its influence grew alongside its wealth.", "Trade flowed through the capital, and new industries began appearing throughout the city. Workshops became factories, old roads became major transport routes, and parts of Constantina began changing faster than the traditions surrounding them could keep up.", "When the Schism divided Seren, Constantina became the centre of one side of the conflict.", "The city increasingly presented itself as the defender of Seren itself. Its government, military, monuments, and public institutions reinforced the idea that Constantina represented order, progress, and the continuation of the kingdom.", "The phrase <em>SEREN VAIL</em> became deeply associated with this identity.", "But Constantina's prosperity came with a cost. Wealth and power became concentrated within certain districts, while workers, soldiers, refugees, and poorer families experienced a very different version of the capital.", "Even within the city, there is no single Constantina.", ["On display", "There is the Constantina shown in monuments and government buildings.", "Lived beneath", "And there is the Constantina experienced by the people who live beneath them."]],q:"How much can a society justify in the name of progress?",k:'Capital &middot; Cathedrals &middot; Industry',c:['#d4202e','#f3efe8','#050405'],names:['red','white','black'],d:'A gothic capital of cathedrals and factories. Power lives here, and so does the poverty beside it.',s:'Empty streets under red banners, chimneys that never stop, and a city that watches itself.',w:'The chimneys never stop. Nobody is out to hear them.',a:['#d4202e','#f3efe8','#7a0f18','#050405']},
- {n:'Westfall',t:"Westfall Citadel",tag:"The city that remembers.",b:"A walled frontier city on Seren's western edge, still standing after a long war.",lore:["Westfall was originally established as a fortified settlement on the western frontier of Seren.", "Its position made it strategically important. Roads from the western regions passed through the city, and its enormous walls protected the surrounding settlements from threats beyond the frontier.", "For generations, Westfall grew around its military role. Soldiers, craftsmen, merchants, and civilians all became part of the city's identity.", "When the Schism occurred, Westfall became one of the most important centres opposing Constantina.", "What began as political division eventually became a prolonged conflict.", "Westfall was repeatedly attacked and damaged throughout the war. Entire districts were destroyed, while others were abandoned as their inhabitants were displaced. The city's fortifications, once symbols of protection, became reminders of how long the conflict had lasted.", "The people of Westfall developed their own understanding of the war.", ["As Constantina tells it", "To Constantina, Westfall became a symbol of rebellion and division.", "As Westfall tells it", "To many people in Westfall, Constantina became the power that had destroyed their homes and attempted to erase their independence."], "Neither population experienced the conflict in exactly the same way.", "Even after the fighting began to subside, Westfall never truly recovered. Its people still live among the ruins, rebuilt streets, military structures, and memories of those who never returned.", "Westfall is not simply a ruined city.", "It is a city that remembers."],q:"What happens when history belongs to the people who survived it?",k:'Frontier &middot; Citadel &middot; The Schism',c:['#8a929c','#8fb0d6','#06080b'],names:['grey','faint blue','black'],d:'A frontier citadel worn down by war. Here the Schism is not history. People remember it.',s:'Cold, damaged and isolated. The people here do not need an Echo to remember what happened.',w:'The wind here carries names.',a:['#8a929c','#8fb0d6','#4a525c','#06080b']},
- {n:'Blackwood',t:"Blackwood",tag:"Unmapped.",b:"A forest so old the sunlight gives up. Something was here long before Seren.",sealed:1,lore:[],q:"",k:'Forest &middot; Ancient &middot; Unmapped',c:['#2a7a52','#3b82ff','#020605'],names:['dark green','blue','black'],d:'A forest so old the sunlight gives up. Something was here long before Seren.',s:'Deep shade, still water, and a quiet that feels like being listened to.',w:'Something older than the kingdom watches. Not me.',a:['#2a7a52','#3b82ff','#0f4a35','#020605'],anc:1}
+ {n:'Ashbourne',t:"Ashbourne Valley",tag:"The valley remembers.",b:"A peaceful countryside city built around generations of farming, trade and community.",k:'Farmland &middot; Markets &middot; The tavern',c:['#6dbf2a','#f0d33a','#050802'],names:['green','yellow','black'],d:'Farms, markets, and a tavern where everyone knows your name. Peaceful, for now.',s:'Golden harvest light, windmills and bunting, and the sense that every smile is guarding something.',w:'The harvest smells of smoke this year.',a:['#6dbf2a','#f0d33a','#2f6b1f','#050802']},
+ {n:'Constantina',t:"Constantina",tag:"The heart of Seren.",b:"The capital of the kingdom: cathedrals, monuments and factories, and the largest city in Seren.",k:'Capital &middot; Cathedrals &middot; Industry',c:['#d4202e','#f3efe8','#050405'],names:['red','white','black'],d:'A gothic capital of cathedrals and factories. Power lives here, and so does the poverty beside it.',s:'Empty streets under red banners, chimneys that never stop, and a city that watches itself.',w:'The chimneys never stop. Nobody is out to hear them.',a:['#d4202e','#f3efe8','#7a0f18','#050405']},
+ {n:'Westfall',t:"Westfall Citadel",tag:"The city that remembers.",b:"A walled frontier city on Seren's western edge, still standing after a long war.",k:'Frontier &middot; Citadel &middot; The Schism',c:['#8a929c','#8fb0d6','#06080b'],names:['grey','faint blue','black'],d:'A frontier citadel worn down by war. Here the Schism is not history. People remember it.',s:'Cold, damaged and isolated. The people here do not need an Echo to remember what happened.',w:'The wind here carries names.',a:['#8a929c','#8fb0d6','#4a525c','#06080b']},
+ {n:'Blackwood',t:"Blackwood",tag:"Unmapped.",b:"A forest so old the sunlight gives up. Something was here long before Seren.",k:'Forest &middot; Ancient &middot; Unmapped',c:['#2a7a52','#3b82ff','#020605'],names:['dark green','blue','black'],d:'A forest so old the sunlight gives up. Something was here long before Seren.',s:'Deep shade, still water, and a quiet that feels like being listened to.',w:'Something older than the kingdom watches. Not me.',a:['#2a7a52','#3b82ff','#0f4a35','#020605'],anc:1}
 ];
 const rl=$('#rlist'),rp=$('#rpanel'),sec=$('#seren');let cur=0,renderLand=()=>{};
 RG.forEach((r,i)=>{const b=document.createElement('button');b.setAttribute('role','tab');b.dataset.i=i;
@@ -775,7 +1258,7 @@ function setRegion(i){const r=RG[i];cur=i;
   typeText(rp.querySelector('.whisper'),'&ldquo;'+r.w+'&rdquo;',30);Snd.mood(i);syncZone();renderLand()}
 let busy=false;
 function go(i){i=(i+4)%4;if(i===cur||busy)return;if(reduce){setRegion(i);return}busy=true;Snd.tick();const bl=$('#blink');bl.classList.remove('go');void bl.offsetWidth;bl.classList.add('go');
-  setTimeout(()=>setRegion(i),290);setTimeout(()=>{busy=false;bl.classList.remove('go')},780)}
+  setTimeout(()=>setRegion(i),430);setTimeout(()=>{busy=false;bl.classList.remove('go')},1150)}
 /* the music and the cursor glow follow whichever region you are in */
 let inSeren=false,loreOpen=false;
 function syncZone(){const z=inSeren||loreOpen;document.documentElement.style.setProperty('--ac',z?RG[cur].a[0]:'#8b5cf6');
@@ -784,123 +1267,485 @@ new IntersectionObserver(es=>{inSeren=es[0].isIntersecting;syncZone()},{rootMarg
 addEventListener('keydown',e=>{if(!inSeren||loreOpen||e.target.closest('input,textarea'))return;if(e.key==='ArrowRight')go(cur+1);else if(e.key==='ArrowLeft')go(cur-1)});
 
 /* ---------- archive: the deeper record behind each place ---------- */
-const lore=$('#lore'),lw=$('#lw'),lbar=$('#lbar');let loreI=0,loreIO=null,lastBtn=null;
+const lore=$('#lore'),lw=$('#lw'),lin=$('#lin'),lbar=$('#lbar');let loreI=0,loreIO=null,lastBtn=null;
+const LORE_NAMES=['ashbourne','constantina','westfall','blackwood'],CRED_SPEED=22;
+const P=s=>s.trim().split('\n').map(x=>x.trim()).filter(Boolean);
+/* the records themselves: no = label, t = title, m = catalogue card, pre/q/p = text before the inscription, the inscription, text after; l = stamp, c = class */
+const ARCH=[
+[
+ {no:'Archive 01',t:'Founding of the Valley',m:[['Classification','Historical Record'],['Origin','Ashbourne Municipal Archive'],['Estimated Age','600–700 years']],
+  q:P(`“The first settlement was established beside the river, where the soil was dark and the water ran clear.”`),
+  p:P(`There is little agreement regarding the exact founding of Ashbourne.
+The oldest surviving records describe no grand ceremony, no royal decree and no military conquest.
+Instead, they describe farmers.
+Small groups settled along the river and began cultivating the surrounding land. The valley provided fertile soil, clean water and natural shelter from the surrounding hills.
+The settlements remained small for generations.
+There was little reason for them to become anything else.
+A person could build a home, grow food, trade with their neighbours and raise a family without ever needing to leave the valley.
+Eventually, the settlements began to merge.
+A market was established.
+Then another.
+Roads connected the farms.
+A permanent town centre appeared.
+The name <strong>Ashbourne</strong> first appears in surviving records several generations after the earliest settlement.
+No surviving document explains where the name originated.`)},
+ {no:'Archive 02',t:'The Valley Grows',m:[['Classification','Civic Record']],
+  p:P(`By the beginning of the modern era, Ashbourne had become one of the largest agricultural communities in Seren.
+The valley produced grain, fruit, livestock, timber and other resources that were distributed throughout the surrounding regions.
+Unlike Constantina, Ashbourne did not grow because of government.
+Unlike Westfall, it did not grow because of military necessity.
+It grew because people continued to live there.
+The city's expansion was gradual.
+There was no single moment when Ashbourne became a city.
+One generation built another street.
+The next expanded the market.
+A family purchased land.
+A farm became a neighbourhood.
+A road became a trade route.
+The valley simply continued to grow.
+This gradual development remains visible in the modern city.
+The oldest parts of Ashbourne contain narrow roads and irregular buildings that follow the original settlements.
+Newer districts are more organised, but even these often curve around old properties, fields and waterways.
+The city was never designed all at once.
+It accumulated.`)},
+ {no:'Archive 03',t:'A Letter from Home',m:[['Classification','Personal Correspondence'],['Author','Unknown'],['Date','Approximately 80 years before the Schism']],
+  q:P(`“You asked whether I intend to leave.”
+“I don't think I could.”
+“There are places beyond the valley where people live completely different lives. I know that. I have heard their stories.”
+“But here, everyone knows everyone.”
+“When the harvest is good, the whole valley knows.”
+“When someone's house burns, the whole valley knows.”
+“Perhaps that is what makes Ashbourne different.”
+“You are never really alone here.”`),
+  p:P(`The letter was discovered in a private collection and later donated to the Ashbourne Historical Society.
+The identity of the author remains unknown.`)},
+ {no:'Archive 04',t:'The Schism',m:[['Classification','Historical Record']],
+  p:P(`The Schism changed Ashbourne without ever making it a battlefield.
+The city was distant from the principal fighting.
+Its farms continued to operate.
+Its markets remained open.
+Its roads remained in use.
+But the people arriving from elsewhere began to tell different stories.
+Soldiers returned from the western regions.
+Families arrived with little more than what they could carry.
+Merchants spoke of disrupted roads.
+Refugees began settling within the valley.
+For the first time in generations, Ashbourne's population began changing rapidly.
+Some residents welcomed those arriving from the conflict.
+Others feared that the problems of Constantina and Westfall were following them home.
+The arguments were rarely about the war itself.
+They were about food.
+Housing.
+Work.
+Safety.
+Trust.
+The things that happen when a distant conflict becomes a local problem.`)},
+ {no:'Archive 05',t:'The Refugees',m:[['Classification','Municipal Census Record']],
+  p:P(`During the later years of the Schism, Ashbourne received more displaced people than any other major settlement outside the immediate conflict zones.
+Many remained.
+Some eventually returned home.
+Some never had a home to return to.
+This permanently changed the valley.
+New surnames appeared in municipal records.
+New traditions became part of local life.
+Different accents could be heard in the markets.
+Old residents sometimes complained that Ashbourne was becoming unfamiliar.
+Others argued that this was simply what a living city looked like.
+The argument remains unresolved.`)},
+ {no:'Archive 06',t:'Present Day',
+  p:P(`Ashbourne is still considered one of the safest settlements in Seren.
+Its farms continue to surround the city.
+Its markets remain busy.
+The old roads remain crowded with travellers.
+Children still grow up knowing the same streets their parents knew.
+The valley looks peaceful.
+That is not entirely an illusion.
+Ashbourne really is peaceful.
+But peace is not the same thing as being untouched.
+The people of Ashbourne have learned that the outside world can reach them eventually.
+No matter how far away it seems.`)},
+ {no:'Archive Note',t:'',c:'note',l:'The following statement has been removed from the public archive.',
+  q:P(`“Ashbourne survived because nobody important thought it worth destroying.”`),
+  p:P(`The author of the statement is unknown.`)}
+],
+[
+ {no:'Archive 01',t:'Origins of the Capital',m:[['Classification','Royal Historical Record']],
+  p:P(`Constantina was not always the largest city in Seren.
+The earliest settlement occupied only a small area around a crossroads where several ancient roads met.
+Merchants recognised the location first.
+Goods travelling between distant settlements were exchanged there.
+Temporary markets became permanent.
+Warehouses appeared.
+Workshops followed.
+The settlement grew.
+Eventually, government followed the money.
+Administrative buildings were constructed.
+Officials moved into the city.
+Military offices were established.
+Religious institutions expanded.
+Constantina became the centre of Seren not because somebody declared it so, but because everything else slowly began depending on it.`)},
+ {no:'Archive 02',t:'The City of Stone',m:[['Classification','Architectural Record']],
+  p:P(`The Constantina known today was built over centuries.
+There is no single architectural style that defines the city.
+Instead, every generation added something.
+Older stone structures sit beneath newer towers.
+Ancient roads pass between enormous government buildings.
+Cathedrals dominate districts that were once residential neighbourhoods.
+Bridges connect parts of the city that were once separate settlements.
+The city became a record of itself.
+To walk through Constantina is to walk through hundreds of years of construction.`)},
+ {no:'Archive 03',t:'The Capital',m:[['Classification','Royal Decree']],
+  q:P(`“From this city shall the affairs of Seren be administered, its laws maintained, and its people represented.”`),
+  p:P(`Constantina eventually became the undisputed political centre of Seren.
+The kingdom's most powerful institutions were concentrated within its walls.
+The government.
+The courts.
+The military command.
+The treasury.
+The largest religious institutions.
+The city became the place where decisions were made.
+And because decisions were made there, power followed.`)},
+ {no:'Archive 04',t:'The Age of Industry',m:[['Classification','Industrial Report']],
+  p:P(`The transformation began slowly.
+A workshop replaced by a factory.
+A factory replaced by a larger factory.
+New machines appeared.
+Production increased.
+Workers moved into the city.
+Entire districts changed.
+Some celebrated the transformation.
+Constantina's economy grew rapidly.
+Its factories could produce goods on a scale previously impossible.
+The city became wealthier.
+Larger.
+More influential.
+But the benefits were not shared equally.
+The wealthy districts became increasingly separated from the industrial neighbourhoods.
+The skyline became more impressive.
+The streets beneath it became more crowded.`)},
+ {no:'Archive 05',t:'Seren Vail',m:[['Classification','Military Record']],
+  p:P(`The phrase <em>SEREN VAIL</em> became increasingly common during the years preceding the Schism.
+Its exact origins are disputed.
+By the beginning of the conflict, however, it had become one of the most recognisable expressions associated with the Constantinan military.
+It appeared on banners.
+It was spoken during ceremonies.
+Soldiers shouted it before battle.
+Children learned it in schools.
+For many citizens, it represented pride in their kingdom.
+For soldiers, it represented the people they believed they were protecting.
+The phrase would eventually become associated with something far more complicated.`)},
+ {no:'Archive 06',t:'The Schism',m:[['Classification','Government Record']],
+  p:P(`The official Constantinan record describes the Schism as an act of rebellion.
+Westfall's refusal to recognise the authority of the central government was treated as a direct threat to the unity of Seren.
+The government declared that the kingdom could not survive divided.
+Military action followed.
+The conflict continued far longer than anyone expected.
+Years became decades.
+The language surrounding the war changed.
+What had begun as a dispute over authority became a struggle over identity.
+What did it mean to be Seren?
+Who had the right to speak for Seren?
+And at what point does defending a kingdom become destroying it?
+The official records do not answer these questions.`)},
+ {no:'Archive 07',t:`Worker's Journal`,m:[['Classification','Personal Account'],['Author','Redacted'],['Origin','Constantina Industrial District']],
+  q:P(`“They say the city is growing.”
+“I suppose it is.”
+“There are more buildings every year.”
+“More machines.”
+“More soldiers.”
+“More smoke.”
+“They say we should be proud.”
+“I think I would like to see the sky again.”`),
+  p:P(`The remainder of the journal is missing.`)},
+ {no:'Archive 08',t:'Present Constantina',
+  p:P(`Constantina remains the largest city in Seren.
+Its government remains powerful.
+Its factories continue to operate.
+Its monuments continue to dominate the skyline.
+The city presents itself as proof that Seren survived.
+That progress overcame division.
+That order defeated chaos.
+That the kingdom continues.
+But Constantina contains millions of individual stories.
+Not all of them agree with the monuments.
+Not all of them agree with the government.
+And not all of them remember the Schism in the same way.`)},
+ {no:'Restricted Archive',t:'',c:'note',m:[['Access Level','Restricted']],
+  p:P(`A number of historical documents relating to the earliest foundations of Constantina have been removed from public archives.
+The reason for their removal is unknown.
+Several documents reportedly contain references to structures that predate the accepted founding of the city.
+No official explanation has been issued.`)}
+],
+[
+ {no:'Archive 01',t:'The Frontier',m:[['Classification','Military Historical Record']],
+  p:P(`Westfall was built where the kingdom ended.
+Beyond it lay the western frontier.
+The land was difficult.
+The roads were long.
+The terrain was unpredictable.
+A permanent military settlement was established to protect the surrounding region.
+The settlement became a fortress.
+The fortress became a town.
+The town became a city.
+The walls expanded alongside it.`)},
+ {no:'Archive 02',t:'Life Behind the Walls',m:[['Classification','Civilian Record']],
+  p:P(`Westfall was never simply a military base.
+Families lived there.
+Children were born there.
+Markets operated inside the walls.
+Blacksmiths worked alongside soldiers.
+Merchants travelled through the gates.
+The city developed its own culture.
+Military service was common, but it was not the only thing that defined the people.
+Westfall was a home before it became a battlefield.
+That distinction became important later.`)},
+ {no:'Archive 03',t:'The Schism',m:[['Classification','Constantinan Military Record']],
+  p:P(`Westfall refused to recognise the authority of the central government.
+The refusal was declared an act of rebellion.
+The western city rejected the accusation.
+According to surviving Westfall records, the city believed Constantina had exceeded its authority and threatened the independence of the western territories.
+Neither side accepted the other's interpretation.
+The conflict became inevitable.`)},
+ {no:'Archive 04',t:'The First Siege',m:[['Classification','Military Record']],
+  p:P(`The first major assault on Westfall was expected to end quickly.
+It did not.
+The city's fortifications had been constructed over generations.
+Its defenders knew the surrounding terrain.
+The siege continued.
+Then another followed.
+And another.
+Westfall became increasingly militarised.
+More soldiers arrived.
+Civilian life became more difficult.
+Food became scarce.
+Trade routes were disrupted.
+Yet the city remained.`)},
+ {no:'Archive 05',t:`A Soldier's Letter`,m:[['Classification','Personal Correspondence'],['Author','Unknown Westfall Soldier']],
+  q:P(`“Mother asked when I will come home.”
+“I did not know what to tell her.”
+“I am home.”`),
+  p:P(`The letter contains no further explanation.`)},
+ {no:'Archive 06',t:'The Ruins',m:[['Classification','Reconstruction Record']],
+  p:P(`By the later stages of the conflict, entire districts of Westfall had been damaged or abandoned.
+Some buildings were never rebuilt.
+Others were rebuilt around their ruins.
+In some areas, the old foundations remain beneath new houses.
+The city learned to live around destruction.
+A broken wall became part of a street.
+A damaged tower became a landmark.
+An abandoned barracks became housing.
+The people stopped waiting for Westfall to return to what it had been.
+They began deciding what it would become instead.`)},
+ {no:'Archive 07',t:'Two Histories',m:[['Classification','Historical Analysis']],
+  p:P(`Constantina's historians describe Westfall as the city that divided Seren.
+Westfall's historians describe Constantina as the power that destroyed their home.
+Both accounts contain evidence.
+Both accounts contain omissions.
+Both contain people who genuinely believed they were doing the right thing.
+The truth is likely somewhere between them.
+But after generations of conflict, admitting that has become difficult.`)},
+ {no:'Archive 08',t:'Present Westfall',
+  p:P(`Westfall remains heavily militarised.
+The old fortifications still surround much of the city.
+Some have been repaired.
+Others remain damaged.
+People continue to live among the remnants of the conflict.
+The city is poorer than Constantina.
+Its buildings are older.
+Its streets are quieter.
+Its people are often less trusting of outsiders.
+But Westfall is not dead.
+Markets still open.
+Children still play in streets that once served as military routes.
+Families still gather together.
+People still rebuild.
+The city has survived.
+Not because the war spared it.
+Because it didn't.`)},
+ {no:'Archive Note',t:'',c:'note',
+  pre:P(`A common saying among older Westfall residents is:`),
+  q:P(`“The walls remember.”`),
+  p:P(`The origin of the phrase is unknown.`)}
+],
+[
+ {no:'Archive 01',t:'The Forest',m:[['Classification','Geographic Record']],
+  p:P(`No accurate map of Blackwood exists.
+Several have been attempted.
+None remain reliable.
+The forest appears to change depending on the route taken.
+Paths disappear.
+Rivers move underground.
+Landmarks become difficult to locate.
+The forest is larger than most early records suggest.
+Much larger.`)},
+ {no:'Archive 02',t:'The First Expeditions',m:[['Classification','Royal Expedition Record']],
+  p:P(`The first official expeditions into Blackwood were conducted centuries ago.
+The objective was simple:
+Map the forest.
+Identify useful resources.
+Locate potential settlements.
+Return.
+The first expedition returned after nineteen days.
+The second returned after twenty-seven.
+The third did not return.
+No explanation was ever recorded.`)},
+ {no:'Archive 03',t:'The Ruins',m:[['Classification','Archaeological Record']],
+  p:P(`The ruins discovered beneath Blackwood are among the oldest known structures in Seren.
+Their origins remain uncertain.
+The architecture does not correspond to any known civilisation.
+Several structures contain symbols that have no confirmed translation.
+Some appear to have been constructed beneath the forest rather than on its surface.
+This has led to considerable debate among historians.
+If the structures were built underground, why?
+And why were they built so far from any known settlement?`)},
+ {no:'Archive 04',t:'The Old Stories',m:[['Classification','Religious Text']],
+  p:P(`The oldest religious traditions of Seren describe the land as a gift from the gods.
+According to several interpretations, the gods placed the kingdom upon the world and gave humanity the land to inhabit.
+Blackwood is frequently cited as evidence of divine intervention.
+Its ancient ruins.
+Its enormous trees.
+Its underground chambers.
+Its unexplained structures.
+To many people, the forest is sacred.
+Others simply consider it dangerous.`)},
+ {no:'Archive 05',t:`Traveller's Journal`,m:[['Classification','Personal Account']],
+  q:P(`“There are places beneath the forest where the trees are larger than buildings.”
+“I found a river underground.”
+“There were lights in the water.”
+“I heard something moving beyond the cavern.”
+“We left before we found out what it was.”`),
+  p:P(`The traveller returned to Ashbourne three days later.
+They never returned to Blackwood.`)},
+ {no:'Archive 06',t:'The Deepest Chambers',m:[['Classification','Restricted Archaeological Record']],
+  p:P(`The deeper chambers beneath Blackwood contain evidence of habitation.
+Not temporary occupation.
+Permanent habitation.
+There are foundations.
+Storage structures.
+Water systems.
+Roads.
+Some chambers appear to have been connected by an extensive network of tunnels.
+The age of these structures cannot currently be determined.
+Several excavation sites have been sealed.
+The official explanation is structural instability.`)},
+ {no:'Archive 07',t:'Order of Ancients',m:[['Classification','Restricted']],
+  p:P(`References to a civilisation known as the <strong>Order of Ancients</strong> appear in several unrelated records.
+No accepted historical account places the Order within Seren's known timeline.
+Some records describe them as scholars.
+Others describe them as builders.
+Some religious interpretations describe them as servants of the gods.
+None of these accounts can be verified.
+No confirmed living descendants are known to exist.`)},
+ {no:'Archive 08',t:'Present Day',
+  p:P(`Blackwood remains largely unexplored.
+The kingdom has never successfully mapped its deepest regions.
+Expeditions continue to return with fragments of information.
+Most are incomplete.
+Some contradict one another.
+A few contain information that has never been made public.
+For most citizens of Seren, Blackwood is simply an enormous forest.
+For historians, it is an unanswered question.
+For archaeologists, it is perhaps the greatest collection of ancient ruins in the kingdom.
+And for those who have travelled deep enough into the forest, it is something else entirely.
+Something that does not fit neatly into any historical record.`)},
+ {no:'Final Archive Note',t:'',c:'note',l:'This document has been amended several times.',
+  pre:P(`The original final paragraph has been removed.
+The replacement reads:`),
+  q:P(`“Further exploration is unnecessary.”`),
+  p:P(`No author is listed.
+The previous version cannot be located.`)}
+]
+];
+const para=(a,cls)=>a.map((x,k)=>`<p class="rv${cls&&k===0&&x.length>150?' dc':''}">${x}</p>`).join('');
+function recHTML(a){
+  const meta=a.m?`<dl class="meta rv">${a.m.map(([k,v])=>`<div><dt>${k}</dt><dd>${v}</dd></div>`).join('')}</dl>`:'';
+  const q=a.q?`<blockquote class="inscr rv">${a.q.map(l=>`<p>${l}</p>`).join('')}</blockquote>`:'';
+  return `<article class="rec ${a.c||''}"><div class="rh rv"><span class="no">${a.no}</span>${a.t?`<h3 class="world">${a.t}</h3>`:''}</div>`
+   +(a.l?`<p class="stamp2 rv">${a.l}</p>`:'')+meta+(a.pre?`<div class="rb">${para(a.pre,1)}</div>`:'')+q+`<div class="rb">${para(a.p,!a.pre)}</div></article>`}
+
+/* ---------- the roll ----------
+   One float position drives everything. The whole number goes to scrollTop, the leftover fraction goes to a transform on the inner
+   wrapper, so the text glides sub-pixel instead of stepping. Speed eases in and out, and wheel / keys ease toward a target
+   instead of jumping. */
+let pos=0,tgt=null,speed=0,loreWorld=null,cPaused=false,userAt=-1e9,credRaf=0,lastCT=0,lastSet=0,swapping=false;
+const lplay=$('#lplay');
+function paintPlay(){lplay.innerHTML=cPaused?'<i>&#9654;</i> Play credits':'<i>&#10074;&#10074;</i> Pause credits';lplay.setAttribute('aria-pressed',cPaused)}
+paintPlay();lplay.onclick=()=>{cPaused=!cPaused;paintPlay()};
+function ensureLoreWorld(i){if(!loreWorld)loreWorld=createWorld($('#loreArt'),lore,{names:LORE_NAMES,start:LORE_NAMES[i],skip:'a,button,input,.lw'});else loreWorld.setScene(LORE_NAMES[i])}
+const maxPos=()=>Math.max(0,lw.scrollHeight-lw.clientHeight);
+const clampPos=v=>Math.max(0,Math.min(maxPos(),v));
+function applyPos(){pos=clampPos(pos);const f=Math.floor(pos);lastSet=f;lw.scrollTop=f;lin.style.transform=`translate3d(0,${(f-pos).toFixed(2)}px,0)`}
+function resetPos(){pos=0;tgt=null;speed=0;lastSet=0;lw.scrollTop=0;lin.style.transform=''}
+function credLoop(t){if(!lore.open){credRaf=0;return}const dt=Math.min(.05,Math.max(0,(t-lastCT)/1000));lastCT=t;
+  const hold=cPaused||swapping||lore.classList.contains('out')||t-userAt<2400;
+  if(tgt!==null){pos+=(tgt-pos)*(1-Math.exp(-dt*6));if(Math.abs(tgt-pos)<.4){pos=tgt;tgt=null}}
+  speed+=((hold?0:CRED_SPEED)-speed)*(1-Math.exp(-dt*(hold?5:1.4)));
+  if(speed>.05)pos+=speed*dt;else if(tgt===null)pos=Math.round(pos);
+  applyPos();credRaf=requestAnimationFrame(credLoop)}
+function startCredits(){if(reduce||credRaf)return;lastCT=performance.now();userAt=performance.now()+600;credRaf=requestAnimationFrame(credLoop)}
+const touchU=()=>{userAt=performance.now()};
+const nudge=d=>{if(reduce){lw.scrollTop+=d;return}tgt=clampPos((tgt===null?pos:tgt)+d)};
 const readList=()=>{const a=store.get('lore',[]);return Array.isArray(a)?a:[]};
-function paintArch(){const r=readList(),n=[0,1,2].filter(i=>r.includes(i)).length;
-  $('#arch').innerHTML=`<span>Archive read ${n} of 3${n>=3?'. One entry is sealed.':''}</span>`+[0,1,2].map(i=>`<u class="${r.includes(i)?'on':''}"></u>`).join('');
+function paintArch(){const r=readList(),n=[0,1,2,3].filter(i=>r.includes(i)).length;
+  $('#arch').innerHTML=`<span>Archive read ${n} of 4</span>`+[0,1,2,3].map(i=>`<u class="${r.includes(i)?'on':''}"></u>`).join('');
   $$('#rlist button').forEach((b,j)=>b.classList.toggle('read',r.includes(j)))}
-function loreHTML(i){const r=RG[i],p=RG[(i+3)%4],n=RG[(i+1)%4];let body;
-  if(r.sealed){const rr=mulberry(9);body=`<div class="sealed rv">${[...Array(9)].map(()=>`<span class="bar" style="width:${Math.round(38+rr()*62)}%"></span>`).join('')}
-    <p class="ancient">${r.w}</p><p class="note">Sealed. Nobody has written this one down yet.</p></div>`}
-  else body=r.lore.map((b,k)=>Array.isArray(b)?`<div class="twin rv"><div><small>${b[0]}</small><p class="world">${b[1]}</p></div><div><small>${b[2]}</small><p class="world">${b[3]}</p></div></div>`
-    :`<p class="lp rv ${k===0?'lead':''} ${b.length<80?'beat':''}">${b}</p>`).join('');
-  return `<span class="kind">Beyond the signposts &middot; ${r.k}</span><h2 id="loreT">${r.t}</h2><p class="tag world">${r.tag}</p><p class="scn">${r.s}</p><div class="rule"></div>${body}
-   ${r.q?`<div class="q rv" id="lq"><small>The question this place asks</small><p class="world">${r.q}</p></div>`:''}
-   <nav class="lnav" aria-label="Archive"><button class="btn" type="button" data-d="-1">&larr; ${p.t}</button><button class="btn solid" type="button" data-d="1">${n.t} &rarr;</button></nav>`}
-function renderLore(i,swap){loreI=i;const r=RG[i];lore.style.setProperty('--acc',r.a[0]);lore.style.setProperty('--acc2',r.a[1]);lore.style.setProperty('--acc3',r.a[2]);
-  lw.innerHTML=loreHTML(i);lw.classList.remove('swap');if(swap){void lw.offsetWidth;lw.classList.add('swap')}lore.scrollTop=0;lbar.style.transform='scaleX(0)';
-  $$('#lw [data-d]').forEach(b=>b.onclick=()=>{const j=(loreI+(+b.dataset.d)+4)%4;setRegion(j);renderLore(j,true);Snd.tick()});
+function loreHTML(i){const r=RG[i],p=RG[(i+3)%4],n=RG[(i+1)%4];
+  return `<div class="lbody"><span class="kind">The Archives of Seren &middot; ${r.k}</span><h2 id="loreT">${r.t}</h2><p class="tag world">${r.tag}</p><p class="scn">${r.s}</p><div class="rule"></div>
+   ${ARCH[i].map(recHTML).join('<div class="orn rv" aria-hidden="true"></div>')}
+   <div class="endmark rv" id="lq" aria-hidden="true"><i></i><small>End of record</small></div>
+   <nav class="lnav" aria-label="Archive"><button class="btn" type="button" data-d="-1">&larr; ${p.t}</button><button class="btn solid" type="button" data-d="1">${n.t} &rarr;</button></nav></div>`}
+function paintAcc(i){const r=RG[i];lore.style.setProperty('--acc',r.a[0]);lore.style.setProperty('--acc2',r.a[1]);lore.style.setProperty('--acc3',r.a[2])}
+function renderLore(i,swap,first){loreI=i;paintAcc(i);
+  lin.innerHTML=loreHTML(i);lw.classList.remove('swap','first');if(swap){void lw.offsetWidth;lw.classList.add('swap');first&&lw.classList.add('first')}
+  resetPos();userAt=performance.now()+600;lbar.style.transform='scaleX(0)';loreWorld&&loreWorld.setScene(LORE_NAMES[i]);
+  $$('#lin [data-d]').forEach(b=>b.onclick=()=>switchLore(loreI+(+b.dataset.d)));
   loreIO&&loreIO.disconnect();
   loreIO=new IntersectionObserver(es=>es.forEach(e=>{if(!e.isIntersecting)return;e.target.classList.add('in');
-    if(e.target.id==='lq'&&!readList().includes(loreI)){const a=readList();a.push(loreI);store.set('lore',a);paintArch();Snd.chime([392,587.3],.08,2.4)}}),{root:lore,threshold:.25});
-  $$('#lw .rv').forEach(el=>loreIO.observe(el))}
+    if(e.target.id==='lq'&&!readList().includes(loreI)){const a=readList();a.push(loreI);store.set('lore',a);paintArch();Snd.chime([392,587.3],.08,2.4)}}),{root:lw,threshold:.2});
+  $$('#lin .rv').forEach(el=>loreIO.observe(el))}
+/* place to place: the art dissolves and the colours drift while the old record fades out, then the new one fades in */
+function switchLore(j){j=(j+4)%4;if(swapping||j===loreI)return;
+  if(reduce){setRegion(j);renderLore(j,false);return}
+  swapping=true;Snd.tick();setRegion(j);paintAcc(j);loreWorld&&loreWorld.setScene(LORE_NAMES[j]);lw.classList.add('leave');
+  setTimeout(()=>{renderLore(j,true);lw.classList.remove('leave');swapping=false},700)}
 function openLore(i,btn){lastBtn=btn||lastBtn;if(btn){const r=btn.getBoundingClientRect();lore.style.setProperty('--ox',(r.left+r.width/2)+'px');lore.style.setProperty('--oy',(r.top+r.height/2)+'px')}
-  renderLore(i,false);lore.classList.remove('out');loreOpen=true;syncZone();Snd.chime([196,293.7,392],.07,3.2);
-  lore.showModal?lore.showModal():lore.setAttribute('open','')}
-function closeLore(){if(!lore.open)return;if(reduce){lore.close();return}lore.classList.add('out');setTimeout(()=>lore.close(),340)}
+  swapping=false;lw.classList.remove('leave');renderLore(i,!reduce,true);lore.classList.remove('out');loreOpen=true;syncZone();Snd.chime([196,293.7,392],.07,3.2);
+  lore.showModal?lore.showModal():lore.setAttribute('open','');ensureLoreWorld(i);lw.focus({preventScroll:true});startCredits()}
+function closeLore(){if(!lore.open)return;if(reduce){lore.close();return}lore.classList.add('out');setTimeout(()=>lore.close(),600)}
 lore.addEventListener('close',()=>{lore.classList.remove('out');loreOpen=false;loreIO&&loreIO.disconnect();syncZone();const b=rp.querySelector('.learn');b&&b.focus({preventScroll:true})});
 $('#lclose').onclick=closeLore;
 lore.addEventListener('cancel',e=>{e.preventDefault();closeLore()});
-lore.addEventListener('scroll',()=>{lbar.style.transform=`scaleX(${lore.scrollTop/Math.max(1,lore.scrollHeight-lore.clientHeight)})`},{passive:true});
+lw.addEventListener('scroll',()=>{lbar.style.transform=`scaleX(${pos/Math.max(1,maxPos())||0})`;
+  if(!reduce&&Math.abs(lw.scrollTop-lastSet)>1.5){pos=lw.scrollTop;tgt=null;speed=0;touchU()}},{passive:true});
+/* wheel and keys ease toward a target instead of jumping */
+lore.addEventListener('wheel',e=>{touchU();if(reduce){if(!lw.contains(e.target))lw.scrollTop+=e.deltaY;return}
+  e.preventDefault();nudge(e.deltaY*(e.deltaMode===1?34:e.deltaMode===2?lw.clientHeight:1))},{passive:false});
+['touchstart','touchmove'].forEach(ev=>lore.addEventListener(ev,touchU,{passive:true}));
+lore.addEventListener('keydown',e=>{if(e.target.closest&&e.target.closest('button'))return;
+  if(e.key===' '){e.preventDefault();cPaused=!cPaused;paintPlay();return}
+  const d={ArrowDown:160,ArrowUp:-160,PageDown:lw.clientHeight*.8,PageUp:-lw.clientHeight*.8,End:1e6,Home:-1e6}[e.key];
+  if(d){e.preventDefault();touchU();nudge(d)}});
 lore.addEventListener('pointermove',e=>{lore.style.setProperty('--mx',e.clientX+'px');lore.style.setProperty('--my',e.clientY+'px')},{passive:true});
-lore.addEventListener('keydown',e=>{if(e.key==='ArrowRight'||e.key==='ArrowLeft'){const j=(loreI+(e.key==='ArrowRight'?1:3))%4;setRegion(j);renderLore(j,true)}});
+lore.addEventListener('keydown',e=>{if(e.key==='ArrowRight'||e.key==='ArrowLeft')switchLore(loreI+(e.key==='ArrowRight'?1:-1))});
 paintArch();
 
 let sx=null;sec.addEventListener('touchstart',e=>{sx=e.touches[0].clientX},{passive:true});
 sec.addEventListener('touchend',e=>{if(sx===null)return;const d=e.changedTouches[0].clientX-sx;sx=null;if(Math.abs(d)>70)go(cur+(d<0?1:-1))},{passive:true});
 
 (function(){
-  const c=$('#land'),g=c.getContext('2d'),PS=4;let W,H,S,px=0,tpx=0,vis=false,running=false,lastMove=-1e9;
-  const R=(x,y,w,h,col)=>{g.fillStyle=col;g.fillRect(Math.round(x),Math.round(y),Math.max(1,Math.round(w)),Math.max(1,Math.round(h)))};
-  const bands=st=>{const n=st.length-1;for(let y=0;y<H;y+=3){const u=y/H*n,i=Math.min(n-1,Math.floor(u));R(0,y,W,3,mix(st[i],st[i+1],u-i))}};
-  const yAt=(X,b,a,f,p)=>Math.round(b+Math.sin(X*f+p)*a+Math.sin(X*f*2.3+p*1.7)*a*.4);
-  const ridge=(b,a,f,p,col,par)=>{g.fillStyle=col;for(let x=0;x<W;x++){const y=yAt(x+px*par,b,a,f,p);g.fillRect(x,y,1,H-y)}};
-  const disc=(cx,cy,r,col)=>{for(let dy=-r;dy<=r;dy++){const hw=Math.round(Math.sqrt(r*r-dy*dy));R(cx-hw,cy+dy,hw*2+1,1,col)}};
-  const glow=(x,y,r,rgb,a)=>{const q=g.createRadialGradient(x,y,0,x,y,r);q.addColorStop(0,`rgba(${rgb},${a})`);q.addColorStop(1,`rgba(${rgb},0)`);g.fillStyle=q;g.fillRect(x-r,y-r,r*2,r*2)};
-  function mkCity(r,hs){const a=[];let x=-14;while(x<W+24){const w=8+Math.floor(r()*18),k=r();a.push({x,w,h:H*(.16+r()*.26)*hs,t:k<.2?'spire':k<.4?'tower':'flat',ch:r()<.3,ban:r()<.3,win:[...Array(Math.round(w*.5))].map(()=>({dx:1+Math.floor(r()*(w-3)),dy:4+Math.floor(r()*28),on:r()<.45,ph:r()*6}))});x+=w+Math.floor(r()*3)}return a}
-  function build(){const r=mulberry(7);
-    S={parts:[...Array(70)].map(()=>({x:r()*W,y:r()*H,v:.1+r()*.9,ph:r()*6,s:r()})),
-       city:[mkCity(r,.7),mkCity(r,1.05)],
-       trees:[0,1,2].map(L=>{const n=Math.round(W/(34-L*9)),a=[];for(let i=0;i<n;i++)a.push({x:-W*.12+r()*W*1.24,w:[2,4,7][L]+Math.floor(r()*3)});return a})};
-    S.rune=S.trees[2].find(t=>t.x>W*.66&&t.x<W*.84)||S.trees[2][0];
-    S.city[1][Math.floor(S.city[1].length*.55)]={x:S.city[1][Math.floor(S.city[1].length*.55)].x,w:26,h:H*.5,t:'spire',ch:false,ban:true,win:[]}}
-  function size(){const r=sec.getBoundingClientRect();W=Math.ceil(r.width/PS);H=Math.ceil(r.height/PS);c.width=W;c.height=H;build()}
-  function parts(t,kind){S.parts.forEach(p=>{let x,y,col,a,w=1;
-    if(kind===0){x=(p.x+Math.sin(t/1400+p.ph)*8+W)%W;y=H*.58+p.y*.3+Math.sin(t/1100+p.ph)*5;a=Math.max(0,Math.sin(t/500+p.ph*3));col='#f0d33a'}
-    else if(kind===1){x=((p.x-t*.004*p.v)%W+W)%W;y=(p.y+t*.012*(.4+p.v))%H;a=.55;col=p.s<.5?'#f3efe8':'#d4202e'}
-    else if(kind===2){x=((p.x-t*.07*(.7+p.s*1.6))%W+W)%W;y=p.y*.86;a=.28;w=4+Math.floor(p.s*7);col=p.s<.5?'#8fb0d6':'#8a929c'}
-    else{x=p.x+Math.sin(t/900+p.ph)*4;y=((p.y-t*.01*(.4+p.v))%H+H)%H;if(y>H*.8)return;a=.35+.6*Math.abs(Math.sin(t/600+p.ph));col=p.s<.75?'#3b82ff':'#0ABF00'}
-    g.globalAlpha=a;R(x,y,w,1,col)});g.globalAlpha=1}
-  function ashbourne(t){
-    bands(['#0a1205','#2c3a0c','#8a7a1c','#e0b93a']);
-    const sx=W*.74-px*2,sy=H*.52;glow(sx,sy,H*.55,'240,211,58',.55);disc(Math.round(sx),Math.round(sy),Math.round(H*.07),'#f0d33a');
-    ridge(H*.60,5,.021,1,'#46651f',5);ridge(H*.68,7,.027,2,'#2f6b1f',12);
-    const X0=W*.57,wx=X0-px*12,by=yAt(X0,H*.68,7,.027,2)+2,hy=by-20;
-    for(let i=0;i<20;i++)R(wx-(9-i*.3)/2,by-i,9-i*.3,1,'#050802');
-    for(let j=0;j<4;j++){const a=t/2600+j*Math.PI/2,cs=Math.cos(a),sn=Math.sin(a);for(let k=2;k<17;k++){R(wx+cs*k,hy+sn*k,1,1,'#050802');if(k>7)R(wx+cs*k-sn*(k-6)*.25,hy+sn*k+cs*(k-6)*.25,1,1,'#050802')}}
-    ridge(H*.80,5,.03,4,'#1c3d12',24);
-    for(let x=-10;x<W+20;x+=13){const X=x-px*34%13;R(X,H*.84+Math.sin(X*.2)*0,1,8,'#0a1605');R(X-1,H*.85,6,1,'#0a1605')}
-    ridge(H*.93,3,.05,6,'#050802',40);parts(t,0)}
-  function constantina(t){
-    bands(['#14050a','#4a0a14','#a3141f']);
-    g.globalAlpha=.9;disc(Math.round(W*.47-px*2),Math.round(H*.3),Math.round(H*.045),'#f3efe8');g.globalAlpha=1;
-    const gy=Math.round(H*.84);
-    S.city.forEach((layer,li)=>{const par=li?12:5,col=li?'#0a0306':'#2a0812';
-      layer.forEach(b=>{const bx=b.x-px*par,top=gy-Math.round(b.h);R(bx,top,b.w,gy-top,col);
-        if(b.t==='spire'){const sh=Math.round(b.w*1.9);for(let k=0;k<sh;k++){const w=Math.max(1,Math.round(b.w*(1-k/sh)));R(bx+(b.w-w)/2,top-k-1,w,1,col)}}
-        else if(b.t==='tower')R(bx+b.w*.25,top-7,b.w*.5,7,col);
-        if(b.ch&&li){R(bx+b.w*.3,top-9,2,9,col);for(let i=0;i<5;i++){const age=(t/70+i*10+b.x)%50;g.globalAlpha=(1-age/50)*.3;R(bx+b.w*.3+Math.sin(age*.2+b.x)*2+age*.2,top-10-age,2+age/12,2+age/12,'#f3efe8')}g.globalAlpha=1}
-        if(li&&b.ban)for(let i=0;i<13;i++)R(bx+b.w-3+Math.round(Math.sin(t/420+i*.3+b.x)*1.3),top+i,3,1,'#d4202e');
-        if(li)b.win.forEach(w=>{if(w.on&&w.dy<b.h-4){g.globalAlpha=.45+.35*Math.sin(t/900+w.ph);R(bx+w.dx,top+w.dy,1,2,'#f3efe8')}});g.globalAlpha=1})});
-    R(0,gy,W,H-gy,'#050405');g.globalAlpha=.6;R(0,gy,W,1,'#d4202e');g.globalAlpha=1;parts(t,1)}
-  function westfall(t){
-    bands(['#06080b','#1a212a','#4a525c','#8a929c']);
-    ridge(H*.56,10,.013,1,'#2d353f',4);ridge(H*.66,9,.018,3,'#1b2128',10);
-    const sx=Math.round(W*.62-px*14),base=Math.round(H*.8),top=base-30,col='#0d1116';
-    for(let dx=-46;dx<=46;dx++){const h=Math.round(32*(1-Math.pow(Math.abs(dx)/46,2.6)));R(sx+dx,base-h,1,H-base+h,col)}
-    R(sx-24,top-14,48,34,col);for(let i=-24;i<24;i+=4)R(sx+i,top-17,2,3,col);
-    R(sx-27,top-34,10,50,col);R(sx+17,top-30,10,46,col);R(sx-7,top-46,14,62,col);
-    for(const x of [-27,-23,-19,17,21,25])R(sx+x,top-(x<0?37:33),2,3,col);for(let i=-7;i<7;i+=4)R(sx+i,top-49,2,3,col);
-    g.globalAlpha=.6+.4*Math.sin(t/700);R(sx-1,top-34,2,4,'#8fb0d6');g.globalAlpha=.4;R(sx-22,top-24,1,3,'#8fb0d6');g.globalAlpha=1;
-    R(sx,top-64,1,17,col);for(let i=0;i<9;i++)R(sx+1+i,top-64+Math.round(Math.sin(t/200+i*.6)*1.4)+Math.floor(i*.25),1,3,'#8fb0d6');
-    parts(t,2);ridge(H*.9,4,.04,5,'#06080b',30);
-    for(let x=-10;x<W+20;x+=29){const X=x-px*30%29;R(X,H*.86-(x%3)*2,2,H*.06,'#06080b')}}
-  function blackwood(t){
-    bands(['#010403','#04120d','#0a2a1f']);
-    const ox=Math.round(W*.58-px*6),oy=Math.round(H*.48),wy=Math.round(H*.8);
-    glow(ox,oy,H*.55,'59,130,255',.45+.08*Math.sin(t/900));disc(ox,oy,3,'#9cc3ff');
-    const cols=['#072a21','#041a14','#020b08'],pars=[6,14,28];
-    const lit=['#0d3a2c','#0a2a20','#06150f'];
-    S.trees.forEach((layer,L)=>layer.forEach(tr=>{const x=tr.x-px*pars[L];R(x,0,tr.w,wy,cols[L]);R(x+(x<ox?tr.w-1:0),0,1,wy,lit[L]);R(x-1,wy-H*.04,tr.w+2,H*.05,cols[L])}));
-    g.fillStyle='#010403';for(let x=0;x<W;x++){const h=Math.round(H*.1+Math.sin((x+px*10)*.05)*5+Math.sin((x+px*10)*.13)*3);g.fillRect(x,0,1,h)}
-    for(let i=0;i<3;i++){g.globalAlpha=.05;R(0,H*(.5+i*.1)+Math.sin(t/3000+i)*4,W,10,'#6fd0b0')}g.globalAlpha=1;
-    const rt=S.rune;if(rt){const rx=Math.round(rt.x-px*28+rt.w/2),ry=Math.round(H*.4);g.globalAlpha=.55+.45*Math.sin(t/500);R(rx,ry,1,11,'#0ABF00');R(rx-3,ry+2,3,1,'#0ABF00');R(rx+1,ry+5,3,1,'#0ABF00');R(rx-2,ry+8,2,1,'#0ABF00');R(rx-3,ry+2,1,3,'#0ABF00');g.globalAlpha=1}
-    for(let y=wy;y<H;y+=2)R(0,y,W,2,mix('#04201a','#010403',(y-wy)/(H-wy)));
-    for(let r=0;r<26;r++){const w=Math.max(1,7-r*.22);g.globalAlpha=.55*(1-r/26);R(ox+Math.sin(t/500+r*.7)*2-w/2,wy+r*2,w,1,'#3b82ff')}g.globalAlpha=1;
-    const rr=(t/40)%46;g.globalAlpha=1-rr/46;for(let k=0;k<360;k+=4){const a=k*Math.PI/180;R(ox+Math.cos(a)*rr,wy+14+Math.sin(a)*rr*.22,1,1,'#9cc3ff')}g.globalAlpha=1;
-    parts(t,3)}
-  const SCENES=[ashbourne,constantina,westfall,blackwood];
-  function frame(t){const live=t-lastMove<3000;if(!live)tpx=Math.sin(t/4000)*.6;px+=(tpx-px)*.06;g.clearRect(0,0,W,H);SCENES[cur](t);g.globalAlpha=1;
-    if(Energy.v>.02){glow(W*.5,H*.66,H*.95,hex(RG[cur].a[0]).join(','),Energy.v*.2);g.globalAlpha=1}}
-  function loop(t){if(!vis||document.hidden){running=false;return}frame(t);requestAnimationFrame(loop)}
-  function kick(){if(!running&&!reduce){running=true;requestAnimationFrame(loop)}}
-  renderLand=()=>{if(reduce&&W)frame(0)};
-  size();new ResizeObserver(()=>{size();renderLand()}).observe(sec);
-  sec.addEventListener('pointermove',e=>{const r=sec.getBoundingClientRect();tpx=((e.clientX-r.left)/r.width-.5)*2;lastMove=performance.now()},{passive:true});
-  new IntersectionObserver(es=>{vis=es[0].isIntersecting;kick()},{rootMargin:'100px'}).observe(sec);
-  document.addEventListener('visibilitychange',kick);
-  setRegion(0);reduce&&frame(0);
+  const NAMES=['ashbourne','constantina','westfall','blackwood'];
+  const land=createWorld($('#land'),sec,{names:NAMES,start:'ashbourne',pauseWhen:()=>loreOpen});
+  renderLand=()=>land.setScene(NAMES[cur]);
+  setRegion(0);
 })();
+
+/* ---------- cinematic layer: slow parallax on the painted plates ---------- */
+(function(){
+  const plates=[[$('#hero'),$('#sky').parentNode,.1],[sec,$('#land').parentNode,.04]];let q=false;
+  function upd(){q=false;const vh=innerHeight;plates.forEach(([h,p,k])=>{const r=h.getBoundingClientRect();if(r.bottom<-80||r.top>vh+80)return;p.style.setProperty('--py',((vh/2-(r.top+r.height/2))*k).toFixed(1)+'px')})}
+  if(reduce)return;addEventListener('scroll',()=>{if(!q){q=true;requestAnimationFrame(upd)}},{passive:true});addEventListener('resize',upd);upd();
+})();
+
 
 /* ---------- reactive layer: cursor aura, card spotlights, magnetic buttons ---------- */
 (function(){if(matchMedia('(hover:none)').matches)return;
