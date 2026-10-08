@@ -1,4 +1,4 @@
-// legal.js - shared by all the support pages
+// legal.js - shared by the support pages
 
 var bar = document.getElementById('prog');
 var links = document.querySelectorAll('.qn a');
@@ -20,45 +20,6 @@ function onScroll() {
 addEventListener('scroll', onScroll);
 onScroll();
 
-// floating pixels in the background
-var cv = document.getElementById('motes');
-var g = cv.getContext('2d');
-var dots = [];
-var still = matchMedia('(prefers-reduced-motion: reduce)').matches;
-var color = getComputedStyle(document.documentElement).getPropertyValue('--glow').trim() || '#b79cff';
-
-function resize() {
-  cv.width = innerWidth;
-  cv.height = innerHeight;
-  dots = [];
-  var n = Math.min(60, Math.round(innerWidth * innerHeight / 25000));
-  for (var i = 0; i < n; i++) {
-    dots.push({
-      x: Math.random() * cv.width,
-      y: Math.random() * cv.height,
-      s: 2 + Math.floor(Math.random() * 3),
-      v: 0.1 + Math.random() * 0.25,
-      a: 0.15 + Math.random() * 0.35
-    });
-  }
-}
-
-function draw() {
-  g.clearRect(0, 0, cv.width, cv.height);
-  g.fillStyle = color;
-  dots.forEach(function (d) {
-    d.y -= d.v;
-    if (d.y < -5) d.y = cv.height + 5; // wrap around
-    g.globalAlpha = d.a;
-    g.fillRect(Math.round(d.x), Math.round(d.y), d.s, d.s);
-  });
-  if (!still) requestAnimationFrame(draw);
-}
-
-addEventListener('resize', resize);
-resize();
-draw();
-
 // contact page: click the email to copy it
 var btn = document.getElementById('email');
 if (btn) {
@@ -67,7 +28,7 @@ if (btn) {
   function copied() {
     btn.classList.add('copied');
     hint.classList.add('ok');
-    hint.textContent = 'Copied!';
+    hint.textContent = 'Copied.';
     setTimeout(function () {
       btn.classList.remove('copied');
       hint.classList.remove('ok');

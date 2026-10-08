@@ -485,6 +485,44 @@ footer::before{content:"";position:absolute;top:0;left:0;right:0;height:1px;back
 @keyframes lhint{0%{opacity:0}12%,80%{opacity:.9}100%{opacity:0}}
 @media(prefers-reduced-motion:reduce){.lore .lhint{animation:none;opacity:.8}}
 </style>
+<style id="flat">
+/* flat pass: case-file look. hard edges, flat colour, no glow, no gradients.
+   (the volume dial and the hold-to-listen circles stay round, they're knobs) */
+body :not(.listen,.listen *,.vol,.vol *),
+body :not(.listen,.listen *,.vol,.vol *)::before,
+body :not(.listen,.listen *,.vol,.vol *)::after{
+  border-radius:0!important;box-shadow:none!important;text-shadow:none!important;
+  backdrop-filter:none!important;-webkit-backdrop-filter:none!important;
+  background-image:none!important;
+}
+.aura,.grain,.fglow{display:none!important}
+h1.pix{color:#fff!important;filter:none!important}
+#seren .veil{background-color:rgba(5,4,8,.62)!important}
+.lore .scrim{background-color:rgba(5,4,8,.72)!important}
+.card:hover,.btn:hover,.flinks a:hover{transform:none!important}
+
+/* record codes instead of decoration */
+.stamp{transform:none!important;background:var(--acc)!important;color:#000!important;border:0!important;padding:.3rem .7rem}
+.code{font:400 .78rem Plex,monospace;letter-spacing:.06em;color:var(--dim);margin:.4rem 0 1.4rem}
+.meta{display:grid!important;gap:.15rem!important;margin-top:1.6rem!important;letter-spacing:.04em!important}
+.meta span::before{content:":: ";color:var(--glow)}
+.eyebrow::after{display:none!important}
+.eyebrow{letter-spacing:.08em!important}
+.spec td:first-child::before{content:":: ";opacity:.7}
+.loop .n::before{content:"STEP ";opacity:.7}
+.fhead{background:var(--acc)!important;color:#000!important;padding:.4rem .9rem!important}
+.fhead *{color:#000!important}
+.rtabs button[aria-selected=true]{border-top:2px solid var(--acc)!important;background-color:rgba(255,255,255,.06)!important}
+.rail a i{transform:none!important}
+.cta{background:none!important;border:1px solid var(--acc)!important}
+.file,.scene,.ledger2,.rpanel{background-color:#0f0d16!important;border-color:#35313f!important}
+.rpanel{background-color:rgba(5,4,8,.85)!important}
+.loop{border-color:#35313f!important}
+.btn{text-transform:uppercase}
+.btn:hover{background:var(--bone)!important;color:#000!important;border-color:var(--bone)!important}
+.btn.solid{background:var(--acc)!important;color:#000!important}
+.btn.solid:hover{background:#fff!important}
+</style>
 <noscript><style>.rv{opacity:1!important;transform:none!important;filter:none!important}.curtain{display:none!important}</style></noscript>
 <script>setTimeout(function(){if(!window.__ready)document.documentElement.classList.add('fail')},4000)</script>
 </head>
@@ -527,6 +565,7 @@ footer::before{content:"";position:absolute;top:0;left:0;right:0;height:1px;back
     <span class="stamp">In development</span>
     <h1 class="pix">UNSHADED</h1>
     <p class="tagline">Find out what actually happened.</p>
+    <p class="code">UNS-0001 // SPD // REV 2026.10</p>
     <p class="sub">A story-driven mystery set in the Kingdom of Seren. Investigate with memories that show fragments, never answers, in a world that remembers everything you do.</p>
     <div class="btns">
       <a class="btn solid" href="#case">Open the case</a>

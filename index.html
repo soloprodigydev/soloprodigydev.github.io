@@ -77,6 +77,8 @@ h1{--tx:50%;--ty:50%;font-size:clamp(2.8rem,13.5vw,11rem);line-height:1;letter-s
 .card{position:absolute;width:250px;height:350px;left:-125px;top:-175px;backface-visibility:hidden;padding:1.2rem;display:flex;flex-direction:column;justify-content:space-between;text-align:left;border:1px solid rgba(255,255,255,.14);background:linear-gradient(165deg,var(--c),#050408 78%);opacity:.4;transition:opacity .6s,border-color .6s,box-shadow .6s}
 .card.on{opacity:1;border-color:var(--glow);box-shadow:0 0 60px -10px var(--c)}
 .card::after{content:"";position:absolute;left:50%;top:22%;width:2px;height:40%;background:linear-gradient(transparent,rgba(255,255,255,.8),transparent);box-shadow:0 0 30px 8px var(--c);opacity:.7}
+.card.link.on{cursor:pointer}
+.card.link.on:hover{border-color:#fff}
 .card.lock{background:repeating-linear-gradient(0deg,#0b0911 0 14px,#120f1b 14px 28px)}
 .card.lock::after{display:none}
 .card h3{font-size:1.5rem;color:#fff;line-height:1.1;position:relative;z-index:1}
@@ -198,25 +200,27 @@ const store={get(k,d){try{return JSON.parse(localStorage.getItem('uns_'+k))??d}c
 
 /* edit your games here */
 const G=[
- {n:'UNSHADED',t:'Story-driven mystery',s:'In development',c:'#5b32c8',d:'Investigate a kingdom split by war, using memories that show fragments, not answers. The world remembers what you do.',l:'unshaded/index.html',lt:'Open the case file'},
+ {n:'UNSHADED',t:'Story-driven mystery',s:'In development',c:'#5b32c8',d:'Investigate a kingdom split by war, using memories that show fragments, not answers. The world remembers what you do.',l:'unshaded/index.html'},
  {n:'????',t:'Not announced',s:'',c:'#222',lock:1,d:'Nothing to see here yet.'},
  {n:'????',t:'Not announced',s:'',c:'#222',lock:1,d:'Nothing to see here yet.'}
 ];
 const N=G.length,STEP=360/N,R3=330;let ang=0,idx=0;
 const ring=$('#ring');
-G.forEach((g,i)=>{const d=document.createElement('div');d.className='card'+(g.lock?' lock':'');d.style.setProperty('--c',g.c);
+G.forEach((g,i)=>{const d=document.createElement('div');d.className='card'+(g.lock?' lock':'')+(g.l?' link':'');d.style.setProperty('--c',g.c);
   d.style.transform=`rotateY(${i*STEP}deg) translateZ(${R3}px)`;
-  d.innerHTML=`<small>${g.t}</small><h3 class="pix">${g.n}</h3><small>${g.s||'&nbsp;'}</small>`;d.onclick=()=>go(i);ring.appendChild(d)});
+  d.innerHTML=`<small>${g.t}</small><h3 class="pix">${g.n}</h3><small>${g.s||'&nbsp;'}</small>`;d.onclick=()=>{if(moved>6)return;if(g.l&&i===idx)location.href=g.l;else go(i)};
+  if(g.l){d.tabIndex=0;d.setAttribute('role','link');d.setAttribute('aria-label','Open '+g.n);d.onkeydown=e=>{if(e.key==='Enter')location.href=g.l}}
+  ring.appendChild(d)});
 function paintWheel(){ring.style.transform=`translateZ(${-R3}px) rotateY(${-ang}deg)`;
   idx=((Math.round(ang/STEP)%N)+N)%N;const g=G[idx];
   $$('.card').forEach((c,i)=>c.classList.toggle('on',i===idx));
-  $('#info').innerHTML=`<h2 class="hd">${g.n}</h2><p>${g.d}</p>${g.l?`<a href="${g.l}">${g.lt}</a>`:''}`}
+  $('#info').innerHTML=`<h2 class="hd">${g.n}</h2><p>${g.d}</p>${g.l?`<p class="hint">Click the card to open it.</p>`:''}`}
 function go(i){let diff=((i-idx)%N+N)%N;if(diff>N/2)diff-=N;ang+=diff*STEP;paintWheel()}
 $('#prev').onclick=()=>{ang-=STEP;paintWheel()};$('#next').onclick=()=>{ang+=STEP;paintWheel()};
 addEventListener('keydown',e=>{if(e.key==='ArrowLeft')$('#prev').click();if(e.key==='ArrowRight')$('#next').click()});
-let sx0=null,sa=0;const stage=$('#stage');
-stage.addEventListener('pointerdown',e=>{sx0=e.clientX;sa=ang;ring.classList.add('drag')});
-addEventListener('pointermove',e=>{if(sx0===null)return;ang=sa-(e.clientX-sx0)*.4;ring.style.transform=`translateZ(${-R3}px) rotateY(${-ang}deg)`});
+let sx0=null,sa=0,moved=0;const stage=$('#stage');
+stage.addEventListener('pointerdown',e=>{moved=0;sx0=e.clientX;sa=ang;ring.classList.add('drag')});
+addEventListener('pointermove',e=>{if(sx0===null)return;moved=Math.max(moved,Math.abs(e.clientX-sx0));ang=sa-(e.clientX-sx0)*.4;ring.style.transform=`translateZ(${-R3}px) rotateY(${-ang}deg)`});
 addEventListener('pointerup',()=>{if(sx0===null)return;sx0=null;ring.classList.remove('drag');ang=Math.round(ang/STEP)*STEP;paintWheel()});
 paintWheel();
 
