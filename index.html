@@ -725,17 +725,19 @@ $('#solo').onclick=()=>$('#sir').classList.toggle('on');
 
 /* soundtrack: the main theme, off until asked for. The same file the game page uses. */
 (function(){const b=$('#msnd'),SRC=['music/Main_Theme.mp3','unshaded/music/Main_Theme.mp3'];
-  let a=null,si=0,want=store.get('homesnd',false),fade=0;
+  let a=null,si=0,want=store.get('snd',false),fade=0;
   const vol=()=>Math.max(.05,Math.min(1,+store.get('vol',.8)||.8));
   const ui=on=>{b.setAttribute('aria-pressed',on);b.textContent=on?'Sound on':'Sound off'};
   function mk(){a=new Audio();a.loop=true;a.preload='none';a.volume=0;a.src=SRC[0];
     a.addEventListener('error',()=>{if(++si<SRC.length){a.src=SRC[si];a.load();if(want)a.play().catch(()=>{})}else{console.warn('Main_Theme.mp3 not found');want=false;ui(false);b.textContent='Music not found'}})}
   function ramp(to,done){clearInterval(fade);fade=setInterval(()=>{const d=to-a.volume;if(Math.abs(d)<.02){a.volume=to;clearInterval(fade);done&&done()}else a.volume=Math.max(0,Math.min(1,a.volume+d*.12))},60)}
-  function on(){if(!a)mk();want=true;ui(true);store.set('homesnd',true);a.play().then(()=>ramp(vol())).catch(()=>{want=false;ui(false)})}
-  function off(){want=false;ui(false);store.set('homesnd',false);if(a)ramp(0,()=>a.pause())}
+  function on(){if(!a)mk();const m=store.get('mt',null);if(m&&Date.now()-m.ts<120000)try{a.currentTime=m.t}catch(e){}want=true;ui(true);store.set('snd',true);a.play().then(()=>ramp(vol())).catch(()=>{want=false;ui(false)})}
+  function off(){want=false;ui(false);store.set('snd',false);if(a)ramp(0,()=>a.pause())}
   b.addEventListener('click',()=>want?off():on());
   /* if you left it on last time, start on your first click or key (browsers block autoplay) */
   if(want){ui(true);const go=()=>{removeEventListener('pointerdown',go);removeEventListener('keydown',go);if(want&&(!a||a.paused))on()};addEventListener('pointerdown',go);addEventListener('keydown',go)}
+  /* remember where the track was so the game page can pick up from the same spot */
+  addEventListener('pagehide',()=>{store.set('mt',a&&!a.paused?{t:a.currentTime,ts:Date.now()}:null)});
   document.addEventListener('visibilitychange',()=>{if(!a||!want)return;if(document.hidden)a.pause();else a.play().catch(()=>{})})
 })();
 </script>

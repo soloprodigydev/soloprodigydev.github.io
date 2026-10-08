@@ -797,7 +797,7 @@ const Mus={on:false,cur:null,vol:+store.get('vol',.8)||.8,duck:1,el:{},g:{},pt:{
         else this.fail(k,a.currentSrc||a.src)});
       if(this.routed){const s=c.createMediaElementSource(a),g=c.createGain();g.gain.value=0;s.connect(g);g.connect(this.bus);this.g[k]=g}else{a.volume=0;this.fade[k]=0}});
     if(!this.routed)setInterval(()=>Object.keys(this.el).forEach(k=>{const a=this.el[k];a.volume=Math.max(0,Math.min(1,a.volume+(this.fade[k]-a.volume)*.12))}),60)},
-  start(){this.init();if(!this.ready)return;this.on=true;Sfx.load();this.rate();if(Snd.pad)Snd.pad.gain.setTargetAtTime(0,Snd.ctx.currentTime,.6);syncZone();this.apply();energyStart()},
+  start(){this.init();if(!this.ready)return;this.on=true;if(!this._rs){this._rs=1;const m=store.get('mt',null);if(m&&Date.now()-m.ts<120000&&this.el.main)try{this.el.main.currentTime=m.t}catch(e){}}Sfx.load();this.rate();if(Snd.pad)Snd.pad.gain.setTargetAtTime(0,Snd.ctx.currentTime,.6);syncZone();this.apply();energyStart()},
   stop(){this.on=false;this.apply();this.cur=null;$('#np').classList.remove('show')},
   want(k,tone){if(k!==this.cur){this.cur=k;this.announce(k)}
     if(this.lp)this.lp.frequency.setTargetAtTime(tone,Snd.ctx.currentTime,.8);this.apply()},
@@ -828,8 +828,9 @@ function energyStart(){if(Energy.run||reduce)return;Energy.run=true;const root=d
   $('#askYes').onclick=()=>{want=turnOn();store.set('snd',want);hideAsk();ui();Snd.tick()};
   $('#askNo').onclick=hideAsk;
   
-  if(want)addEventListener('pointerdown',()=>{if(want&&!Snd.on){turnOn();ui()}},{once:true});
+  if(want){const first=()=>{removeEventListener('pointerdown',first);removeEventListener('keydown',first);if(want&&!Snd.on){turnOn();ui()}};addEventListener('pointerdown',first);addEventListener('keydown',first)}
   else setTimeout(()=>{if(!Snd.on&&!store.get('asked',false))ask.classList.add('show')},4500);
+  addEventListener('pagehide',()=>{store.set('mt',Mus.on&&Mus.cur==='main'&&Mus.el.main&&!Mus.el.main.paused?{t:Mus.el.main.currentTime,ts:Date.now()}:null)});
   document.addEventListener('visibilitychange',()=>{if(!Snd.ctx)return;if(document.hidden)Snd.ctx.suspend();else{if(Snd.on){Snd.ctx.resume();energyStart()}}});ui()})();
 
 /* header, progress, reveal, chapter rail */
