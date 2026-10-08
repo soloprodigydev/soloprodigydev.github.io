@@ -80,12 +80,12 @@ li::before{content:">>";position:absolute;left:0;top:.3em;font:600 .72rem var(--
 
 /* boxes: a coloured tab on a plain frame */
 .box,.card{border:1px solid var(--line);background:var(--panel);margin:1.5rem 0}
-.box h3,.card h3{display:inline-block;background:var(--acc);color:#000;font:600 .75rem var(--mono);text-transform:uppercase;letter-spacing:.08em;padding:.35rem .9rem;margin:0}
+.box h2,.card h2,.box h3,.card h3{display:inline-block;background:var(--acc);color:#000;font:600 .75rem var(--mono);text-transform:uppercase;letter-spacing:.08em;padding:.35rem .9rem;margin:0}
 .box p,.card p{padding:.9rem 1rem;margin:0;font-size:.95rem;color:var(--body)}
 .box ul,.card ul{padding:.9rem 1rem .5rem;margin:0}
-.ok{border-color:var(--ok)}.ok h3{background:var(--ok)}.ok li::before{color:var(--ok)}
-.no{border-color:var(--no)}.no h3{background:var(--no)}.no li::before{color:var(--no)}
-.warn{border-color:var(--warn)}.warn h3{background:var(--warn)}
+.ok{border-color:var(--ok)}.ok h2,.ok h3{background:var(--ok)}.ok li::before{color:var(--ok)}
+.no{border-color:var(--no)}.no h2,.no h3{background:var(--no)}.no li::before{color:var(--no)}
+.warn{border-color:var(--warn)}.warn h2,.warn h3{background:var(--warn)}
 .grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(280px,1fr));gap:1rem;margin:0 0 3rem}
 .grid .card{margin:0}
 

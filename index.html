@@ -3,10 +3,24 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
-<title>UNSHADED | Solo Prodigy Dev</title>
-<meta name="description" content="UNSHADED is a story-driven mystery set in the Kingdom of Seren. The world remembers what you do.">
+<title>UNSHADED | Story-Driven Mystery Game by Solo Prodigy Dev</title>
+<meta name="description" content="UNSHADED is a story-driven mystery set in the Kingdom of Seren. Echoes of the Iris show fragments, never answers, and the world remembers what you do.">
 <meta name="theme-color" content="#050408">
 <link rel="icon" href="logo.png">
+<link rel="apple-touch-icon" href="logo.png">
+<link rel="canonical" href="https://soloprodigydev.github.io/">
+<meta property="og:type" content="website">
+<meta property="og:site_name" content="UNSHADED">
+<meta property="og:title" content="UNSHADED | Story-Driven Mystery Game by Solo Prodigy Dev">
+<meta property="og:description" content="UNSHADED is a story-driven mystery set in the Kingdom of Seren. Echoes of the Iris show fragments, never answers, and the world remembers what you do.">
+<meta property="og:url" content="https://soloprodigydev.github.io/">
+<meta property="og:image" content="https://soloprodigydev.github.io/unshaded/og.png">
+<meta name="twitter:card" content="summary_large_image">
+<meta name="twitter:title" content="UNSHADED | Story-Driven Mystery Game by Solo Prodigy Dev">
+<meta name="twitter:description" content="UNSHADED is a story-driven mystery set in the Kingdom of Seren. Echoes of the Iris show fragments, never answers, and the world remembers what you do.">
+<meta name="twitter:image" content="https://soloprodigydev.github.io/unshaded/og.png">
+<script type="application/ld+json">{"@context":"https://schema.org","@graph":[{"@type":"Organization","@id":"https://soloprodigydev.github.io/#studio","name":"Solo Prodigy Dev","url":"https://soloprodigydev.github.io/","logo":"https://soloprodigydev.github.io/logo.png","email":"soloprodigydev@gmail.com","sameAs":["https://github.com/soloprodigydev","https://beacons.ai/soloprodigy"]},{"@type":"VideoGame","@id":"https://soloprodigydev.github.io/unshaded/#game","name":"UNSHADED","url":"https://soloprodigydev.github.io/unshaded/","description":"A story-driven mystery set in the Kingdom of Seren. Echoes of the Iris show fragments of the past, never answers, and the people of Seren remember what you do.","genre":["Mystery","Story-driven","Adventure"],"gamePlatform":"PC (Steam)","image":"https://soloprodigydev.github.io/unshaded/og.png","publisher":{"@id":"https://soloprodigydev.github.io/#studio"},"author":{"@id":"https://soloprodigydev.github.io/#studio"}}]}</script>
+
 <style>
 /*
   FONT SYSTEM
@@ -81,7 +95,7 @@ h1{--tx:50%;--ty:50%;font-size:clamp(2.8rem,13.5vw,11rem);line-height:1;letter-s
 .card.link.on:hover{border-color:#fff}
 .card.lock{background:repeating-linear-gradient(0deg,#0b0911 0 14px,#120f1b 14px 28px)}
 .card.lock::after{display:none}
-.card h3{font-size:1.5rem;color:#fff;line-height:1.1;position:relative;z-index:1}
+.card .ct{font-size:1.5rem;color:#fff;line-height:1.1;position:relative;z-index:1}
 .card small{color:var(--dim);font-size:.75rem}
 .nav-wheel{display:flex;gap:1rem;align-items:center;margin-top:.5rem}
 .nav-wheel button{font:600 1rem Plex,monospace;width:2.8rem;height:2.8rem;background:rgba(5,4,8,.5);color:#fff;border:1px solid #3a3350;cursor:pointer;transition:.25s}
@@ -108,7 +122,7 @@ p{max-width:60ch;color:#d8d3e8}
 .r p{color:#fff;position:absolute;left:1.2rem;right:1.2rem;bottom:1.2rem;opacity:0;transition:opacity .5s .2s}
 .r.open p{opacity:1}
 .sw{position:absolute;top:1rem;right:1rem;display:flex;gap:3px;font-style:normal}
-.sw u{display:block;width:10px;height:10px;border:1px solid rgba(255,255,255,.28);text-decoration:none}
+.sw i{display:block;width:10px;height:10px;border:1px solid rgba(255,255,255,.28);text-decoration:none}
 
 .ledger{list-style:none;display:grid;gap:.9rem;max-width:54ch;margin-top:1.5rem}
 .ledger li{display:flex;gap:1rem;border-left:2px solid #2a2538;padding-left:1rem;color:#9a92b5;font-style:italic;transition:.6s}
@@ -145,6 +159,8 @@ h2.big{clip-path:inset(0 100% 0 0);transition:clip-path 1.1s cubic-bezier(.2,.8,
 @keyframes drift{50%{transform:translate(6px,-4px)}}
 @media(max-width:700px){header nav{display:none}.ring{scale:.72}.stage{height:360px}.ring{top:170px}.rg{flex-direction:column;height:auto}.r{min-height:62px}.r.open{min-height:170px}.r span,.r.open span{writing-mode:horizontal-tb}}
 @media(prefers-reduced-motion:reduce){*,::after{animation:none!important;transition:none!important}}
+.note{margin-top:1.2rem;font-size:.85rem;color:var(--dim)}
+.about-more{margin-top:1rem}
 </style>
 </head>
 <body>
@@ -163,6 +179,7 @@ h2.big{clip-path:inset(0 100% 0 0);transition:clip-path 1.1s cubic-bezier(.2,.8,
   <section id="about">
     <h2 class="big hd">Find out what actually happened.</h2>
     <p>Grain goes missing in a quiet valley. A <button class="echo" data-e="0">stranger was seen near the granary</button>, a witness has a grudge, and everyone has a reason to lie. Your Echoes of the Iris show fragments of the past, never answers. The people of Seren <button class="echo" data-e="1">remember what you do</button>.</p>
+  <p class="about-more">UNSHADED is a story-driven mystery game from solo developer Solo Prodigy Dev. You investigate a kingdom split by war, walking the roads of Seren, questioning its people and listening to Echoes of the Iris: memories that show fragments of the past but never tell you who is right. There is no narrator to name the guilty, only the evidence you gather and the conclusion you commit to. Seren keeps count, so what you say and do changes how its people treat you. <a href="unshaded/">Read about the game</a>, check the <a href="unshaded/mods.html">modding guidelines</a>, or <a href="unshaded/contact.html">get in touch</a>.</p>
   </section>
 
   <section id="seren">
@@ -174,15 +191,15 @@ h2.big{clip-path:inset(0 100% 0 0);transition:clip-path 1.1s cubic-bezier(.2,.8,
   <section id="echoes">
     <h2 class="big hd">Echoes of the Iris</h2>
     <ol class="ledger" id="lst" aria-label="Echoes found"></ol>
-    <p style="margin-top:1.2rem;font-size:.85rem;color:var(--dim)">Two are in the text above. One is hiding in the footer. This page saves what you find.</p>
+    <p class="note">Two are in the text above. One is hiding in the footer. This page saves what you find.</p>
     <p class="hint" id="sec"></p>
     <a class="cta" href="#echoes">Steam page coming soon</a>
   </section>
 </main>
 <footer>
-  <button id="solo" aria-label="Solo Prodigy Dev logo"><img src="logo.png" alt=""></button>
+  <button id="solo" aria-label="Solo Prodigy Dev"><img src="logo.png" alt="Solo Prodigy Dev logo"></button>
   <span>&copy; 2026 Solo Prodigy Dev</span>
-  <a href="https://github.com/soloprodigydev">GitHub</a>
+  <a href="https://github.com/soloprodigydev" rel="me noopener">GitHub</a>
   <a href="unshaded/eula.html">EULA</a>
   <a href="unshaded/terms.html">Terms</a>
   <a href="unshaded/privacy.html">Privacy</a>
@@ -200,7 +217,7 @@ const store={get(k,d){try{return JSON.parse(localStorage.getItem('uns_'+k))??d}c
 
 /* edit your games here */
 const G=[
- {n:'UNSHADED',t:'Story-driven mystery',s:'In development',c:'#5b32c8',d:'Investigate a kingdom split by war, using memories that show fragments, not answers. The world remembers what you do.',l:'unshaded/index.html'},
+ {n:'UNSHADED',t:'Story-driven mystery',s:'In development',c:'#5b32c8',d:'Investigate a kingdom split by war, using memories that show fragments, not answers. The world remembers what you do.',l:'unshaded/'},
  {n:'????',t:'Not announced',s:'',c:'#222',lock:1,d:'Nothing to see here yet.'},
  {n:'????',t:'Not announced',s:'',c:'#222',lock:1,d:'Nothing to see here yet.'}
 ];
@@ -208,7 +225,7 @@ const N=G.length,STEP=360/N,R3=330;let ang=0,idx=0;
 const ring=$('#ring');
 G.forEach((g,i)=>{const d=document.createElement('div');d.className='card'+(g.lock?' lock':'')+(g.l?' link':'');d.style.setProperty('--c',g.c);
   d.style.transform=`rotateY(${i*STEP}deg) translateZ(${R3}px)`;
-  d.innerHTML=`<small>${g.t}</small><h3 class="pix">${g.n}</h3><small>${g.s||'&nbsp;'}</small>`;d.onclick=()=>{if(moved>6)return;if(g.l&&i===idx)location.href=g.l;else go(i)};
+  d.innerHTML=`<small>${g.t}</small><div class="pix ct">${g.n}</div><small>${g.s||'&nbsp;'}</small>`;d.onclick=()=>{if(moved>6)return;if(g.l&&i===idx)location.href=g.l;else go(i)};
   if(g.l){d.tabIndex=0;d.setAttribute('role','link');d.setAttribute('aria-label','Open '+g.n);d.onkeydown=e=>{if(e.key==='Enter')location.href=g.l}}
   ring.appendChild(d)});
 function paintWheel(){ring.style.transform=`translateZ(${-R3}px) rotateY(${-ang}deg)`;
@@ -598,7 +615,7 @@ let cur='ashbourne',inSeren=false;
 function refresh(){document.body.dataset.r=inSeren?cur:'';setScene(inSeren?cur:'unshaded')}
 const rg=$('#rg');
 RG.forEach((r,i)=>{const b=document.createElement('button');b.className='r'+(i===0?' open':'');b.dataset.k=r[0].toLowerCase();b.style.setProperty('--c',r[1][0]);b.style.setProperty('--c2',r[1][1]);b.style.setProperty('--c3',r[1][2]);
-  b.innerHTML=`<em class="sw">${r[1].map(c=>`<u style="background:${c}"></u>`).join('')}</em><span class="hd">${r[0]}</span><p>${r[2]}</p>`;
+  b.innerHTML=`<em class="sw">${r[1].map(c=>`<i style="background:${c}"></i>`).join('')}</em><span class="hd">${r[0]}</span><p>${r[2]}</p>`;
   b.onclick=()=>{b.animate([{transform:'scale(.96)'},{transform:'scale(1)'}],{duration:400,easing:'cubic-bezier(.3,1.6,.5,1)'});$$('.r').forEach(x=>x.classList.toggle('open',x===b));cur=r[0].toLowerCase();refresh();say(WH[cur])};rg.appendChild(b)});
 new IntersectionObserver(([e])=>{inSeren=e.isIntersecting;refresh()},{threshold:.25}).observe($('#seren'));
 

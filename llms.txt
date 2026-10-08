@@ -1,0 +1,14 @@
+# UNSHADED
+
+> UNSHADED is a story-driven mystery game by solo developer Solo Prodigy Dev, set in the Kingdom of Seren. The player investigates a kingdom split by war using Echoes of the Iris, memories that show fragments of the past but never answers. The people of Seren remember what the player says and does.
+
+## Game
+- [UNSHADED game page](https://soloprodigydev.github.io/unshaded/): premise, features and interactive demos
+- [Solo Prodigy Dev home](https://soloprodigydev.github.io/): studio page and game wheel
+
+## Support and policies
+- [Contact](https://soloprodigydev.github.io/unshaded/contact.html): support, bugs, business and press (soloprodigydev@gmail.com)
+- [Modding guidelines](https://soloprodigydev.github.io/unshaded/mods.html): what mods are allowed and how to share them
+- [Privacy Policy](https://soloprodigydev.github.io/unshaded/privacy.html): no analytics, cookies or personal data collection
+- [Terms of Service](https://soloprodigydev.github.io/unshaded/terms.html): rules, fair play, and creator monetization rights
+- [EULA](https://soloprodigydev.github.io/unshaded/eula.html): license, ownership and restrictions
