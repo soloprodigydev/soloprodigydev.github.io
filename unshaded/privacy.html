@@ -1,20 +1,26 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="en" data-t="privacy">
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
 <title>Privacy Policy | UNSHADED</title>
 <meta name="description" content="Privacy Policy for UNSHADED and this website.">
 <meta name="theme-color" content="#050408">
+<meta name="color-scheme" content="dark">
 <link rel="icon" href="../logo.png">
 <link rel="stylesheet" href="legal.css">
+<script src="legal.js" defer></script>
 </head>
 <body>
+<a class="skip" href="#main">Skip to content</a>
+<div class="prog" id="prog" aria-hidden="true"></div>
+<canvas id="motes" aria-hidden="true"></canvas>
+<div class="aura" id="aura" aria-hidden="true"></div>
 <header>
   <a class="brand pix" href="index.html">UNSHADED</a>
-  <nav aria-label="Site"><a href="index.html">The Game</a><a href="mods.html">Mods</a><a href="eula.html">EULA</a><a href="terms.html">Terms</a><a href="privacy.html" aria-current="page">Privacy</a><a href="contact.html">Contact</a><a href="../index.html">Portfolio</a></nav>
+  <nav aria-label="Site"><a href="index.html">The Game</a><a href="eula.html">EULA</a><a href="terms.html">Terms</a><a href="privacy.html" aria-current="page">Privacy</a><a href="contact.html">Contact</a><a href="../index.html">Portfolio</a></nav>
 </header>
-<main>
+<main id="main">
 <p class="meta">Legal</p>
 <h1>Privacy Policy</h1>
 <p class="updated">Last updated: October 2026</p>
@@ -48,8 +54,12 @@
 </section>
 </main>
 <footer>
-  <div class="links"><a href="eula.html">EULA</a><a href="terms.html">Terms of Service</a><a href="privacy.html">Privacy Policy</a><a href="mods.html">Modding</a><a href="contact.html">Contact</a></div>
-  <div>&copy; 2026 UNSHADED by Solo Prodigy Dev. All rights reserved.</div>
+  <div class="fglow" aria-hidden="true"></div>
+  <div class="wrap">
+    <div class="fbrand"><span class="pix fmark">UNSHADED</span><p class="world">Find out what actually happened.</p></div>
+    <nav class="flinks" aria-label="Legal and contact"><a href="eula.html"><small>License</small><span>EULA</span><i aria-hidden="true">&rarr;</i></a><a href="terms.html"><small>The rules</small><span>Terms of Service</span><i aria-hidden="true">&rarr;</i></a><a href="privacy.html" aria-current="page"><small>Your data</small><span>Privacy Policy</span><i aria-hidden="true">&rarr;</i></a><a href="contact.html"><small>Say hello</small><span>Contact</span><i aria-hidden="true">&rarr;</i></a></nav>
+    <div class="fbase"><div>&copy; 2026 UNSHADED by Solo Prodigy Dev. All rights reserved.</div><button class="totop" id="toTop" type="button">Back to top <span aria-hidden="true">&uarr;</span></button></div>
+  </div>
 </footer>
 
 </body>

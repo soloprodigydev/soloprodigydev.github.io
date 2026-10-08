@@ -1,27 +1,33 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="en" data-t="contact">
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
 <title>Contact | UNSHADED</title>
 <meta name="description" content="Contact the UNSHADED team for support, bug reports, business inquiries and feedback.">
 <meta name="theme-color" content="#050408">
+<meta name="color-scheme" content="dark">
 <link rel="icon" href="../logo.png">
 <link rel="stylesheet" href="legal.css">
+<script src="legal.js" defer></script>
 </head>
 <body>
+<a class="skip" href="#main">Skip to content</a>
+<div class="prog" id="prog" aria-hidden="true"></div>
+<canvas id="motes" aria-hidden="true"></canvas>
+<div class="aura" id="aura" aria-hidden="true"></div>
 <header>
   <a class="brand pix" href="index.html">UNSHADED</a>
-  <nav aria-label="Site"><a href="index.html">The Game</a><a href="mods.html">Mods</a><a href="eula.html">EULA</a><a href="terms.html">Terms</a><a href="privacy.html">Privacy</a><a href="contact.html" aria-current="page">Contact</a><a href="../index.html">Portfolio</a></nav>
+  <nav aria-label="Site"><a href="index.html">The Game</a><a href="eula.html">EULA</a><a href="terms.html">Terms</a><a href="privacy.html">Privacy</a><a href="contact.html" aria-current="page">Contact</a><a href="../index.html">Portfolio</a></nav>
 </header>
-<main>
+<main id="main">
 <div class="center">
 <p class="meta">Contact</p>
 <h1>Get in touch</h1>
 <p class="lede" style="text-align:left">Need support? Found a bug? Have a business inquiry, or just want to say hi and share your thoughts on UNSHADED? We would love to hear from you.</p>
-<p class="meta" style="margin-top:2.5rem">Official support email</p>
+<p class="meta" style="margin-top:2.5rem">Official support email</p><br>
 <button class="email" id="email" type="button">soloprodigydev@gmail.com</button>
-<p class="copy-hint">Click to copy</p>
+<p class="copy-hint" id="hint">Click to copy</p>
 <p style="margin-top:2rem;color:var(--dim);font-style:italic">Replies may take a few days, especially during development crunch. Thanks for your patience.</p>
 </div>
 <div class="grid">
@@ -33,16 +39,21 @@
 <div class="toast" id="toast" role="status">Email copied to clipboard</div>
 </main>
 <footer>
-  <div class="links"><a href="eula.html">EULA</a><a href="terms.html">Terms of Service</a><a href="privacy.html">Privacy Policy</a><a href="mods.html">Modding</a><a href="contact.html">Contact</a></div>
-  <div>&copy; 2026 UNSHADED by Solo Prodigy Dev. All rights reserved.</div>
+  <div class="fglow" aria-hidden="true"></div>
+  <div class="wrap">
+    <div class="fbrand"><span class="pix fmark">UNSHADED</span><p class="world">Find out what actually happened.</p></div>
+    <nav class="flinks" aria-label="Legal and contact"><a href="eula.html"><small>License</small><span>EULA</span><i aria-hidden="true">&rarr;</i></a><a href="terms.html"><small>The rules</small><span>Terms of Service</span><i aria-hidden="true">&rarr;</i></a><a href="privacy.html"><small>Your data</small><span>Privacy Policy</span><i aria-hidden="true">&rarr;</i></a><a href="contact.html" aria-current="page"><small>Say hello</small><span>Contact</span><i aria-hidden="true">&rarr;</i></a></nav>
+    <div class="fbase"><div>&copy; 2026 UNSHADED by Solo Prodigy Dev. All rights reserved.</div><button class="totop" id="toTop" type="button">Back to top <span aria-hidden="true">&uarr;</span></button></div>
+  </div>
 </footer>
 <script>
 (function(){
-  var e='soloprodigydev@gmail.com',b=document.getElementById('email'),t=document.getElementById('toast');
-  function ok(){t.classList.add('show');setTimeout(function(){t.classList.remove('show')},2500)}
+  var e='soloprodigydev@gmail.com',b=document.getElementById('email'),t=document.getElementById('toast'),hint=document.getElementById('hint');
+  function ok(){t.classList.add('show');b.classList.add('copied');hint.classList.add('ok');hint.textContent='Copied';window.uBurst&&window.uBurst(b);
+    setTimeout(function(){t.classList.remove('show');b.classList.remove('copied');hint.classList.remove('ok');hint.textContent='Click to copy'},2500)}
+  function fb(){var a=document.createElement('textarea');a.value=e;a.style.position='fixed';a.style.opacity='0';document.body.appendChild(a);a.select();try{document.execCommand('copy');ok()}catch(x){hint.textContent='Select the email and copy it by hand'}document.body.removeChild(a)}
   b.addEventListener('click',function(){
     if(navigator.clipboard&&navigator.clipboard.writeText){navigator.clipboard.writeText(e).then(ok,fb)}else fb();
-    function fb(){var a=document.createElement('textarea');a.value=e;document.body.appendChild(a);a.select();try{document.execCommand('copy');ok()}catch(x){}document.body.removeChild(a)}
   });
 })();
 </script>
