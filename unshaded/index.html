@@ -35,6 +35,8 @@
 @property --acc{syntax:'<color>';inherits:true;initial-value:#8b5cf6}
 @property --acc2{syntax:'<color>';inherits:true;initial-value:#f4f1ff}
 @property --acc3{syntax:'<color>';inherits:true;initial-value:#4b2a9e}
+@property --ac{syntax:'<color>';inherits:true;initial-value:#8b5cf6}
+:root{transition:--ac .9s}
 :root{--ink:#050408;--bone:#f1ecfa;--dim:#8a829f;--line:rgba(139,92,246,.2);--acc:#8b5cf6;--acc2:#f4f1ff;--acc3:#4b2a9e;--glow:#b79cff}
 *{margin:0;padding:0;box-sizing:border-box}
 html{scroll-behavior:smooth}
@@ -58,7 +60,7 @@ section{position:relative;padding:6.5rem 0}
 .sr{position:absolute;width:1px;height:1px;overflow:hidden;clip:rect(0 0 0 0);white-space:nowrap}
 
 /* progress + header + rail + sound */
-.prog{position:fixed;top:0;left:0;right:0;height:2px;z-index:70;background:linear-gradient(90deg,var(--acc3),var(--glow));transform:scaleX(0);transform-origin:left}
+.prog{position:fixed;top:0;left:0;right:0;height:2px;z-index:70;background:linear-gradient(90deg,var(--acc3),var(--glow));transform:scaleX(0);transform-origin:left;box-shadow:0 0 calc(var(--beat,0)*16px) var(--glow)}
 header{position:fixed;top:0;left:0;right:0;z-index:50;display:flex;justify-content:space-between;align-items:center;gap:.6rem 2rem;flex-wrap:wrap;padding:1rem 2rem;background:linear-gradient(rgba(5,4,8,.92),rgba(5,4,8,0));transition:background .4s}
 header.solid{background:rgba(5,4,8,.9);backdrop-filter:blur(14px);-webkit-backdrop-filter:blur(14px);border-bottom:1px solid var(--line)}
 header .brand{font-size:1.05rem;letter-spacing:.12em;color:#fff;text-decoration:none}
@@ -81,6 +83,10 @@ header nav a.on{text-decoration:underline;text-decoration-color:var(--acc);text-
 .sound[aria-pressed=true] .bars i{animation:eq 1.1s ease-in-out infinite}
 .sound .bars i:nth-child(2){animation-delay:-.4s}.sound .bars i:nth-child(3){animation-delay:-.8s}
 @keyframes eq{0%,100%{height:3px}50%{height:12px}}
+.sound.live .bars i{animation:none;transition:height .08s linear}
+.sndwrap{display:flex;align-items:center;gap:.8rem}
+.vol{width:74px;height:14px;accent-color:var(--glow);cursor:pointer;display:none}
+.sound[aria-pressed=true]+.vol{display:block}
 
 /* hero: the page is in shade, your cursor is the light */
 .hero{min-height:100svh;display:flex;align-items:center;position:relative;overflow:hidden;padding:7rem 0 4rem;touch-action:pan-y}
@@ -92,14 +98,14 @@ header nav a.on{text-decoration:underline;text-decoration-color:var(--acc);text-
 .hero::before{content:"";position:absolute;inset:0;z-index:2;pointer-events:none;background:radial-gradient(circle 170px at var(--lx,30%) var(--ly,60%),rgba(183,156,255,.2),rgba(139,92,246,.07) 55%,transparent)}
 .hero .wrap{position:relative;z-index:3}
 .stamp{display:inline-block;font-size:.72rem;letter-spacing:.22em;text-transform:uppercase;color:var(--glow);border:1px solid var(--glow);padding:.35rem .8rem;transform:rotate(-2.5deg);margin-bottom:1.6rem}
-h1.pix{font-size:clamp(3rem,12vw,8.5rem);letter-spacing:.04em;line-height:1;color:transparent;background:linear-gradient(100deg,var(--acc),var(--acc3) 55%,var(--acc2));-webkit-background-clip:text;background-clip:text;filter:drop-shadow(0 0 30px rgba(139,92,246,.45));animation:rise 2.6s .5s ease both}
+h1.pix{font-size:clamp(3rem,12vw,8.5rem);letter-spacing:.04em;line-height:1;color:transparent;background:linear-gradient(100deg,var(--acc),var(--acc3) 55%,var(--acc2));-webkit-background-clip:text;background-clip:text;filter:drop-shadow(0 0 calc(30px + var(--beat,0)*34px) rgba(139,92,246,calc(.45 + var(--beat,0)*.35)));animation:rise 2.6s .5s ease both}
 @keyframes rise{from{opacity:0;filter:blur(16px)}}
 .hero .tagline{font-size:clamp(1.3rem,3vw,2rem);color:var(--acc2);margin:1.2rem 0 .8rem;font-weight:300;animation:rise 2s 1.6s ease both}
 .hero .sub{max-width:52ch;color:#cfc7e6;margin-bottom:2rem;animation:rise 2s 2s ease both}
 .hero .btns,.hero .meta{animation:rise 2s 2.3s ease both}
 .meta{font-size:.78rem;color:var(--dim);letter-spacing:.08em;display:flex;flex-wrap:wrap;gap:.3rem 1.2rem;margin-top:2rem}
 .btns{display:flex;flex-wrap:wrap;gap:.8rem}
-.btn{font:400 .8rem Plex,monospace;letter-spacing:.14em;text-transform:uppercase;text-decoration:none;padding:.9rem 1.7rem;border:1px solid var(--acc);color:var(--acc2);border-radius:4px;transition:background .25s,box-shadow .25s,transform .25s;display:inline-block}
+.btn{font:400 .8rem Plex,monospace;letter-spacing:.14em;text-transform:uppercase;text-decoration:none;padding:.9rem 1.7rem;border:1px solid var(--acc);color:var(--acc2);border-radius:4px;transition:background .25s,box-shadow .25s,transform .25s,translate .25s;display:inline-block;cursor:pointer}
 .btn:hover{background:rgba(139,92,246,.28);box-shadow:0 0 30px rgba(139,92,246,.35);transform:translateY(-2px)}
 .btn.solid{background:var(--acc);color:#fff}
 .btn.solid:hover{background:#9d78ff}
@@ -208,6 +214,11 @@ h1.pix{font-size:clamp(3rem,12vw,8.5rem);letter-spacing:.04em;line-height:1;colo
 .rpanel .kind{font:400 .74rem Plex,monospace;letter-spacing:.18em;text-transform:uppercase;color:var(--acc)}
 .rpanel p{color:#d6cfeb;max-width:56ch}
 .rpanel .scene-note{font-size:.9rem;color:var(--dim)}
+.rpanel .rtag{font-size:1.3rem;color:var(--acc);margin-top:-.3rem}
+.rpanel .learn{align-self:flex-start;margin-top:.3rem;border-color:var(--acc);display:inline-flex;gap:.8rem;align-items:center}
+.rpanel .learn span{transition:transform .3s}
+.rpanel .learn:hover span{transform:translateX(5px)}
+.rtabs button.read .hd::after{content:"";display:inline-block;width:6px;height:6px;margin-left:.6rem;background:var(--acc);transform:rotate(45deg);vertical-align:middle}
 .rpanel .whisper{margin-top:auto;font-size:1.15rem;color:var(--acc);border-top:1px solid var(--line);padding-top:1rem}
 .rpanel .whisper.ancient{color:#0ABF00}
 .rtabs{position:relative;z-index:3;display:grid;grid-template-columns:repeat(4,1fr);border-top:1px solid var(--line);background:rgba(5,4,8,.88);backdrop-filter:blur(10px);-webkit-backdrop-filter:blur(10px)}
@@ -218,6 +229,65 @@ h1.pix{font-size:clamp(3rem,12vw,8.5rem);letter-spacing:.04em;line-height:1;colo
 .rtabs .sw{display:flex}
 .rtabs .sw u{width:10px;height:24px}
 .rtabs .sw u:first-child{border-radius:3px 0 0 3px}.rtabs .sw u:last-child{border-radius:0 3px 3px 0}
+
+/* reactive layer: cursor aura, card spotlights, now playing, sound prompt */
+.aura{position:fixed;left:0;top:0;width:460px;height:460px;margin:-230px 0 0 -230px;border-radius:50%;pointer-events:none;z-index:2;mix-blend-mode:screen;background:radial-gradient(circle,color-mix(in srgb,var(--ac) 22%,transparent),transparent 65%);opacity:0;transition:opacity .7s;will-change:transform}
+.aura.on{opacity:1}.aura.off{opacity:0}
+@media(hover:none){.aura{display:none}}
+.spot{position:relative}
+.spot::after{content:"";position:absolute;inset:0;pointer-events:none;border-radius:inherit;background:radial-gradient(280px circle at var(--mx,50%) var(--my,50%),color-mix(in srgb,var(--ac) 16%,transparent),transparent 70%);opacity:0;transition:opacity .35s}
+.spot:hover::after{opacity:1}
+.np{position:fixed;right:1.2rem;bottom:5.2rem;z-index:60;display:flex;align-items:center;gap:.9rem;max-width:calc(100vw - 2.4rem);padding:.7rem 1.1rem;background:rgba(5,4,8,.84);border:1px solid color-mix(in srgb,var(--glow) 40%,transparent);border-radius:8px;backdrop-filter:blur(12px);-webkit-backdrop-filter:blur(12px);opacity:0;transform:translateY(14px);pointer-events:none;transition:opacity .6s,transform .6s cubic-bezier(.2,.8,.2,1)}
+.np.show{opacity:1;transform:none}
+.np i{width:7px;height:7px;background:var(--glow);transform:rotate(45deg);box-shadow:0 0 calc(4px + var(--beat,0)*14px) var(--glow);flex:none}
+.np small{display:block;font:400 .64rem Plex,monospace;letter-spacing:.16em;text-transform:uppercase;color:var(--dim)}
+.np b{display:block;font:400 1rem Trajan,'Trajan Pro',Georgia,serif;color:var(--acc2);letter-spacing:.02em}
+.sndask{position:fixed;top:4.6rem;right:1.2rem;z-index:60;display:flex;align-items:center;gap:.9rem;padding:.55rem .6rem .55rem 1.1rem;background:rgba(10,7,20,.92);border:1px solid var(--line);border-radius:999px;backdrop-filter:blur(12px);-webkit-backdrop-filter:blur(12px);font:400 .72rem Plex,monospace;letter-spacing:.1em;color:var(--bone);opacity:0;transform:translateY(-12px);pointer-events:none;transition:opacity .6s,transform .6s cubic-bezier(.2,.8,.2,1)}
+.sndask.show{opacity:1;transform:none;pointer-events:auto}
+.sndask .btn{padding:.45rem .9rem;font-size:.68rem;border-radius:999px}
+.sndask .x{width:26px;height:26px;border-radius:50%;color:var(--dim);line-height:1}
+.sndask .x:hover{color:#fff}
+
+/* lore archive: the deeper record */
+dialog.lore{position:fixed;inset:0;width:100%;height:100%;max-width:none;max-height:none;margin:0;padding:0;border:0;background:var(--ink);color:var(--bone);overflow-y:auto;overscroll-behavior:contain;scroll-behavior:auto}
+dialog.lore:not([open]){display:none}
+dialog.lore::backdrop{background:#000}
+dialog.lore[open]{animation:loreIn .9s cubic-bezier(.2,.7,.2,1) both}
+dialog.lore.out{animation:loreOut .35s ease forwards}
+@keyframes loreIn{from{clip-path:circle(0 at var(--ox,50%) var(--oy,80%))}to{clip-path:circle(160vmax at var(--ox,50%) var(--oy,80%))}}
+@keyframes loreOut{to{opacity:0}}
+.lore .fx{position:fixed;inset:0;pointer-events:none;z-index:0;background:radial-gradient(ellipse 80% 55% at 15% 0,color-mix(in oklch,var(--acc3) 60%,transparent),transparent 70%),radial-gradient(ellipse 60% 50% at 100% 100%,color-mix(in oklch,var(--acc3) 35%,transparent),transparent 70%),radial-gradient(circle 380px at var(--mx,70%) var(--my,30%),color-mix(in oklch,var(--acc) 15%,transparent),transparent 70%)}
+.lore .lbar{position:fixed;top:0;left:0;right:0;height:2px;z-index:5;background:var(--acc);transform:scaleX(0);transform-origin:left;box-shadow:0 0 calc(var(--beat,0)*14px) var(--acc)}
+.lore .lclose{position:fixed;top:1rem;right:1.2rem;z-index:5;font:400 .72rem Plex,monospace;letter-spacing:.16em;text-transform:uppercase;color:var(--dim);padding:.55rem 1rem;border:1px solid var(--line);border-radius:999px;background:rgba(5,4,8,.7);backdrop-filter:blur(8px);-webkit-backdrop-filter:blur(8px);transition:color .25s,border-color .25s}
+.lore .lclose:hover{color:#fff;border-color:var(--acc)}
+.lw{position:relative;z-index:1;max-width:740px;margin:0 auto;padding:7rem 1.5rem 5rem}
+.lw.swap{animation:rise 1s ease both}
+.lore .kind{font:400 .74rem Plex,monospace;letter-spacing:.2em;text-transform:uppercase;color:var(--acc);display:flex;align-items:center;gap:.9rem}
+.lore .kind::after{content:"";width:48px;height:1px;background:var(--acc);opacity:.6}
+.lore h2{max-width:none;font-size:clamp(2.6rem,8vw,5rem);color:var(--acc2);margin:1rem 0 .6rem}
+.lore .tag{font-size:1.5rem;color:var(--acc)}
+.lore .scn{margin:1.2rem 0 0;color:var(--dim);font-size:.95rem;max-width:52ch}
+.lore .rule{height:1px;margin:2.6rem 0 3rem;background:linear-gradient(90deg,var(--acc),transparent)}
+.lp{font-size:1.14rem;line-height:1.9;color:#d9d2ee;margin:0 0 1.5rem}
+.lp.lead{font-size:1.32rem;color:var(--acc2)}
+.lp.beat{font-family:Trajan,'Trajan Pro',Georgia,serif;font-size:1.45rem;line-height:1.5;color:var(--acc2);margin:2.4rem 0;padding-left:1.2rem;border-left:3px solid var(--acc)}
+.lp em{font-style:normal;font-family:Plex,monospace;font-size:.92em;letter-spacing:.14em;color:var(--acc);border:1px solid color-mix(in srgb,var(--acc) 55%,transparent);padding:.05em .45em;border-radius:3px;white-space:nowrap}
+.twin{display:grid;grid-template-columns:1fr 1fr;gap:1rem;margin:2.8rem 0}
+.twin>div{border:1px solid color-mix(in srgb,var(--acc) 35%,transparent);border-radius:10px;padding:1.4rem 1.3rem;background:rgba(5,4,8,.55);transition:opacity .4s,border-color .4s,transform .4s}
+.twin>div:hover{border-color:var(--acc);transform:translateY(-3px)}
+.twin:hover>div:not(:hover){opacity:.45}
+.twin small{display:block;font:400 .68rem Plex,monospace;letter-spacing:.18em;text-transform:uppercase;color:var(--acc);margin-bottom:.8rem}
+.twin p{font-size:1.1rem;line-height:1.6;color:var(--acc2)}
+.lore .q{margin:4rem 0 3rem;padding:2rem 0 0;border-top:1px solid color-mix(in srgb,var(--acc) 40%,transparent)}
+.lore .q small{font:400 .7rem Plex,monospace;letter-spacing:.2em;text-transform:uppercase;color:var(--dim)}
+.lore .q p{font-size:clamp(1.5rem,3.6vw,2.2rem);line-height:1.3;color:var(--acc2);margin-top:.8rem}
+.lnav{display:flex;flex-wrap:wrap;justify-content:space-between;gap:.8rem;margin-top:2rem}
+.lnav .btn{background:rgba(5,4,8,.5)}
+.sealed .bar{display:block;height:1.15rem;margin:0 0 .8rem;border-radius:2px;background:#000;border:1px solid color-mix(in srgb,var(--acc) 30%,transparent);position:relative;overflow:hidden}
+.sealed .bar::after{content:"";position:absolute;inset:0;background:linear-gradient(90deg,transparent,color-mix(in srgb,var(--acc) 40%,transparent),transparent);transform:translateX(-100%);animation:sweep 5s ease-in-out infinite}
+@keyframes sweep{60%,100%{transform:translateX(100%)}}
+.sealed .ancient{font-size:1.4rem;margin:2.2rem 0 .6rem}
+.sealed .note{color:var(--dim);font-size:.95rem}
 
 /* details */
 .spec{width:100%;border-collapse:collapse;margin-top:2.2rem}
@@ -246,6 +316,7 @@ footer a{color:var(--dim);text-decoration:none}footer a:hover{color:#fff}
   .lamp-hint{bottom:5.2rem}
 }
 @media(max-width:700px){
+  .vol{display:none!important}.twin{grid-template-columns:1fr}.sndask{left:1rem;right:1rem;top:4.2rem;justify-content:space-between;white-space:normal}.np{bottom:4.6rem;right:.8rem}
   header nav{display:none}
   header{flex-wrap:nowrap}
   .scroll{display:none}.lamp-hint{bottom:1.3rem}
@@ -272,8 +343,14 @@ footer a{color:var(--dim);text-decoration:none}footer a:hover{color:#fff}
   <nav aria-label="Page">
     <a href="#case">The case</a><a href="#memory">Memory</a><a href="#seren">Seren</a><a href="#play">How it plays</a><a href="#details">Details</a><a href="../index.html">Portfolio</a>
   </nav>
-  <button class="sound" id="sound" type="button" aria-pressed="false"><span class="bars" aria-hidden="true"><i></i><i></i><i></i></span><span id="soundLabel">Sound off</span></button>
+  <div class="sndwrap">
+    <button class="sound" id="sound" type="button" aria-pressed="false"><span class="bars" aria-hidden="true"><i></i><i></i><i></i></span><span id="soundLabel">Sound off</span></button>
+    <input class="vol" id="vol" type="range" min="0" max="1" step=".05" value=".8" aria-label="Music volume">
+  </div>
 </header>
+<div class="aura" id="aura" aria-hidden="true"></div>
+<div class="np" id="np" aria-live="polite"><i aria-hidden="true"></i><div><small>Now playing</small><b id="npT"></b><small id="npS"></small></div></div>
+<div class="sndask" id="sndask" role="region" aria-label="Sound"><span>This page has a soundtrack.</span><button class="btn solid" id="askYes" type="button">Sound on</button><button class="x" id="askNo" type="button" aria-label="Dismiss">&#10005;</button></div>
 <nav class="rail" id="rail" aria-label="Chapters"></nav>
 
 <!-- ============ HERO ============ -->
@@ -351,6 +428,7 @@ footer a{color:var(--dim);text-decoration:none}footer a:hover{color:#fff}
         <dl>
           <div><dt>Reputation</dt><dd id="repu">Unknown. No one has met you yet.</dd></div>
           <div><dt>Last seen</dt><dd id="seen">Nowhere.</dd></div>
+          <div><dt>The soundtrack</dt><dd id="airdd">Untouched.</dd></div>
         </dl>
         <p class="note">Illustrative scene, not from the game. Your choice is saved in this browser only, and nowhere else.</p>
         <button class="reset" id="reset" hidden>Forget me</button>
@@ -367,10 +445,17 @@ footer a{color:var(--dim);text-decoration:none}footer a:hover{color:#fff}
   <div class="wrap rg">
     <div class="eyebrow">The Kingdom of Seren</div>
     <h2>One kingdom. Four memories.</h2>
+    <p class="tracker" id="arch"></p>
     <div class="rpanel" id="rpanel" role="tabpanel" aria-live="polite"></div>
   </div>
   <div class="rtabs" role="tablist" aria-label="Regions" id="rlist"></div>
 </section>
+
+<dialog class="lore" id="lore" aria-labelledby="loreT">
+  <div class="fx" aria-hidden="true"></div><div class="lbar" id="lbar" aria-hidden="true"></div>
+  <button class="lclose" id="lclose" type="button">Close &#10005;</button>
+  <div class="lw" id="lw"></div>
+</dialog>
 
 <!-- ============ HOW IT PLAYS ============ -->
 <section id="play" data-label="How it plays">
@@ -442,7 +527,7 @@ const Snd={on:false,ctx:null,m:4,
     const d=c.createDelay(1.5);d.delayTime.value=.42;const fb=c.createGain();fb.gain.value=.45;
     const l2=c.createBiquadFilter();l2.type='lowpass';l2.frequency.value=1700;d.connect(l2);l2.connect(fb);fb.connect(d);
     const wet=c.createGain();wet.gain.value=.4;l2.connect(wet);wet.connect(m);this.fx=d;
-    const pad=c.createGain();pad.gain.value=.5;pad.connect(m);pad.connect(d);
+    const pad=this.pad=c.createGain();pad.gain.value=0;pad.connect(m);pad.connect(d);
     this.v=[0,1,2].map(i=>{const o=c.createOscillator(),f=c.createBiquadFilter(),g=c.createGain(),l=c.createOscillator(),lg=c.createGain();
       o.type=['sine','triangle','sawtooth'][i];f.type='lowpass';f.frequency.value=420;g.gain.value=[.14,.08,.035][i];
       l.frequency.value=.06+i*.045;lg.gain.value=i?150:0;l.connect(lg);lg.connect(f.frequency);l.start();
@@ -460,11 +545,61 @@ const Snd={on:false,ctx:null,m:4,
   holdUpdate(p){if(this.h){const t=this.ctx.currentTime;this.h.f.frequency.setTargetAtTime(200+p*1800,t,.05);this.h.o.frequency.setTargetAtTime(110+p*110,t,.05)}},
   holdStop(){if(this.h){const {o,g}=this.h,t=this.ctx.currentTime;g.gain.setTargetAtTime(0,t,.08);o.stop(t+.6);this.h=null}}
 };
-(function(){const b=$('#sound'),l=$('#soundLabel');let want=store.get('snd',false);
-  const ui=()=>{const on=Snd.on||want;b.setAttribute('aria-pressed',on);l.textContent=on?'Sound on':'Sound off'};
-  b.onclick=()=>{if(Snd.on){Snd.disable();want=false}else{want=Snd.enable()}store.set('snd',want);ui();Snd.tick()};
-  if(want)addEventListener('pointerdown',()=>{if(want&&!Snd.on)Snd.enable()},{once:true});
-  document.addEventListener('visibilitychange',()=>{if(!Snd.ctx)return;document.hidden?Snd.ctx.suspend():(Snd.on&&Snd.ctx.resume())});ui()})();
+/* ---------- soundtrack: the real OST, from the music/ folder ---------- */
+const DIRS=['music/','../music/'];/* folders to look in, in order */
+const TRACKS={
+ home:{f:'Do_You_Remember.ogg',t:'Do You Remember',s:'Piano'},
+ quiet:{f:'A_Quiet_Place.ogg',t:'A Quiet Place',s:'Ashbourne Valley OST'},
+ below:{f:'The_Quiet_Below.mp3',t:'The Quiet Below',s:'The Depths of Blackwood OST'}};
+/* which track plays in each region [Ashbourne, Constantina, Westfall, Blackwood], and how muffled it is. Swap in new tracks here. */
+const REGION_TRACK=['quiet','home','home','below'],REGION_TONE=[20000,20000,2600,20000];
+const RATE={round:1.03,quiet:.97,accuse:.92};
+/* live level of the music, read by the hero eye, the kingdom scenes, the glow on the title and the header bars */
+const Energy={v:0,kick:0,pk:.2,run:false};
+const Mus={on:false,cur:null,vol:+store.get('vol',.8)||.8,duck:1,el:{},g:{},pt:{},fade:{},dir:{},ready:false,routed:false,
+  init(){if(this.ready||!Snd.ctx)return;this.ready=true;const c=Snd.ctx;this.routed=location.protocol!=='file:';
+    if(this.routed){this.bus=c.createGain();this.lp=c.createBiquadFilter();this.lp.type='lowpass';this.lp.frequency.value=20000;
+      this.an=c.createAnalyser();this.an.fftSize=256;this.an.smoothingTimeConstant=.72;this.bus.connect(this.lp);this.lp.connect(this.an);this.lp.connect(Snd.master)}
+    Object.entries(TRACKS).forEach(([k,T])=>{const a=new Audio();a.preload='none';a.loop=true;a.preservesPitch=false;a.src=DIRS[0]+T.f;this.dir[k]=DIRS[0];this.el[k]=a;
+      a.addEventListener('error',()=>{const i=DIRS.indexOf(this.dir[k]||DIRS[0]);
+        if(i<DIRS.length-1){this.dir[k]=DIRS[i+1];a.src=DIRS[i+1]+T.f;a.load();if(this.on&&k===this.cur)a.play().catch(()=>{})}
+        else this.fail(k,a.currentSrc||a.src)});
+      if(this.routed){const s=c.createMediaElementSource(a),g=c.createGain();g.gain.value=0;s.connect(g);g.connect(this.bus);this.g[k]=g}else{a.volume=0;this.fade[k]=0}});
+    if(!this.routed)setInterval(()=>Object.keys(this.el).forEach(k=>{const a=this.el[k];a.volume=Math.max(0,Math.min(1,a.volume+(this.fade[k]-a.volume)*.12))}),60)},
+  start(){this.init();if(!this.ready)return;this.on=true;this.rate();if(Snd.pad)Snd.pad.gain.setTargetAtTime(0,Snd.ctx.currentTime,.6);syncZone();this.apply();energyStart()},
+  stop(){this.on=false;this.apply();this.cur=null;$('#np').classList.remove('show')},
+  want(k,tone){if(k!==this.cur){this.cur=k;this.announce(k)}
+    if(this.lp)this.lp.frequency.setTargetAtTime(tone,Snd.ctx.currentTime,.8);this.apply()},
+  apply(){if(!this.ready)return;const c=Snd.ctx;Object.keys(this.el).forEach(k=>{const live=this.on&&k===this.cur,tgt=live?this.vol*this.duck:0;clearTimeout(this.pt[k]);
+    if(this.routed)this.g[k].gain.setTargetAtTime(tgt,c.currentTime,.8);else this.fade[k]=tgt;
+    if(live){const a=this.el[k];if(a.paused)a.play().catch(()=>{})}
+    else this.pt[k]=setTimeout(()=>{if(!(this.on&&k===this.cur))this.el[k].pause()},3400)})},
+  setDuck(d){this.duck=d;this.apply()},
+  rate(){const r=RATE[store.get('tavern',null)]||1;Object.values(this.el).forEach(a=>{a.preservesPitch=false;a.playbackRate=r})},
+  fail(k,src){console.warn('Music file failed to load:',src);const n=$('#np');$('#npT').textContent='Music file not found';$('#npS').textContent=src.replace(location.origin,'');n.classList.add('show');clearTimeout(this._n);this._n=setTimeout(()=>n.classList.remove('show'),12000)},
+  announce(k){const T=TRACKS[k],n=$('#np');$('#npT').textContent=T.t;$('#npS').textContent=T.s;n.classList.add('show');clearTimeout(this._n);this._n=setTimeout(()=>n.classList.remove('show'),5200)}};
+function energyStart(){if(Energy.run||reduce)return;Energy.run=true;const root=document.documentElement,bars=$$('#sound .bars i');let buf,prev=0;
+  (function f(t){if(!Mus.on||document.hidden){Energy.run=false;Energy.v=Energy.kick=0;root.style.setProperty('--beat',0);bars.forEach(b=>b.style.height='');return}
+    let raw,b3;
+    if(Mus.an){buf=buf||new Uint8Array(Mus.an.frequencyBinCount);Mus.an.getByteFrequencyData(buf);
+      const avg=(a,z)=>{let s=0;for(let i=a;i<z;i++)s+=buf[i];return s/(z-a)/255};raw=avg(0,40);b3=[avg(0,4),avg(4,20),avg(20,64)]}
+    else{raw=.3+.2*Math.sin(t/650);b3=[raw,raw*.8,raw*.6]}
+    Energy.pk=Math.max(Energy.pk*.997,raw,.08);const n=Math.min(1,raw/Energy.pk);
+    Energy.kick=Math.max(0,n-prev-.05)*1.8;prev=n;Energy.v+=(n-Energy.v)*.25;
+    root.style.setProperty('--beat',Energy.v.toFixed(3));
+    bars.forEach((el,i)=>el.style.height=(3+Math.min(1,b3[i]/Energy.pk*1.6)*9).toFixed(1)+'px');
+    requestAnimationFrame(f)})(performance.now())}
+(function(){const b=$('#sound'),l=$('#soundLabel'),vol=$('#vol'),ask=$('#sndask');let want=store.get('snd',false);
+  const ui=()=>{const on=Snd.on||want;b.setAttribute('aria-pressed',on);l.textContent=on?'Sound on':'Sound off';b.classList.toggle('live',Snd.on&&!reduce)};
+  const hideAsk=()=>{ask.classList.remove('show');store.set('asked',true)};
+  const turnOn=()=>{const ok=Snd.enable();if(ok)Mus.start();return ok};
+  b.onclick=()=>{if(Snd.on){Snd.disable();Mus.stop();want=false}else{want=turnOn()}store.set('snd',want);hideAsk();ui();Snd.tick()};
+  $('#askYes').onclick=()=>{want=turnOn();store.set('snd',want);hideAsk();ui();Snd.tick()};
+  $('#askNo').onclick=hideAsk;
+  vol.value=Mus.vol;vol.oninput=()=>{Mus.vol=+vol.value;store.set('vol',Mus.vol);Mus.apply()};
+  if(want)addEventListener('pointerdown',()=>{if(want&&!Snd.on){turnOn();ui()}},{once:true});
+  else setTimeout(()=>{if(!Snd.on&&!store.get('asked',false))ask.classList.add('show')},4500);
+  document.addEventListener('visibilitychange',()=>{if(!Snd.ctx)return;if(document.hidden)Snd.ctx.suspend();else{if(Snd.on){Snd.ctx.resume();energyStart()}}});ui()})();
 
 /* ---------- header, progress, reveal, chapter rail ---------- */
 const hdr=$('#top'),prog=$('#prog');
@@ -504,7 +639,7 @@ $$('section[id],#hero').forEach(s=>so.observe(s));
     /* the eye opens at load, blinks now and then, and widens when clicked */
     const age=reduce?9e3:t-T0,wake=Math.min(1,Math.max(0,(age-300)/2300)),op=wake*wake*(3-2*wake);
     const ph=(t%6500)/6500,blink=ph>.96?Math.abs(Math.cos((ph-.96)/.04*Math.PI)):1;
-    pulse*=.94;const h=ry*op*blink*(1+pulse*.22);
+    pulse*=.94;pulse=Math.max(pulse,Energy.kick);const h=ry*op*blink*(1+pulse*.22);
     const ix=cx+px*rx*.3,iy=cy+py*ry*.45,ir=Math.round(ry*.9*(1+pulse*.18));
     const lid=u=>Math.round(h*(1-Math.pow(Math.abs(u),1.7)));
     const q=g.createRadialGradient(cx,cy,0,cx,cy,rx*1.6);q.addColorStop(0,`rgba(139,92,246,${.28*op+pulse*.3})`);q.addColorStop(1,'rgba(139,92,246,0)');g.fillStyle=q;g.fillRect(cx-rx*1.7,cy-rx*1.7,rx*3.4,rx*3.4);
@@ -557,14 +692,14 @@ function paintAll(){THREADS.forEach((_,i)=>paint(i));const f=found(),n=[0,1,2].f
   $('#tracker').innerHTML=`<span>Echoes heard ${n} of 3</span>`+[0,1,2].map(i=>`<u class="${f.includes(i)?'on':''}"></u>`).join('');$('#allHeard').hidden=n<3}
 paintAll();
 let hold=null;
-function startHold(i){if(hold)return;const li=ol.children[i],b=li.querySelector('.listen');hold={i,li,b,t0:performance.now(),raf:0,last:0};b.classList.add('on');li.querySelector('.frag').classList.add('live');Snd.holdStart();step()}
+function startHold(i){if(hold)return;const li=ol.children[i],b=li.querySelector('.listen');hold={i,li,b,t0:performance.now(),raf:0,last:0};Mus.setDuck(.35);b.classList.add('on');li.querySelector('.frag').classList.add('live');Snd.holdStart();step()}
 function step(){const h=hold;if(!h)return;const now=performance.now(),p=Math.min(1,(now-h.t0)/HOLD);ring(h.li,p);Snd.holdUpdate(p);
   if(!heard(h.i)&&now-h.last>70){h.last=now;h.li.querySelector('.frag').innerHTML=garble(h.i,p)}
   if(p>=1)return finish();h.raf=requestAnimationFrame(step)}
 function finish(){const {i,li}=hold,first=!heard(i);end(true);
   if(first){const f=found();f.push(i);store.set('found',f);li.querySelector('.sr').textContent=F[i]}
   Snd.chime([392,587.3,783.99],.13,3);paintAll()}
-function end(done){if(!hold)return;cancelAnimationFrame(hold.raf);const {i,b,li}=hold;hold=null;b.classList.remove('on');li.querySelector('.frag').classList.remove('live');Snd.holdStop();if(!done)paint(i)}
+function end(done){if(!hold)return;cancelAnimationFrame(hold.raf);const {i,b,li}=hold;hold=null;Mus.setDuck(1);b.classList.remove('on');li.querySelector('.frag').classList.remove('live');Snd.holdStop();if(!done)paint(i)}
 $$('.listen').forEach((b,i)=>{
   b.addEventListener('pointerdown',e=>{e.preventDefault();b.setPointerCapture?.(e.pointerId);startHold(i)});
   ['pointerup','pointercancel','lostpointercapture'].forEach(ev=>b.addEventListener(ev,()=>end(false)));
@@ -590,7 +725,7 @@ function drawScene(){
      <div class="say world"><span id="say1"></span><small id="sm1" class="in">What do you do?</small></div>
      <div class="choices">${Object.entries(CH).map(([id,c])=>`<button data-c="${id}">${c.label}</button>`).join('')}</div>`;
     typeText($('#say1'),'The tavern goes quiet as you step inside. A fire, a few farmers, and a man by the hearth who will not meet your eye.',20);
-    $$('.choices button').forEach(b=>b.onclick=()=>{Snd.tick();store.set('tavern',b.dataset.c);Snd.chime([293.7,440],.07,2);drawScene()});
+    $$('.choices button').forEach(b=>b.onclick=()=>{Snd.tick();store.set('tavern',b.dataset.c);Mus.rate();Snd.chime([293.7,440],.07,2);drawScene()});
   }else{
     const c=CH[k];
     $('#repu').textContent=c.rep;$('#seen').textContent='Ashbourne, in the tavern.';$('#reset').hidden=false;
@@ -600,15 +735,17 @@ function drawScene(){
     typeText($('#say1'),c.next,24,()=>$('#sm1').classList.add('in'));
   }
 }
-$('#reset').onclick=()=>{store.del('tavern');drawScene()};
+$('#reset').onclick=()=>{store.del('tavern');Mus.rate();drawScene()};
+const AIR={round:'Warmer, a little brighter.',quiet:'Hushed, a little lower.',accuse:'Low and slow. Something is wrong.'};
+const _ds=drawScene;drawScene=function(){_ds();$('#airdd').textContent=AIR[store.get('tavern',null)]||'Untouched.'};
 drawScene();
 
 /* ---------- the kingdom: four pixel worlds ---------- */
 const RG=[
- {n:'Ashbourne',k:'Farmland &middot; Markets &middot; The tavern',c:['#6dbf2a','#f0d33a','#050802'],names:['green','yellow','black'],d:'Farms, markets, and a tavern where everyone knows your name. Peaceful, for now.',s:'Golden harvest light, windmills and bunting, and the sense that every smile is guarding something.',w:'The harvest smells of smoke this year.',a:['#6dbf2a','#f0d33a','#2f6b1f','#050802']},
- {n:'Constantina',k:'Capital &middot; Cathedrals &middot; Industry',c:['#d4202e','#f3efe8','#050405'],names:['red','white','black'],d:'A gothic capital of cathedrals and factories. Power lives here, and so does the poverty beside it.',s:'Empty streets under red banners, chimneys that never stop, and a city that watches itself.',w:'The chimneys never stop. Nobody is out to hear them.',a:['#d4202e','#f3efe8','#7a0f18','#050405']},
- {n:'Westfall',k:'Frontier &middot; Citadel &middot; The Schism',c:['#8a929c','#8fb0d6','#06080b'],names:['grey','faint blue','black'],d:'A frontier citadel worn down by war. Here the Schism is not history. People remember it.',s:'Cold, damaged and isolated. The people here do not need an Echo to remember what happened.',w:'The wind here carries names.',a:['#8a929c','#8fb0d6','#4a525c','#06080b']},
- {n:'Blackwood',k:'Forest &middot; Ancient &middot; Unmapped',c:['#2a7a52','#3b82ff','#020605'],names:['dark green','blue','black'],d:'A forest so old the sunlight gives up. Something was here long before Seren.',s:'Deep shade, still water, and a quiet that feels like being listened to.',w:'Something older than the kingdom watches. Not me.',a:['#2a7a52','#3b82ff','#0f4a35','#020605'],anc:1}
+ {n:'Ashbourne',t:"Ashbourne Valley",tag:"The valley remembers.",b:"A peaceful countryside city built around generations of farming, trade and community.",lore:["Ashbourne is one of the oldest continuously inhabited settlements in Seren, built around the fertile valley and the rivers that run through it. Unlike Constantina and Westfall, it was never primarily founded as a seat of political or military power.", "For centuries, Ashbourne served as an agricultural and trading centre. Farmers from the surrounding countryside brought crops, livestock, and materials into the city, while merchants carried goods along the old roads connecting the valley to the rest of Seren.", "Because of its distance from the kingdom's political centre, Ashbourne developed a strong local identity. Families often lived in the valley for generations, and many of its traditions existed long before the modern kingdom took shape.", "The city was largely spared from the worst of the early conflict between Constantina and Westfall. This made Ashbourne a place where refugees, travellers, and people trying to escape the war could find some degree of safety.", "That safety, however, has never meant complete isolation. The conflict has gradually reached the valley through displaced families, returning soldiers, political arguments, and shortages of supplies.", ["Seen from outside", "To outsiders, Ashbourne represents the peaceful side of Seren.", "Lived from within", "To the people who live there, it is simply home."]],q:"What is worth protecting?",k:'Farmland &middot; Markets &middot; The tavern',c:['#6dbf2a','#f0d33a','#050802'],names:['green','yellow','black'],d:'Farms, markets, and a tavern where everyone knows your name. Peaceful, for now.',s:'Golden harvest light, windmills and bunting, and the sense that every smile is guarding something.',w:'The harvest smells of smoke this year.',a:['#6dbf2a','#f0d33a','#2f6b1f','#050802']},
+ {n:'Constantina',t:"Constantina",tag:"The heart of Seren.",b:"The capital of the kingdom: cathedrals, monuments and factories, and the largest city in Seren.",lore:["Constantina began as a major settlement at the centre of Seren's political and economic network, eventually becoming the seat of the kingdom's government.", "Over generations, the city expanded far beyond its original boundaries. Grand cathedrals, government buildings, monuments, bridges, markets, and enormous residential districts transformed Constantina into the largest city in Seren.", "Its influence grew alongside its wealth.", "Trade flowed through the capital, and new industries began appearing throughout the city. Workshops became factories, old roads became major transport routes, and parts of Constantina began changing faster than the traditions surrounding them could keep up.", "When the Schism divided Seren, Constantina became the centre of one side of the conflict.", "The city increasingly presented itself as the defender of Seren itself. Its government, military, monuments, and public institutions reinforced the idea that Constantina represented order, progress, and the continuation of the kingdom.", "The phrase <em>SEREN VAIL</em> became deeply associated with this identity.", "But Constantina's prosperity came with a cost. Wealth and power became concentrated within certain districts, while workers, soldiers, refugees, and poorer families experienced a very different version of the capital.", "Even within the city, there is no single Constantina.", ["On display", "There is the Constantina shown in monuments and government buildings.", "Lived beneath", "And there is the Constantina experienced by the people who live beneath them."]],q:"How much can a society justify in the name of progress?",k:'Capital &middot; Cathedrals &middot; Industry',c:['#d4202e','#f3efe8','#050405'],names:['red','white','black'],d:'A gothic capital of cathedrals and factories. Power lives here, and so does the poverty beside it.',s:'Empty streets under red banners, chimneys that never stop, and a city that watches itself.',w:'The chimneys never stop. Nobody is out to hear them.',a:['#d4202e','#f3efe8','#7a0f18','#050405']},
+ {n:'Westfall',t:"Westfall Citadel",tag:"The city that remembers.",b:"A walled frontier city on Seren's western edge, still standing after a long war.",lore:["Westfall was originally established as a fortified settlement on the western frontier of Seren.", "Its position made it strategically important. Roads from the western regions passed through the city, and its enormous walls protected the surrounding settlements from threats beyond the frontier.", "For generations, Westfall grew around its military role. Soldiers, craftsmen, merchants, and civilians all became part of the city's identity.", "When the Schism occurred, Westfall became one of the most important centres opposing Constantina.", "What began as political division eventually became a prolonged conflict.", "Westfall was repeatedly attacked and damaged throughout the war. Entire districts were destroyed, while others were abandoned as their inhabitants were displaced. The city's fortifications, once symbols of protection, became reminders of how long the conflict had lasted.", "The people of Westfall developed their own understanding of the war.", ["As Constantina tells it", "To Constantina, Westfall became a symbol of rebellion and division.", "As Westfall tells it", "To many people in Westfall, Constantina became the power that had destroyed their homes and attempted to erase their independence."], "Neither population experienced the conflict in exactly the same way.", "Even after the fighting began to subside, Westfall never truly recovered. Its people still live among the ruins, rebuilt streets, military structures, and memories of those who never returned.", "Westfall is not simply a ruined city.", "It is a city that remembers."],q:"What happens when history belongs to the people who survived it?",k:'Frontier &middot; Citadel &middot; The Schism',c:['#8a929c','#8fb0d6','#06080b'],names:['grey','faint blue','black'],d:'A frontier citadel worn down by war. Here the Schism is not history. People remember it.',s:'Cold, damaged and isolated. The people here do not need an Echo to remember what happened.',w:'The wind here carries names.',a:['#8a929c','#8fb0d6','#4a525c','#06080b']},
+ {n:'Blackwood',t:"Blackwood",tag:"Unmapped.",b:"A forest so old the sunlight gives up. Something was here long before Seren.",sealed:1,lore:[],q:"",k:'Forest &middot; Ancient &middot; Unmapped',c:['#2a7a52','#3b82ff','#020605'],names:['dark green','blue','black'],d:'A forest so old the sunlight gives up. Something was here long before Seren.',s:'Deep shade, still water, and a quiet that feels like being listened to.',w:'Something older than the kingdom watches. Not me.',a:['#2a7a52','#3b82ff','#0f4a35','#020605'],anc:1}
 ];
 const rl=$('#rlist'),rp=$('#rpanel'),sec=$('#seren');let cur=0,renderLand=()=>{};
 RG.forEach((r,i)=>{const b=document.createElement('button');b.setAttribute('role','tab');b.dataset.i=i;
@@ -619,12 +756,53 @@ RG.forEach((r,i)=>{const b=document.createElement('button');b.setAttribute('role
 function setRegion(i){const r=RG[i];cur=i;
   $$('#rlist button').forEach((b,j)=>{b.setAttribute('aria-selected',j===i);b.tabIndex=j===i?0:-1});
   sec.style.setProperty('--acc',r.a[0]);sec.style.setProperty('--acc2',r.a[1]);sec.style.setProperty('--acc3',r.a[2]);
-  rp.innerHTML=`<span class="kind">${r.k}</span><h3 class="hd">${r.n}</h3><p>${r.d}</p><p class="scene-note">${r.s}</p>
-   <p class="scene-note mono">Palette: ${r.names.join(' / ')}</p><p class="whisper ${r.anc?'ancient':'world'}"></p>`;
-  typeText(rp.querySelector('.whisper'),'&ldquo;'+r.w+'&rdquo;',30);Snd.mood(i);renderLand()}
+  rp.innerHTML=`<span class="kind">${r.k}</span><h3 class="hd">${r.t}</h3><p class="rtag world">${r.tag}</p><p>${r.b}</p>
+   <button class="btn learn" type="button" data-i="${i}">Learn more <span aria-hidden="true">&rarr;</span></button><p class="whisper ${r.anc?'ancient':'world'}"></p>`;
+  rp.querySelector('.learn').onclick=e=>openLore(i,e.currentTarget);
+  typeText(rp.querySelector('.whisper'),'&ldquo;'+r.w+'&rdquo;',30);Snd.mood(i);syncZone();renderLand()}
 let busy=false;
 function go(i){i=(i+4)%4;if(i===cur||busy)return;if(reduce){setRegion(i);return}busy=true;Snd.tick();const bl=$('#blink');bl.classList.remove('go');void bl.offsetWidth;bl.classList.add('go');
   setTimeout(()=>setRegion(i),290);setTimeout(()=>{busy=false;bl.classList.remove('go')},780)}
+/* the music and the cursor glow follow whichever region you are in */
+let inSeren=false,loreOpen=false;
+function syncZone(){const z=inSeren||loreOpen;document.documentElement.style.setProperty('--ac',z?RG[cur].a[0]:'#8b5cf6');
+  if(Mus.on)Mus.want(z?REGION_TRACK[cur]:'home',z?REGION_TONE[cur]:20000)}
+new IntersectionObserver(es=>{inSeren=es[0].isIntersecting;syncZone()},{rootMargin:'-30% 0px -30% 0px'}).observe(sec);
+addEventListener('keydown',e=>{if(!inSeren||loreOpen||e.target.closest('input,textarea'))return;if(e.key==='ArrowRight')go(cur+1);else if(e.key==='ArrowLeft')go(cur-1)});
+
+/* ---------- archive: the deeper record behind each place ---------- */
+const lore=$('#lore'),lw=$('#lw'),lbar=$('#lbar');let loreI=0,loreIO=null,lastBtn=null;
+const readList=()=>{const a=store.get('lore',[]);return Array.isArray(a)?a:[]};
+function paintArch(){const r=readList(),n=[0,1,2].filter(i=>r.includes(i)).length;
+  $('#arch').innerHTML=`<span>Archive read ${n} of 3${n>=3?'. One entry is sealed.':''}</span>`+[0,1,2].map(i=>`<u class="${r.includes(i)?'on':''}"></u>`).join('');
+  $$('#rlist button').forEach((b,j)=>b.classList.toggle('read',r.includes(j)))}
+function loreHTML(i){const r=RG[i],p=RG[(i+3)%4],n=RG[(i+1)%4];let body;
+  if(r.sealed){const rr=mulberry(9);body=`<div class="sealed rv">${[...Array(9)].map(()=>`<span class="bar" style="width:${Math.round(38+rr()*62)}%"></span>`).join('')}
+    <p class="ancient">${r.w}</p><p class="note">Sealed. Nobody has written this one down yet.</p></div>`}
+  else body=r.lore.map((b,k)=>Array.isArray(b)?`<div class="twin rv"><div><small>${b[0]}</small><p class="world">${b[1]}</p></div><div><small>${b[2]}</small><p class="world">${b[3]}</p></div></div>`
+    :`<p class="lp rv ${k===0?'lead':''} ${b.length<80?'beat':''}">${b}</p>`).join('');
+  return `<span class="kind">Beyond the signposts &middot; ${r.k}</span><h2 id="loreT">${r.t}</h2><p class="tag world">${r.tag}</p><p class="scn">${r.s}</p><div class="rule"></div>${body}
+   ${r.q?`<div class="q rv" id="lq"><small>The question this place asks</small><p class="world">${r.q}</p></div>`:''}
+   <nav class="lnav" aria-label="Archive"><button class="btn" type="button" data-d="-1">&larr; ${p.t}</button><button class="btn solid" type="button" data-d="1">${n.t} &rarr;</button></nav>`}
+function renderLore(i,swap){loreI=i;const r=RG[i];lore.style.setProperty('--acc',r.a[0]);lore.style.setProperty('--acc2',r.a[1]);lore.style.setProperty('--acc3',r.a[2]);
+  lw.innerHTML=loreHTML(i);lw.classList.remove('swap');if(swap){void lw.offsetWidth;lw.classList.add('swap')}lore.scrollTop=0;lbar.style.transform='scaleX(0)';
+  $$('#lw [data-d]').forEach(b=>b.onclick=()=>{const j=(loreI+(+b.dataset.d)+4)%4;setRegion(j);renderLore(j,true);Snd.tick()});
+  loreIO&&loreIO.disconnect();
+  loreIO=new IntersectionObserver(es=>es.forEach(e=>{if(!e.isIntersecting)return;e.target.classList.add('in');
+    if(e.target.id==='lq'&&!readList().includes(loreI)){const a=readList();a.push(loreI);store.set('lore',a);paintArch();Snd.chime([392,587.3],.08,2.4)}}),{root:lore,threshold:.25});
+  $$('#lw .rv').forEach(el=>loreIO.observe(el))}
+function openLore(i,btn){lastBtn=btn||lastBtn;if(btn){const r=btn.getBoundingClientRect();lore.style.setProperty('--ox',(r.left+r.width/2)+'px');lore.style.setProperty('--oy',(r.top+r.height/2)+'px')}
+  renderLore(i,false);lore.classList.remove('out');loreOpen=true;syncZone();Snd.chime([196,293.7,392],.07,3.2);
+  lore.showModal?lore.showModal():lore.setAttribute('open','')}
+function closeLore(){if(!lore.open)return;if(reduce){lore.close();return}lore.classList.add('out');setTimeout(()=>lore.close(),340)}
+lore.addEventListener('close',()=>{lore.classList.remove('out');loreOpen=false;loreIO&&loreIO.disconnect();syncZone();const b=rp.querySelector('.learn');b&&b.focus({preventScroll:true})});
+$('#lclose').onclick=closeLore;
+lore.addEventListener('cancel',e=>{e.preventDefault();closeLore()});
+lore.addEventListener('scroll',()=>{lbar.style.transform=`scaleX(${lore.scrollTop/Math.max(1,lore.scrollHeight-lore.clientHeight)})`},{passive:true});
+lore.addEventListener('pointermove',e=>{lore.style.setProperty('--mx',e.clientX+'px');lore.style.setProperty('--my',e.clientY+'px')},{passive:true});
+lore.addEventListener('keydown',e=>{if(e.key==='ArrowRight'||e.key==='ArrowLeft'){const j=(loreI+(e.key==='ArrowRight'?1:3))%4;setRegion(j);renderLore(j,true)}});
+paintArch();
+
 let sx=null;sec.addEventListener('touchstart',e=>{sx=e.touches[0].clientX},{passive:true});
 sec.addEventListener('touchend',e=>{if(sx===null)return;const d=e.changedTouches[0].clientX-sx;sx=null;if(Math.abs(d)>70)go(cur+(d<0?1:-1))},{passive:true});
 
@@ -699,7 +877,8 @@ sec.addEventListener('touchend',e=>{if(sx===null)return;const d=e.changedTouches
     const rr=(t/40)%46;g.globalAlpha=1-rr/46;for(let k=0;k<360;k+=4){const a=k*Math.PI/180;R(ox+Math.cos(a)*rr,wy+14+Math.sin(a)*rr*.22,1,1,'#9cc3ff')}g.globalAlpha=1;
     parts(t,3)}
   const SCENES=[ashbourne,constantina,westfall,blackwood];
-  function frame(t){const live=t-lastMove<3000;if(!live)tpx=Math.sin(t/4000)*.6;px+=(tpx-px)*.06;g.clearRect(0,0,W,H);SCENES[cur](t);g.globalAlpha=1}
+  function frame(t){const live=t-lastMove<3000;if(!live)tpx=Math.sin(t/4000)*.6;px+=(tpx-px)*.06;g.clearRect(0,0,W,H);SCENES[cur](t);g.globalAlpha=1;
+    if(Energy.v>.02){glow(W*.5,H*.66,H*.95,hex(RG[cur].a[0]).join(','),Energy.v*.2);g.globalAlpha=1}}
   function loop(t){if(!vis||document.hidden){running=false;return}frame(t);requestAnimationFrame(loop)}
   function kick(){if(!running&&!reduce){running=true;requestAnimationFrame(loop)}}
   renderLand=()=>{if(reduce&&W)frame(0)};
@@ -708,6 +887,21 @@ sec.addEventListener('touchend',e=>{if(sx===null)return;const d=e.changedTouches
   new IntersectionObserver(es=>{vis=es[0].isIntersecting;kick()},{rootMargin:'100px'}).observe(sec);
   document.addEventListener('visibilitychange',kick);
   setRegion(0);reduce&&frame(0);
+})();
+
+/* ---------- reactive layer: cursor aura, card spotlights, magnetic buttons ---------- */
+(function(){if(matchMedia('(hover:none)').matches)return;
+  $$('.loop article,.pillars div,.ledger2,.cta').forEach(el=>el.classList.add('spot'));
+  const aura=$('#aura');let ax=0,ay=0,tx=0,ty=0,run=false;
+  new IntersectionObserver(es=>aura.classList.toggle('off',es[0].isIntersecting)).observe($('#hero'));
+  function af(){ax+=(tx-ax)*.12;ay+=(ty-ay)*.12;aura.style.transform=`translate(${ax.toFixed(1)}px,${ay.toFixed(1)}px) scale(${(1+Energy.v*.25).toFixed(3)})`;
+    if(Math.abs(tx-ax)+Math.abs(ty-ay)>.5||Energy.v>.02)requestAnimationFrame(af);else run=false}
+  addEventListener('pointermove',e=>{
+    if(!reduce){tx=e.clientX;ty=e.clientY;aura.classList.add('on');if(!run){run=true;requestAnimationFrame(af)}}
+    const s=e.target.closest&&e.target.closest('.spot');if(s){const r=s.getBoundingClientRect();s.style.setProperty('--mx',(e.clientX-r.left)+'px');s.style.setProperty('--my',(e.clientY-r.top)+'px')}
+    if(reduce)return;const b=e.target.closest&&e.target.closest('.btn:not([aria-disabled=true])');
+    if(b){const r=b.getBoundingClientRect();b.style.translate=`${((e.clientX-r.left)/r.width-.5)*10}px ${((e.clientY-r.top)/r.height-.5)*8}px`}},{passive:true});
+  addEventListener('pointerout',e=>{const b=e.target.closest&&e.target.closest('.btn');if(b)b.style.translate=''},{passive:true});
 })();
 
 /* ---------- steam button: set STEAM_URL at the top to switch it on ---------- */
