@@ -170,7 +170,10 @@ main,footer,header{transition:opacity .5s,visibility .5s}
 .artbar button:hover{border-color:var(--glow)}
 .artbar span{min-width:9.5rem;text-align:center}
 body.art .artbar{opacity:1;visibility:visible;pointer-events:auto;transform:translate(-50%,0)}
-body.art.idle .artbar{opacity:0;pointer-events:none}
+body.art.idle .artbar,body.art.nui .artbar{opacity:0;pointer-events:none;visibility:hidden}
+body.art.nui{cursor:none}
+.arthint{position:fixed;left:50%;bottom:1.6rem;transform:translateX(-50%);z-index:60;font:400 .72rem Plex,monospace;letter-spacing:.14em;text-transform:uppercase;color:#fff;background:rgba(5,4,8,.72);border:1px solid #3a3350;padding:.5rem .9rem;opacity:0;pointer-events:none;transition:opacity .4s}
+.arthint.on{opacity:1}
 body.art.idle{cursor:none}
 @media(max-width:700px){.hr{gap:.6rem}.msnd{padding:.4rem .6rem;font-size:.68rem}}
 .note{margin-top:1.2rem;font-size:.85rem;color:var(--dim)}
@@ -222,7 +225,8 @@ body.art.idle{cursor:none}
   <button class="echo" data-e="2">listen closely</button>
 </footer>
 <img id="sir" src="good_day_sir.png" alt="A catfish in a small black top hat">
-<div class="artbar" id="artbar" role="toolbar" aria-label="Artwork viewer"><button id="artPrev" type="button" aria-label="Previous scene">&lt;</button><span id="artName" aria-live="polite">UNSHADED</span><button id="artNext" type="button" aria-label="Next scene">&gt;</button><button id="artExit" type="button">Exit</button></div>
+<div class="artbar" id="artbar" role="toolbar" aria-label="Artwork viewer"><button id="artPrev" type="button" aria-label="Previous scene">&lt;</button><span id="artName" aria-live="polite">UNSHADED</span><button id="artNext" type="button" aria-label="Next scene">&gt;</button><button id="artHide" type="button" aria-label="Hide controls (press H to show again)">Hide UI</button><button id="artExit" type="button">Exit</button></div>
+<div class="arthint" id="artHint" aria-hidden="true">Press H to show controls</div>
 <div id="ancient" role="status" aria-live="polite"></div>
 
 <script>
@@ -335,7 +339,7 @@ unshaded:{dark:.5,ink:'5,4,8',glow:'139,92,246',
   ridge(H*.78,6,.03,2,'#1d1040');ridge(H*.86,5,.05,5,'#0b0618');
   this.m.forEach(m=>{gust(m,26,.7);m.vx+=(w*.15-m.vx)*.03;m.x+=m.vx;m.y+=m.vy;m.vy+=(-.12-m.vy)*.02;if(m.y<-4){m.y=H+4;m.x=rnd(0,W)}wrapP(m);g.globalAlpha=.4+.5*Math.sin(t/500+m.ph);R(m.x,m.y,1,1,'#b79cff');g.globalAlpha=1})}},
 
-/* ASHBOURNE: black, green, yellow. Golden harvest, birds, leaves, wheat, windmill, bunting */
+/* ASHBOURNE: black, green, yellow. Golden harvest, birds, leaves, wheat, windmill */
 ashbourne:{dark:.42,ink:'3,5,2',glow:'240,211,58',
  click(px,py){if(Math.hypot(px-this.mx,py-this.mh)<26){this.spin=.6;secret('mill','The mill remembers being busy.')}},
  init(){this.a=0;this.fk=makeFolk(26,H-15,5,['#f0d33a','#6dbf2a','#c9d84a']);
@@ -351,12 +355,6 @@ ashbourne:{dark:.42,ink:'3,5,2',glow:'240,211,58',
   for(let k=0;k<26;k++)R(mx-(8-k*.12)/2,mb-k,8-k*.12,1,'#030501');
   this.a+=.012*w+near(mx,mh,40)*.08+this.spin;
   for(let k=0;k<4;k++){const q=this.a+k*Math.PI/2;line(mx,mh,mx+Math.cos(q)*20,mh+Math.sin(q)*20,'#030501')}
-  /* bunting between two poles, pennants flutter and snap near the cursor */
-  const x0=Math.round(W*.06),x1=Math.round(W*.6),y0=Math.round(H*.16);
-  R(x0,y0-3,2,34,'#030501');R(x1,y0-3,2,34,'#030501');
-  for(let x=x0;x<x1;x++)R(x,y0+Math.sin((x-x0)/(x1-x0)*Math.PI)*12,1,1,'#44631f');
-  for(let i=1;i<(x1-x0)/8;i++){const px=x0+i*8,py=y0+Math.sin(i*8/(x1-x0)*Math.PI)*12,sw=Math.sin(t/260+i*.8)*1.2*w+near(px,py,30)*Math.sin(t/70+i)*2.5,c=['#f0d33a','#6dbf2a','#c9d84a'][i%3];
-   for(let k=0;k<5;k++)R(px-(5-k)/2+sw*k/4,py+1+k,5-k,1,c)}
   /* birds flock toward each other and scatter from the cursor */
   let fx=0,fy=0;this.b.forEach(b=>{fx+=b.x;fy+=b.y});fx/=this.b.length;fy/=this.b.length;
   this.b.forEach(b=>{/* calm cursor = birds come close to look, fast cursor = they scatter */
@@ -758,18 +756,23 @@ $('#solo').onclick=()=>$('#sir').classList.toggle('on');
 (function(){const SCN=[['unshaded','UNSHADED'],['ashbourne','Ashbourne'],['constantina','Constantina'],['westfall','Westfall'],['blackwood','Blackwood']];
   const bar=$('#artbar'),nm=$('#artName'),btn=$('#artBtn');let i=0,idle=0,fs=false;
   const show=()=>{const [k,n]=SCN[i];setScene(k);document.body.dataset.r=k==='unshaded'?'':k;nm.textContent=n};
-  const wake=()=>{document.body.classList.remove('idle');clearTimeout(idle);if(art.on)idle=setTimeout(()=>document.body.classList.add('idle'),3200)};
+  const wake=()=>{if(document.body.classList.contains('nui'))return;document.body.classList.remove('idle');clearTimeout(idle);if(art.on)idle=setTimeout(()=>document.body.classList.add('idle'),3200)};
   async function enter(){if(art.on)return;art.on=true;i=Math.max(0,SCN.findIndex(x=>x[0]===sceneName));document.body.classList.add('art');btn.setAttribute('aria-pressed',true);show();wake();
     const r=document.documentElement.requestFullscreen||document.documentElement.webkitRequestFullscreen;
     if(r){try{await r.call(document.documentElement);fs=true}catch(e){fs=false}}}
-  function leave(){if(!art.on)return;art.on=false;clearTimeout(idle);document.body.classList.remove('art','idle');btn.setAttribute('aria-pressed',false);
+  function leave(){if(!art.on)return;art.on=false;clearTimeout(idle);document.body.classList.remove('art','idle','nui');hint.classList.remove('on');btn.setAttribute('aria-pressed',false);
     const x=document.fullscreenElement||document.webkitFullscreenElement;if(x){(document.exitFullscreen||document.webkitExitFullscreen).call(document)}fs=false;refresh()}
   const step=d=>{i=(i+d+SCN.length)%SCN.length;show();wake()};
+  const hint=$('#artHint');let ht=0;
+  const ui=on=>{document.body.classList.toggle('nui',!on);if(on){hint.classList.remove('on');wake()}else{clearTimeout(idle);hint.classList.add('on');clearTimeout(ht);ht=setTimeout(()=>hint.classList.remove('on'),2800)}};
+  const touch=matchMedia('(hover:none)').matches;
+  $('#artHide').addEventListener('click',()=>{hint.textContent=touch?'Tap with two fingers to show controls':'Press H to show controls';ui(false)});
+  addEventListener('touchstart',e=>{if(art.on&&e.touches.length>=2&&document.body.classList.contains('nui'))ui(true)},{passive:true});
   btn.addEventListener('click',enter);$('#artExit').addEventListener('click',leave);
   $('#artPrev').addEventListener('click',()=>step(-1));$('#artNext').addEventListener('click',()=>step(1));
   /* Esc leaves browser full screen on its own; follow it out */
   ['fullscreenchange','webkitfullscreenchange'].forEach(ev=>document.addEventListener(ev,()=>{if(fs&&art.on&&!(document.fullscreenElement||document.webkitFullscreenElement))leave()}));
-  addEventListener('keydown',e=>{if(!art.on)return;if(e.key==='ArrowLeft'){step(-1)}else if(e.key==='ArrowRight'){step(1)}else if(e.key==='Escape'){leave()}else return;wake()});
+  addEventListener('keydown',e=>{if(!art.on)return;if(e.key==='ArrowLeft'){step(-1)}else if(e.key==='ArrowRight'){step(1)}else if(e.key==='Escape'){leave();return}else if(e.key==='h'||e.key==='H'){ui(document.body.classList.contains('nui'));return}else return;wake()});
   ['pointermove','pointerdown','touchstart'].forEach(ev=>addEventListener(ev,()=>{if(art.on)wake()},{passive:true}))
 })();
 </script>
