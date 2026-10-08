@@ -11,51 +11,37 @@
 <link rel="stylesheet" href="legal.css">
 <script src="legal.js" defer></script>
 </head>
-<body>
+<body id="top">
 <a class="skip" href="#main">Skip to content</a>
-<div class="prog" id="prog" aria-hidden="true"></div>
+<div id="prog" aria-hidden="true"></div>
 <canvas id="motes" aria-hidden="true"></canvas>
-<div class="aura" id="aura" aria-hidden="true"></div>
 <header>
   <a class="brand pix" href="index.html">UNSHADED</a>
-  <nav aria-label="Site"><a href="index.html">The Game</a><a href="eula.html">EULA</a><a href="terms.html">Terms</a><a href="privacy.html">Privacy</a><a href="contact.html" aria-current="page">Contact</a><a href="../index.html">Portfolio</a></nav>
+  <nav aria-label="Site"><a href="index.html">The Game</a><a href="mods.html">Mods</a><a href="eula.html">EULA</a><a href="terms.html">Terms</a><a href="privacy.html">Privacy</a><a href="contact.html" aria-current="page">Contact</a><a href="../index.html">Portfolio</a></nav>
 </header>
 <main id="main">
 <div class="center">
-<p class="meta">Contact</p>
 <h1>Get in touch</h1>
-<p class="lede" style="text-align:left">Need support? Found a bug? Have a business inquiry, or just want to say hi and share your thoughts on UNSHADED? We would love to hear from you.</p>
-<p class="meta" style="margin-top:2.5rem">Official support email</p><br>
+<p class="lede" style="margin-left:auto;margin-right:auto">Need support? Found a bug? Have a business inquiry, or just want to say hi and share your thoughts on UNSHADED? We would love to hear from you.</p>
+<p class="updated" style="margin-top:2.5rem;margin-bottom:0">Support email</p>
 <button class="email" id="email" type="button">soloprodigydev@gmail.com</button>
-<p class="copy-hint" id="hint">Click to copy</p>
-<p style="margin-top:2rem;color:var(--dim);font-style:italic">Replies may take a few days, especially during development crunch. Thanks for your patience.</p>
+<p class="hint" id="hint">Click to copy</p>
+<p style="margin-top:2rem;color:var(--dim);font-style:italic">Replies can take a few days, especially when I'm crunching on the game. Thanks for waiting.</p>
 </div>
 <div class="grid">
-  <div class="card"><span class="tag-label">01 / Bugs</span><h3>Bug reports</h3><p>Found a glitch? Help us squash it by sending a detailed report, with screenshots if you can.</p></div>
-  <div class="card"><span class="tag-label">02 / Business</span><h3>Business inquiries</h3><p>Interested in partnerships, press coverage or collaboration? Let's talk.</p></div>
-  <div class="card"><span class="tag-label">03 / Feedback</span><h3>General feedback</h3><p>We love hearing what players think. Your feedback helps shape the game's future.</p></div>
+  <div class="card"><h3>Bug reports</h3><p>Found a glitch? Send a detailed report, with screenshots if you can.</p></div>
+  <div class="card"><h3>Business</h3><p>Partnerships, press or collaboration? Let's talk.</p></div>
+  <div class="card"><h3>Feedback</h3><p>Tell me what you think of the game. It really does shape what I build next.</p></div>
 </div>
 <p class="center" style="color:var(--dim)">Elsewhere: <a href="https://github.com/soloprodigydev">GitHub</a> &middot; <a href="https://beacons.ai/soloprodigy">Beacons</a></p>
-<div class="toast" id="toast" role="status">Email copied to clipboard</div>
 </main>
 <footer>
-  <div class="fglow" aria-hidden="true"></div>
-  <div class="wrap">
-    <div class="fbrand"><span class="pix fmark">UNSHADED</span><p class="world">Find out what actually happened.</p></div>
-    <nav class="flinks" aria-label="Legal and contact"><a href="eula.html"><small>License</small><span>EULA</span><i aria-hidden="true">&rarr;</i></a><a href="terms.html"><small>The rules</small><span>Terms of Service</span><i aria-hidden="true">&rarr;</i></a><a href="privacy.html"><small>Your data</small><span>Privacy Policy</span><i aria-hidden="true">&rarr;</i></a><a href="contact.html" aria-current="page"><small>Say hello</small><span>Contact</span><i aria-hidden="true">&rarr;</i></a></nav>
-    <div class="fbase"><div>&copy; 2026 UNSHADED by Solo Prodigy Dev. All rights reserved.</div><button class="totop" id="toTop" type="button">Back to top <span aria-hidden="true">&uarr;</span></button></div>
+  <div class="fwrap">
+    <span class="pix fmark">UNSHADED</span>
+    <p class="world">Find out what actually happened.</p>
+    <nav class="flinks" aria-label="Legal and contact"><a href="eula.html">EULA</a><a href="terms.html">Terms of Service</a><a href="privacy.html">Privacy Policy</a><a href="mods.html">Modding</a><a href="contact.html" aria-current="page">Contact</a></nav>
+    <div class="fbase"><span>&copy; 2026 UNSHADED by Solo Prodigy Dev. All rights reserved.</span><a href="#top">Back to top</a></div>
   </div>
 </footer>
-<script>
-(function(){
-  var e='soloprodigydev@gmail.com',b=document.getElementById('email'),t=document.getElementById('toast'),hint=document.getElementById('hint');
-  function ok(){t.classList.add('show');b.classList.add('copied');hint.classList.add('ok');hint.textContent='Copied';window.uBurst&&window.uBurst(b);
-    setTimeout(function(){t.classList.remove('show');b.classList.remove('copied');hint.classList.remove('ok');hint.textContent='Click to copy'},2500)}
-  function fb(){var a=document.createElement('textarea');a.value=e;a.style.position='fixed';a.style.opacity='0';document.body.appendChild(a);a.select();try{document.execCommand('copy');ok()}catch(x){hint.textContent='Select the email and copy it by hand'}document.body.removeChild(a)}
-  b.addEventListener('click',function(){
-    if(navigator.clipboard&&navigator.clipboard.writeText){navigator.clipboard.writeText(e).then(ok,fb)}else fb();
-  });
-})();
-</script>
 </body>
 </html>
