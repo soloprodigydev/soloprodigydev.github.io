@@ -6,6 +6,13 @@
 <title>UNSHADED | A Story-Driven Mystery</title>
 <meta name="description" content="UNSHADED is a story-driven mystery set in the Kingdom of Seren. Memories show fragments, never answers, and the world remembers what you do.">
 <meta name="theme-color" content="#050408">
+<meta name="color-scheme" content="dark">
+<meta property="og:type" content="website">
+<meta property="og:title" content="UNSHADED: find out what actually happened">
+<meta property="og:description" content="A story-driven mystery in the Kingdom of Seren. Echoes show fragments, never answers. Everyone has a reason to lie.">
+<meta property="og:url" content="https://soloprodigydev.github.io/unshaded/">
+<meta property="og:image" content="https://soloprodigydev.github.io/unshaded/og.png">
+<meta name="twitter:card" content="summary_large_image">
 <link rel="icon" href="../logo.png">
 <style>
 @font-face{font-family:Avenir;src:local('AvenirNextWorld-Light'),url(../fonts/AvenirNextWorld-Light.woff) format('woff');font-weight:300;font-display:swap}
@@ -37,7 +44,7 @@ a{color:var(--glow)}
 button{font:inherit;color:inherit;background:none;border:0;cursor:pointer}
 .pix{font-family:Pixelopolis,monospace;-webkit-font-smoothing:none;font-weight:400}
 h1,h2,h3,.hd{font-family:Avenir,'Avenir Next',system-ui,sans-serif;font-weight:600;line-height:1.15}
-.mono,header nav a,.eyebrow,.stamp,.tabs button,.meta,footer{font-family:Plex,monospace;font-weight:400}
+.mono,header nav a,.eyebrow,.stamp,.meta,footer,.sound,.rail a,.tracker,.hintline,.lamp-hint{font-family:Plex,monospace;font-weight:400}
 .world{font-family:Trajan,'Trajan Pro',Georgia,serif;font-weight:400;letter-spacing:.02em}
 .ancient{font-family:Dotum,Plex,monospace;color:#0ABF00}
 .wrap{width:100%;max-width:1100px;margin:0 auto;padding:0 1.5rem}
@@ -48,26 +55,48 @@ h2{font-size:clamp(1.9rem,4.6vw,3.1rem);color:var(--acc2);margin-bottom:1.2rem;m
 section{position:relative;padding:6.5rem 0}
 .rv{opacity:0;transform:translateY(22px);transition:opacity .8s,transform .8s cubic-bezier(.2,.8,.2,1)}
 .rv.in{opacity:1;transform:none}
+.sr{position:absolute;width:1px;height:1px;overflow:hidden;clip:rect(0 0 0 0);white-space:nowrap}
 
-/* header */
+/* progress + header + rail + sound */
+.prog{position:fixed;top:0;left:0;right:0;height:2px;z-index:70;background:linear-gradient(90deg,var(--acc3),var(--glow));transform:scaleX(0);transform-origin:left}
 header{position:fixed;top:0;left:0;right:0;z-index:50;display:flex;justify-content:space-between;align-items:center;gap:.6rem 2rem;flex-wrap:wrap;padding:1rem 2rem;background:linear-gradient(rgba(5,4,8,.92),rgba(5,4,8,0));transition:background .4s}
 header.solid{background:rgba(5,4,8,.9);backdrop-filter:blur(14px);-webkit-backdrop-filter:blur(14px);border-bottom:1px solid var(--line)}
 header .brand{font-size:1.05rem;letter-spacing:.12em;color:#fff;text-decoration:none}
-header nav{display:flex;flex-wrap:wrap;gap:.1rem 1.5rem}
+header nav{display:flex;flex-wrap:wrap;gap:.1rem 1.5rem;margin-left:auto}
 header nav a{color:var(--dim);text-decoration:none;font-size:.82rem;transition:color .25s}
 header nav a:hover,header nav a.on{color:#fff}
 header nav a.on{text-decoration:underline;text-decoration-color:var(--acc);text-underline-offset:6px}
+.rail{position:fixed;right:1.2rem;top:50%;transform:translateY(-50%);z-index:40;display:none;flex-direction:column;gap:1.1rem;align-items:flex-end}
+.rail a{display:flex;align-items:center;gap:.7rem;color:var(--dim);text-decoration:none;font-size:.68rem;letter-spacing:.14em;text-transform:uppercase}
+.rail a span{opacity:0;transform:translateX(6px);transition:opacity .3s,transform .3s}
+.rail a i{width:9px;height:9px;border:1px solid var(--glow);transform:rotate(45deg);transition:background .3s,box-shadow .3s}
+.rail a:hover span,.rail a.on span{opacity:1;transform:none;color:#fff}
+.rail a.on i{background:var(--glow);box-shadow:0 0 12px var(--glow)}
+@media(min-width:1200px){.rail{display:flex}}
+.sound{display:flex;align-items:center;gap:.6rem;padding:.4rem .9rem;font-size:.7rem;letter-spacing:.14em;text-transform:uppercase;color:var(--dim);border:1px solid var(--line);border-radius:999px;transition:color .3s,border-color .3s}
+.sound:hover{color:#fff;border-color:var(--acc)}
+.sound[aria-pressed=true]{color:#fff;border-color:var(--glow)}
+.sound .bars{display:flex;align-items:flex-end;gap:2px;height:12px}
+.sound .bars i{width:2px;height:3px;background:currentColor}
+.sound[aria-pressed=true] .bars i{animation:eq 1.1s ease-in-out infinite}
+.sound .bars i:nth-child(2){animation-delay:-.4s}.sound .bars i:nth-child(3){animation-delay:-.8s}
+@keyframes eq{0%,100%{height:3px}50%{height:12px}}
 
-/* hero */
-.hero{min-height:100svh;display:flex;align-items:center;position:relative;overflow:hidden;padding:7rem 0 4rem}
+/* hero: the page is in shade, your cursor is the light */
+.hero{min-height:100svh;display:flex;align-items:center;position:relative;overflow:hidden;padding:7rem 0 4rem;touch-action:pan-y}
 #sky{position:absolute;inset:0;width:100%;height:100%;image-rendering:pixelated;image-rendering:crisp-edges;z-index:0}
 .hero::after{content:"";position:absolute;inset:0;z-index:1;pointer-events:none;background:linear-gradient(90deg,rgba(5,4,8,.85) 0%,rgba(5,4,8,.45) 45%,transparent 75%),linear-gradient(transparent 70%,var(--ink))}
-.hero .wrap{position:relative;z-index:2}
+.whispers{position:absolute;inset:0;z-index:2;pointer-events:none;-webkit-mask-image:radial-gradient(circle 200px at var(--lx,30%) var(--ly,60%),#000 12%,transparent 100%);mask-image:radial-gradient(circle 200px at var(--lx,30%) var(--ly,60%),#000 12%,transparent 100%)}
+.whispers p{position:absolute;max-width:26ch;font-size:clamp(.95rem,1.5vw,1.3rem);color:var(--acc2);text-shadow:0 0 18px rgba(183,156,255,.8)}
+.whispers p.ancient{color:#0ABF00;text-shadow:0 0 14px rgba(10,191,0,.7);font-size:clamp(1rem,1.6vw,1.4rem)}
+.hero::before{content:"";position:absolute;inset:0;z-index:2;pointer-events:none;background:radial-gradient(circle 170px at var(--lx,30%) var(--ly,60%),rgba(183,156,255,.2),rgba(139,92,246,.07) 55%,transparent)}
+.hero .wrap{position:relative;z-index:3}
 .stamp{display:inline-block;font-size:.72rem;letter-spacing:.22em;text-transform:uppercase;color:var(--glow);border:1px solid var(--glow);padding:.35rem .8rem;transform:rotate(-2.5deg);margin-bottom:1.6rem}
-h1.pix{font-size:clamp(3rem,12vw,8.5rem);letter-spacing:.04em;line-height:1;color:transparent;background:linear-gradient(100deg,var(--acc),var(--acc3) 55%,var(--acc2));-webkit-background-clip:text;background-clip:text;filter:drop-shadow(0 0 30px rgba(139,92,246,.45));animation:rise 2.2s ease both}
+h1.pix{font-size:clamp(3rem,12vw,8.5rem);letter-spacing:.04em;line-height:1;color:transparent;background:linear-gradient(100deg,var(--acc),var(--acc3) 55%,var(--acc2));-webkit-background-clip:text;background-clip:text;filter:drop-shadow(0 0 30px rgba(139,92,246,.45));animation:rise 2.6s .5s ease both}
 @keyframes rise{from{opacity:0;filter:blur(16px)}}
-.hero .tagline{font-size:clamp(1.3rem,3vw,2rem);color:var(--acc2);margin:1.2rem 0 .8rem;font-weight:300}
-.hero .sub{max-width:52ch;color:#cfc7e6;margin-bottom:2rem}
+.hero .tagline{font-size:clamp(1.3rem,3vw,2rem);color:var(--acc2);margin:1.2rem 0 .8rem;font-weight:300;animation:rise 2s 1.6s ease both}
+.hero .sub{max-width:52ch;color:#cfc7e6;margin-bottom:2rem;animation:rise 2s 2s ease both}
+.hero .btns,.hero .meta{animation:rise 2s 2.3s ease both}
 .meta{font-size:.78rem;color:var(--dim);letter-spacing:.08em;display:flex;flex-wrap:wrap;gap:.3rem 1.2rem;margin-top:2rem}
 .btns{display:flex;flex-wrap:wrap;gap:.8rem}
 .btn{font:400 .8rem Plex,monospace;letter-spacing:.14em;text-transform:uppercase;text-decoration:none;padding:.9rem 1.7rem;border:1px solid var(--acc);color:var(--acc2);border-radius:4px;transition:background .25s,box-shadow .25s,transform .25s;display:inline-block}
@@ -75,7 +104,9 @@ h1.pix{font-size:clamp(3rem,12vw,8.5rem);letter-spacing:.04em;line-height:1;colo
 .btn.solid{background:var(--acc);color:#fff}
 .btn.solid:hover{background:#9d78ff}
 .btn[aria-disabled=true]{opacity:.55;pointer-events:none}
-.scroll{position:absolute;bottom:1.6rem;left:50%;transform:translateX(-50%);z-index:2;width:1px;height:46px;background:linear-gradient(var(--glow),transparent);animation:drop 2.2s ease-in-out infinite}
+.lamp-hint{position:absolute;z-index:3;left:50%;bottom:4.6rem;transform:translateX(-50%);font-size:.72rem;letter-spacing:.16em;text-transform:uppercase;color:var(--glow);white-space:nowrap;transition:opacity 1s;animation:rise 2s 3.2s ease both}
+.lamp-hint.hide{opacity:0}
+.scroll{position:absolute;bottom:1.6rem;left:50%;transform:translateX(-50%);z-index:3;width:1px;height:46px;background:linear-gradient(var(--glow),transparent);animation:drop 2.2s ease-in-out infinite}
 @keyframes drop{0%{transform:translateX(-50%) scaleY(0);transform-origin:top}50%{transform:translateX(-50%) scaleY(1);transform-origin:top}51%{transform-origin:bottom}100%{transform:translateX(-50%) scaleY(0);transform-origin:bottom}}
 
 /* pillars strip */
@@ -85,27 +116,47 @@ h1.pix{font-size:clamp(3rem,12vw,8.5rem);letter-spacing:.04em;line-height:1;colo
 .pillars h3{font-size:1.15rem;color:var(--acc2);margin-bottom:.4rem}
 .pillars p{font-size:.95rem;color:#bdb4d8}
 
-/* case */
-.case{display:grid;grid-template-columns:minmax(0,.9fr) minmax(0,1.1fr);gap:3.5rem;align-items:start;margin-top:2.5rem}
+/* the case: hold to listen */
+.case{display:grid;grid-template-columns:minmax(0,.85fr) minmax(0,1.15fr);gap:3.5rem;align-items:start;margin-top:2.5rem}
+.case .intro{position:sticky;top:6.5rem}
 .case .intro p{color:#d0c8e6;margin-bottom:1.1rem}
 .case .intro .world{font-size:1.15rem;color:var(--acc2);border-left:3px solid var(--acc);padding-left:1rem;margin:1.6rem 0}
 .file{background:rgba(20,14,38,.6);border:1px solid var(--line);border-radius:10px;overflow:hidden}
-.file header{all:unset}
-.fhead{display:flex;justify-content:space-between;gap:1rem;flex-wrap:wrap;padding:.9rem 1.3rem;border-bottom:1px solid var(--line);font:400 .74rem Plex,monospace;letter-spacing:.14em;text-transform:uppercase;color:var(--dim)}
-.tabs{display:grid;grid-template-columns:repeat(3,1fr);border-bottom:1px solid var(--line)}
-.tabs button{padding:.9rem .4rem;font-size:.78rem;letter-spacing:.1em;text-transform:uppercase;color:var(--dim);border-right:1px solid var(--line);transition:background .25s,color .25s}
-.tabs button:last-child{border-right:0}
-.tabs button:hover{color:#fff}
-.tabs button[aria-selected=true]{color:#fff;background:rgba(139,92,246,.16);box-shadow:inset 0 -2px var(--acc)}
-.panel{padding:1.6rem 1.4rem 1.8rem;min-height:300px}
-.panel h3{font-size:1.3rem;color:var(--acc2);margin-bottom:.4rem}
-.panel>p{color:#c9c1e0;margin-bottom:1.1rem}
-.echo-line{font-size:1.1rem;color:var(--acc2);background:rgba(139,92,246,.1);border-left:3px solid var(--acc);padding:.9rem 1.1rem;margin-bottom:1.2rem;border-radius:0 6px 6px 0}
-.echo-line.locked{color:var(--dim);font-style:italic;background:rgba(255,255,255,.03);border-color:#2a2538}
-.panel h4{font:400 .72rem Plex,monospace;letter-spacing:.18em;text-transform:uppercase;color:var(--glow);margin-bottom:.5rem}
-.panel ul{list-style:none}
-.panel li{position:relative;padding-left:1.4rem;margin-bottom:.4rem;color:#d0c8e6}
-.panel li::before{content:"?";position:absolute;left:0;font-family:Plex,monospace;color:var(--acc)}
+.fhead{display:flex;justify-content:space-between;align-items:center;gap:1rem;flex-wrap:wrap;padding:.9rem 1.3rem;font:400 .74rem Plex,monospace;letter-spacing:.14em;text-transform:uppercase;color:var(--dim)}
+.tracker{display:flex;align-items:center;gap:.6rem}
+.tracker u{width:9px;height:9px;border:1px solid var(--glow);transform:rotate(45deg);transition:background .5s,box-shadow .5s}
+.tracker u.on{background:var(--glow);box-shadow:0 0 10px var(--glow)}
+.threads{list-style:none}
+.thread{border-top:1px solid var(--line);padding:1.4rem 1.3rem 1.5rem;transition:background .8s}
+.thread.heard{background:linear-gradient(90deg,rgba(139,92,246,.12),transparent)}
+.tmain{display:grid;grid-template-columns:auto 1fr auto;gap:1rem 1.1rem;align-items:center}
+.tnum{font:400 .75rem Plex,monospace;color:var(--glow)}
+.tmain h3{font-size:1.25rem;color:var(--acc2);margin-bottom:.15rem}
+.tmain p{font-size:.95rem;color:#bdb4d8;line-height:1.55}
+.listen{position:relative;width:66px;height:66px;border-radius:50%;display:grid;place-items:center;touch-action:none;-webkit-user-select:none;user-select:none;-webkit-touch-callout:none;-webkit-tap-highlight-color:transparent}
+.listen svg{position:absolute;inset:0;transform:rotate(-90deg)}
+.listen .bg{fill:rgba(139,92,246,.08);stroke:var(--line);stroke-width:2;transition:fill .3s}
+.listen .fg{fill:none;stroke:var(--glow);stroke-width:3;stroke-linecap:round;stroke-dasharray:176;stroke-dashoffset:176}
+.listen span{position:relative;font:400 .6rem Plex,monospace;letter-spacing:.14em;text-transform:uppercase;color:var(--acc2)}
+.listen:hover .bg,.listen.on .bg{fill:rgba(139,92,246,.3)}
+.listen.on{animation:throb .5s ease-in-out infinite alternate}
+@keyframes throb{to{box-shadow:0 0 26px rgba(183,156,255,.5)}}
+.frag{font-size:1.1rem;margin-top:1.1rem;min-height:4.4em;padding:.8rem 1rem;border-left:3px solid #2a2538;color:#6f6788;border-radius:0 6px 6px 0;transition:background .6s,border-color .6s,color .6s;overflow-wrap:anywhere}
+.frag i{font-style:normal;opacity:.35}
+.thread.heard .frag{border-color:var(--acc);color:var(--acc2);background:rgba(139,92,246,.1)}
+.frag.live{border-color:var(--glow);color:#cfc4f5}
+.unans{margin-top:1rem}
+.unans[hidden]{display:none}
+.unans h4{font:400 .72rem Plex,monospace;letter-spacing:.18em;text-transform:uppercase;color:var(--glow);margin-bottom:.5rem}
+.unans ul{list-style:none}
+.unans li{position:relative;padding-left:1.4rem;margin-bottom:.3rem;color:#d0c8e6;font-size:.95rem}
+.unans li::before{content:"?";position:absolute;left:0;font-family:Plex,monospace;color:var(--acc)}
+.fnote{display:flex;justify-content:space-between;align-items:center;gap:1rem;flex-wrap:wrap;border-top:1px solid var(--line);padding:.9rem 1.3rem;font-size:.85rem;color:var(--dim)}
+.reset{font:400 .72rem Plex,monospace;letter-spacing:.14em;text-transform:uppercase;color:var(--dim);text-decoration:underline;width:max-content}
+.reset:hover{color:#fff}
+.all{margin-top:1.4rem;padding:1.3rem 1.4rem;border:1px solid rgba(183,156,255,.5);border-radius:10px;background:rgba(139,92,246,.1);box-shadow:0 0 40px rgba(139,92,246,.18);animation:rise 1.4s ease both}
+.all[hidden]{display:none}
+.all p{color:var(--acc2);font-size:1.1rem;margin-bottom:.9rem}
 
 /* loop */
 .loop{display:grid;grid-template-columns:repeat(4,1fr);gap:1px;background:var(--line);border:1px solid var(--line);border-radius:10px;overflow:hidden;margin-top:2.6rem}
@@ -120,12 +171,16 @@ h1.pix{font-size:clamp(3rem,12vw,8.5rem);letter-spacing:.04em;line-height:1;colo
 /* memory demo */
 .mem{background:linear-gradient(180deg,transparent,rgba(75,42,158,.14) 40%,transparent)}
 .stage{margin-top:2.4rem;display:grid;grid-template-columns:minmax(0,1.2fr) minmax(0,.8fr);gap:2rem;align-items:stretch}
-.scene{background:rgba(10,7,20,.8);border:1px solid var(--line);border-radius:10px;padding:1.8rem 1.6rem;display:flex;flex-direction:column;gap:1.1rem;min-height:340px}
+.scene{position:relative;overflow:hidden;background:rgba(10,7,20,.8);border:1px solid var(--line);border-radius:10px;padding:1.8rem 1.6rem;display:flex;flex-direction:column;gap:1.1rem;min-height:360px}
+.scene::before{content:"";position:absolute;left:-20%;right:-20%;bottom:-35%;height:75%;background:radial-gradient(ellipse at 50% 100%,rgba(255,140,60,.26),transparent 65%);animation:fire 3.2s ease-in-out infinite;pointer-events:none}
+@keyframes fire{0%,100%{opacity:.7;transform:scale(1)}30%{opacity:1;transform:scale(1.06)}60%{opacity:.62;transform:scale(.98)}}
+.scene>*{position:relative}
 .scene .where{font:400 .72rem Plex,monospace;letter-spacing:.18em;text-transform:uppercase;color:var(--dim)}
 .scene .say{font-size:1.25rem;color:var(--acc2);flex:1}
-.scene .say small{display:block;margin-top:.8rem;font:300 .9rem Avenir,system-ui,sans-serif;color:var(--dim);letter-spacing:0}
+.scene .say small{display:block;margin-top:.8rem;font:300 .9rem Avenir,system-ui,sans-serif;color:var(--dim);letter-spacing:0;opacity:0;transition:opacity 1.2s}
+.scene .say small.in{opacity:1}
 .choices{display:grid;gap:.6rem}
-.choices button{text-align:left;padding:.8rem 1rem;border:1px solid var(--line);border-radius:6px;color:#d6cfeb;transition:border-color .25s,background .25s,transform .25s}
+.choices button{text-align:left;padding:.8rem 1rem;border:1px solid var(--line);border-radius:6px;color:#d6cfeb;background:rgba(5,4,8,.5);transition:border-color .25s,background .25s,transform .25s}
 .choices button:hover{border-color:var(--acc);background:rgba(139,92,246,.14);transform:translateX(4px)}
 .ledger2{background:rgba(20,14,38,.5);border:1px solid var(--line);border-radius:10px;padding:1.4rem}
 .ledger2 h3{font:400 .72rem Plex,monospace;letter-spacing:.18em;text-transform:uppercase;color:var(--glow);margin-bottom:1rem}
@@ -133,39 +188,36 @@ h1.pix{font-size:clamp(3rem,12vw,8.5rem);letter-spacing:.04em;line-height:1;colo
 .ledger2 dt{font:400 .74rem Plex,monospace;color:var(--dim);letter-spacing:.1em;text-transform:uppercase}
 .ledger2 dd{color:#d6cfeb;font-size:.98rem}
 .ledger2 .note{margin-top:1.2rem;font-size:.85rem;color:var(--dim)}
-.reset{font:400 .72rem Plex,monospace;letter-spacing:.14em;text-transform:uppercase;color:var(--dim);text-decoration:underline;margin-top:.4rem;text-align:left;width:max-content}
-.reset:hover{color:#fff}
+.ledger2 .reset{margin-top:.4rem;display:block}
 
-/* regions */
-.regions{transition:background 1.2s}
-#seren{background:radial-gradient(ellipse 80% 60% at 70% 30%,color-mix(in oklch,var(--acc3) 38%,transparent),transparent 70%)}
-.rwrap{display:grid;grid-template-columns:minmax(0,.7fr) minmax(0,1.3fr);gap:2.5rem;margin-top:2.6rem}
-.rlist{display:grid;gap:.6rem;align-content:start}
-.rlist button{display:flex;align-items:center;gap:.9rem;text-align:left;padding:1rem 1.1rem;border:1px solid var(--line);border-radius:8px;transition:border-color .3s,background .3s}
-.rlist button:hover{border-color:var(--acc)}
-.rlist button[aria-selected=true]{border-color:var(--acc);background:color-mix(in oklch,var(--acc) 14%,transparent)}
-.rlist .sw{display:flex}
-.rlist .sw u{width:12px;height:28px}
-.rlist .sw u:first-child{border-radius:3px 0 0 3px}.rlist .sw u:last-child{border-radius:0 3px 3px 0}
-.rlist span.hd{font-size:1.05rem}
-.rpanel{border:1px solid var(--line);border-radius:10px;padding:2rem 1.8rem;background:color-mix(in oklch,var(--ink) 70%,transparent);backdrop-filter:blur(6px);-webkit-backdrop-filter:blur(6px);min-height:340px;display:flex;flex-direction:column;gap:1rem}
-.rpanel h3{font-size:clamp(2rem,4vw,2.8rem);color:var(--acc2);transition:color .6s}
+/* the kingdom: full-bleed pixel worlds */
+#seren{padding:0;min-height:max(100svh,780px);display:flex;flex-direction:column;overflow:hidden;transition:--acc .9s,--acc2 .9s,--acc3 .9s}
+#land{position:absolute;inset:0;width:100%;height:100%;image-rendering:pixelated;image-rendering:crisp-edges;z-index:0}
+#seren .veil{position:absolute;inset:0;z-index:1;pointer-events:none;background:linear-gradient(90deg,rgba(5,4,8,.8),rgba(5,4,8,.15) 60%,transparent),linear-gradient(rgba(5,4,8,.85),transparent 22%,transparent 50%,rgba(5,4,8,.88))}
+.blink{position:absolute;inset:0;z-index:4;pointer-events:none;overflow:hidden}
+.blink i{position:absolute;left:-5%;right:-5%;height:51%;background:#020104;transform:scaleY(0)}
+.blink i:first-child{top:0;transform-origin:top;border-radius:0 0 50% 50%/0 0 14% 14%}
+.blink i:last-child{bottom:0;transform-origin:bottom;border-radius:50% 50% 0 0/14% 14% 0 0}
+.blink.go i{animation:lid .75s cubic-bezier(.5,0,.5,1)}
+@keyframes lid{0%{transform:scaleY(0)}38%{transform:scaleY(1)}62%{transform:scaleY(1)}100%{transform:scaleY(0)}}
+.rg{position:relative;z-index:2;flex:1;display:flex;flex-direction:column;padding-top:6.5rem;padding-bottom:2rem}
+.rg h2{color:#f4f1ff}
+#seren .eyebrow{color:var(--acc)}
+.rpanel{margin-top:auto;width:min(540px,100%);border:1px solid color-mix(in oklch,var(--acc) 45%,transparent);border-radius:10px;padding:1.8rem 1.7rem;background:rgba(5,4,8,.66);backdrop-filter:blur(10px);-webkit-backdrop-filter:blur(10px);display:flex;flex-direction:column;gap:.9rem;min-height:330px}
+.rpanel h3{font-size:clamp(2rem,4vw,2.8rem);color:var(--acc2)}
 .rpanel .kind{font:400 .74rem Plex,monospace;letter-spacing:.18em;text-transform:uppercase;color:var(--acc)}
 .rpanel p{color:#d6cfeb;max-width:56ch}
-.rpanel .whisper{margin-top:auto;font-size:1.15rem;color:var(--acc);border-top:1px solid var(--line);padding-top:1.1rem}
 .rpanel .scene-note{font-size:.9rem;color:var(--dim)}
+.rpanel .whisper{margin-top:auto;font-size:1.15rem;color:var(--acc);border-top:1px solid var(--line);padding-top:1rem}
 .rpanel .whisper.ancient{color:#0ABF00}
-#seren h2{color:#f4f1ff}
-#seren .eyebrow{color:var(--acc)}
-
-/* echoes */
-.echoes{display:grid;gap:.9rem;margin-top:2.4rem;max-width:62ch}
-.echoes li{list-style:none;display:flex;gap:1rem;padding:1rem 1.2rem;border-left:2px solid #2a2538;background:rgba(20,14,38,.5);color:#9a92b5;font-style:italic;transition:border-color .6s,color .6s}
-.echoes li b{font:400 .8rem Plex,monospace;font-style:normal;color:#7a7295}
-.echoes li.on{border-color:var(--acc);color:var(--bone);font-style:normal}
-.echoes li.on b{color:var(--glow)}
-.echoes li span{font-family:Trajan,'Trajan Pro',Georgia,serif;font-style:normal}
-.hintline{margin-top:1.2rem;color:var(--dim);font-size:.9rem}
+.rtabs{position:relative;z-index:3;display:grid;grid-template-columns:repeat(4,1fr);border-top:1px solid var(--line);background:rgba(5,4,8,.88);backdrop-filter:blur(10px);-webkit-backdrop-filter:blur(10px)}
+.rtabs button{display:flex;align-items:center;justify-content:center;gap:.9rem;padding:1.25rem .6rem;border-right:1px solid var(--line);color:var(--dim);font-size:1.05rem;transition:background .5s,color .3s}
+.rtabs button:last-child{border-right:0}
+.rtabs button:hover{color:#fff}
+.rtabs button[aria-selected=true]{color:#fff;background:color-mix(in oklch,var(--acc) 18%,transparent);box-shadow:inset 0 2px var(--acc)}
+.rtabs .sw{display:flex}
+.rtabs .sw u{width:10px;height:24px}
+.rtabs .sw u:first-child{border-radius:3px 0 0 3px}.rtabs .sw u:last-child{border-radius:0 3px 3px 0}
 
 /* details */
 .spec{width:100%;border-collapse:collapse;margin-top:2.2rem}
@@ -185,30 +237,60 @@ footer a{color:var(--dim);text-decoration:none}footer a:hover{color:#fff}
 
 @media(max-width:900px){
   header{background:rgba(5,4,8,.94);border-bottom:1px solid var(--line)}
-  .case,.stage,.rwrap{grid-template-columns:1fr}
+  header nav a:nth-child(n+6):not(:last-child){display:none}
+  .case,.stage{grid-template-columns:1fr}
   .loop{grid-template-columns:1fr 1fr}
   .pillars{grid-template-columns:1fr}.pillars div{border-right:0;border-bottom:1px solid var(--line)}.pillars div:last-child{border-bottom:0}
   .hero::after{background:linear-gradient(rgba(5,4,8,.55),rgba(5,4,8,.75) 60%,var(--ink))}
+  #seren .veil{background:linear-gradient(rgba(5,4,8,.85),transparent 25%,transparent 35%,rgba(5,4,8,.92))}
+  .lamp-hint{bottom:5.2rem}
+}
+@media(max-width:700px){
+  header nav{display:none}
+  header{flex-wrap:nowrap}
+  .scroll{display:none}.lamp-hint{bottom:1.3rem}
+  .whispers p{left:6%!important;right:auto!important;text-align:left!important;max-width:30ch}
+  .whispers p:nth-child(n){display:none}
+  .whispers p:nth-child(1){display:block;top:81%!important}
+  .whispers p:nth-child(10){display:block;top:88%!important}
+  .rpanel{min-height:0}.rpanel .scene-note{display:none}
 }
 @media(max-width:560px){
   header{padding:.8rem 1rem}section{padding:4.5rem 0}.loop{grid-template-columns:1fr}.spec td:first-child{width:120px}
-  .tabs button{font-size:.68rem;letter-spacing:.04em}
+  .tmain{grid-template-columns:1fr auto}.tnum{display:none}
+  .rtabs .sw{display:none}.rtabs button{font-size:.8rem;padding:1.1rem .2rem}
+  .rg{padding-top:5.5rem}.rpanel{padding:1.4rem 1.2rem}
 }
 @media(prefers-reduced-motion:reduce){*,::after{animation:none!important;transition:none!important}html{scroll-behavior:auto}.rv{opacity:1;transform:none}}
 </style>
 </head>
 <body>
+<div class="prog" id="prog" aria-hidden="true"></div>
 
 <header id="top">
   <a class="brand pix" href="index.html">UNSHADED</a>
   <nav aria-label="Page">
-    <a href="#case">The case</a><a href="#play">How it plays</a><a href="#memory">Memory</a><a href="#seren">Seren</a><a href="#echoes">Echoes</a><a href="#details">Details</a><a href="../index.html">Portfolio</a>
+    <a href="#case">The case</a><a href="#memory">Memory</a><a href="#seren">Seren</a><a href="#play">How it plays</a><a href="#details">Details</a><a href="../index.html">Portfolio</a>
   </nav>
+  <button class="sound" id="sound" type="button" aria-pressed="false"><span class="bars" aria-hidden="true"><i></i><i></i><i></i></span><span id="soundLabel">Sound off</span></button>
 </header>
+<nav class="rail" id="rail" aria-label="Chapters"></nav>
 
 <!-- ============ HERO ============ -->
-<div class="hero">
+<div class="hero" id="hero">
   <canvas id="sky" aria-hidden="true"></canvas>
+  <div class="whispers" id="whispers" aria-hidden="true">
+    <p class="world" style="left:6%;top:76%">Echoes show fragments of the past, never answers.</p>
+    <p class="world" style="right:7%;top:19%;text-align:right">Everyone has a reason to lie.</p>
+    <p class="world" style="left:44%;top:88%">Seren remembers.</p>
+    <p class="world" style="right:6%;top:78%;text-align:right">The truth is whatever survives the doubt.</p>
+    <p class="world" style="left:9%;top:14%">You are not handed a culprit.</p>
+    <p class="world" style="left:38%;top:30%">People keep track of what you say and do.</p>
+    <p class="world" style="left:66%;top:68%">Neighbours protect secrets.</p>
+    <p class="world" style="left:62%;top:9%">Writing outlasts memory.</p>
+    <p class="world" style="left:24%;top:92%">Witnesses hold grudges.</p>
+    <p class="ancient" style="left:50%;top:62%">Something older than the kingdom watches. Not me.</p>
+  </div>
   <div class="wrap">
     <span class="stamp">In development</span>
     <h1 class="pix">UNSHADED</h1>
@@ -216,10 +298,11 @@ footer a{color:var(--dim);text-decoration:none}footer a:hover{color:#fff}
     <p class="sub">A story-driven mystery set in the Kingdom of Seren. Investigate with memories that show fragments, never answers, in a world that remembers everything you do.</p>
     <div class="btns">
       <a class="btn solid" href="#case">Open the case</a>
-      <a class="btn" href="#" aria-disabled="true">Steam page coming soon</a>
+      <a class="btn" href="#" id="steamHero" aria-disabled="true">Steam page coming soon</a>
     </div>
     <div class="meta"><span>Story-driven mystery</span><span>Solo Prodigy Dev</span><span>Release: when it's ready</span></div>
   </div>
+  <p class="lamp-hint" id="lampHint">Move the light. Click the Iris.</p>
   <div class="scroll" aria-hidden="true"></div>
 </div>
 
@@ -230,7 +313,7 @@ footer a{color:var(--dim);text-decoration:none}footer a:hover{color:#fff}
 </div>
 
 <!-- ============ THE CASE ============ -->
-<section id="case">
+<section id="case" data-label="The case">
   <div class="wrap">
     <div class="eyebrow rv">Case file 001</div>
     <h2 class="rv">Grain goes missing. Nobody tells the truth.</h2>
@@ -240,39 +323,23 @@ footer a{color:var(--dim);text-decoration:none}footer a:hover{color:#fff}
         <p>A stranger was seen near the granary. A witness has a grudge. Everyone you meet has something to protect, and a reason to point you somewhere else.</p>
         <p class="world">&ldquo;Echoes show fragments of the past, never answers.&rdquo;</p>
         <p>You are not handed a culprit. You gather what people say, what the Echoes show, and what each person stands to lose, then decide for yourself what happened.</p>
+        <p class="hintline" style="color:var(--glow);font-size:.85rem">Try it. Press and hold a circle to listen.</p>
       </div>
-
       <div class="file rv" aria-label="Case file">
-        <div class="fhead"><span>Case 001 &middot; The granary</span><span>Status: open</span></div>
-        <div class="tabs" role="tablist" aria-label="Threads in the case">
-          <button role="tab" aria-selected="true" aria-controls="panel" id="t0" data-i="0">01 Sighting</button>
-          <button role="tab" aria-selected="false" aria-controls="panel" id="t1" data-i="1">02 Witness</button>
-          <button role="tab" aria-selected="false" aria-controls="panel" id="t2" data-i="2">03 Paper</button>
-        </div>
-        <div class="panel" id="panel" role="tabpanel" aria-live="polite"></div>
+        <div class="fhead"><span>Case 001 &middot; The granary</span><span class="tracker" id="tracker"></span></div>
+        <ol class="threads" id="threads"></ol>
+        <div class="fnote"><span>Echoes you hear are saved in this browser only.</span><button class="reset" id="forget" type="button">Forget these Echoes</button></div>
       </div>
     </div>
-  </div>
-</section>
-
-<!-- ============ HOW IT PLAYS ============ -->
-<section id="play">
-  <div class="wrap">
-    <div class="eyebrow rv">Method</div>
-    <h2 class="rv">Investigate. Listen. Decide. Be remembered.</h2>
-    <p class="lead rv">UNSHADED is built around one loop, and every part of it pushes back on you.</p>
-    <div class="loop">
-      <article class="rv"><span class="n">01</span><h3>Investigate</h3><p>Walk Seren's roads, question its people, and look closely at what they would rather you didn't.</p></article>
-      <article class="rv"><span class="n">02</span><h3>Listen</h3><p>Use the Echoes of the Iris to hear what a place remembers: a glimpse, a sentence, a thing left behind. Never the whole picture.</p></article>
-      <article class="rv"><span class="n">03</span><h3>Decide</h3><p>No narrator names the guilty. Weigh the fragments against what each person stands to lose, and commit to a conclusion.</p></article>
-      <article class="rv"><span class="n">04</span><h3>Be remembered</h3><p>Seren keeps count. People change what they tell you, and what they hide, based on what you have already done.</p></article>
+    <div class="all" id="allHeard" hidden>
+      <p class="world">That is all three. Two players can hear the same fragment and come away certain of different things.</p>
+      <div class="btns"><a class="btn solid" href="#memory">See how Seren remembers you</a></div>
     </div>
-    <p class="loopnote rv">Because the Echoes are partial and the people are biased, two players can walk the same road, hear the same fragment, and come away certain of different things.</p>
   </div>
 </section>
 
 <!-- ============ MEMORY DEMO ============ -->
-<section id="memory" class="mem">
+<section id="memory" class="mem" data-label="Memory">
   <div class="wrap">
     <div class="eyebrow rv">Seren remembers</div>
     <h2 class="rv">Try it. This page will remember too.</h2>
@@ -293,31 +360,36 @@ footer a{color:var(--dim);text-decoration:none}footer a:hover{color:#fff}
 </section>
 
 <!-- ============ SEREN ============ -->
-<section id="seren">
-  <div class="wrap">
-    <div class="eyebrow rv">The Kingdom of Seren</div>
-    <h2 class="rv">One kingdom. Four memories.</h2>
-    <p class="lead rv">Each region has its own colour, its own mood, and its own way of lying to you.</p>
-    <div class="rwrap rv">
-      <div class="rlist" role="tablist" aria-label="Regions" id="rlist"></div>
-      <div class="rpanel" id="rpanel" role="tabpanel" aria-live="polite"></div>
-    </div>
+<section id="seren" data-label="Seren">
+  <canvas id="land" aria-hidden="true"></canvas>
+  <div class="veil"></div>
+  <div class="blink" id="blink" aria-hidden="true"><i></i><i></i></div>
+  <div class="wrap rg">
+    <div class="eyebrow">The Kingdom of Seren</div>
+    <h2>One kingdom. Four memories.</h2>
+    <div class="rpanel" id="rpanel" role="tabpanel" aria-live="polite"></div>
   </div>
+  <div class="rtabs" role="tablist" aria-label="Regions" id="rlist"></div>
 </section>
 
-<!-- ============ ECHOES ============ -->
-<section id="echoes">
+<!-- ============ HOW IT PLAYS ============ -->
+<section id="play" data-label="How it plays">
   <div class="wrap">
-    <div class="eyebrow rv">Echoes of the Iris</div>
-    <h2 class="rv">What the Iris has shown so far.</h2>
-    <p class="lead rv">Three fragments of the granary case are hidden on the portfolio page. The ones you have found appear here.</p>
-    <ol class="echoes rv" id="echoList" aria-label="Echoes found"></ol>
-    <p class="hintline rv" id="echoHint"></p>
+    <div class="eyebrow rv">Method</div>
+    <h2 class="rv">Investigate. Listen. Decide. Be remembered.</h2>
+    <p class="lead rv">UNSHADED is built around one loop, and every part of it pushes back on you.</p>
+    <div class="loop">
+      <article class="rv"><span class="n">01</span><h3>Investigate</h3><p>Walk Seren's roads, question its people, and look closely at what they would rather you didn't.</p></article>
+      <article class="rv"><span class="n">02</span><h3>Listen</h3><p>Use the Echoes of the Iris to hear what a place remembers: a glimpse, a sentence, a thing left behind. Never the whole picture.</p></article>
+      <article class="rv"><span class="n">03</span><h3>Decide</h3><p>No narrator names the guilty. Weigh the fragments against what each person stands to lose, and commit to a conclusion.</p></article>
+      <article class="rv"><span class="n">04</span><h3>Be remembered</h3><p>Seren keeps count. People change what they tell you, and what they hide, based on what you have already done.</p></article>
+    </div>
+    <p class="loopnote rv">Because the Echoes are partial and the people are biased, two players can walk the same road, hear the same fragment, and come away certain of different things.</p>
   </div>
 </section>
 
 <!-- ============ DETAILS ============ -->
-<section id="details">
+<section id="details" data-label="Details">
   <div class="wrap">
     <div class="eyebrow rv">Details</div>
     <h2 class="rv">The short version.</h2>
@@ -326,12 +398,12 @@ footer a{color:var(--dim);text-decoration:none}footer a:hover{color:#fff}
       <tr><td>Genre</td><td>Story-driven mystery</td></tr>
       <tr><td>Setting</td><td>The Kingdom of Seren: Ashbourne, Constantina, Westfall and Blackwood</td></tr>
       <tr><td>Developer</td><td>Solo Prodigy Dev</td></tr>
-      <tr><td>Store</td><td>Steam page coming soon</td></tr>
+      <tr><td>Store</td><td id="storeCell">Steam page coming soon</td></tr>
       <tr><td>Release</td><td>TBA. Ships when it's ready.</td></tr>
     </table>
     <div class="cta rv">
       <div><h3>Follow the case.</h3><p>Questions, bugs, feedback, or press? Come say hello.</p></div>
-      <div class="btns"><a class="btn solid" href="contact.html">Contact</a><a class="btn" href="mods.html">Modding</a><a class="btn" href="../index.html">Portfolio</a></div>
+      <div class="btns"><a class="btn solid" href="#" id="steamCta" aria-disabled="true">Steam page coming soon</a><a class="btn" href="contact.html">Contact</a><a class="btn" href="https://beacons.ai/soloprodigy" rel="noopener">Follow the dev</a><a class="btn" href="../index.html">Portfolio</a></div>
     </div>
   </div>
 </section>
@@ -340,84 +412,174 @@ footer a{color:var(--dim);text-decoration:none}footer a:hover{color:#fff}
   <div class="links"><a href="eula.html">EULA</a><a href="terms.html">Terms of Service</a><a href="privacy.html">Privacy Policy</a><a href="mods.html">Modding</a><a href="contact.html">Contact</a></div>
   <div>&copy; 2026 UNSHADED by Solo Prodigy Dev. All rights reserved.</div>
 </footer>
+<noscript><p style="position:fixed;bottom:0;left:0;right:0;padding:1rem;background:#1b1033;color:#f4f1ff;text-align:center;z-index:99">UNSHADED's page is interactive and needs JavaScript. The game is a story-driven mystery set in the Kingdom of Seren. Contact: soloprodigydev@gmail.com</p></noscript>
 
 <script>
+/* Put the Steam page URL here when it exists and every "coming soon" button turns into a wishlist button. */
+const STEAM_URL='';
+
 const $=s=>document.querySelector(s),$$=s=>[...document.querySelectorAll(s)];
 const reduce=matchMedia('(prefers-reduced-motion:reduce)').matches;
 /* same storage keys as the portfolio page (uns_*) so progress carries over */
 const store={get(k,d){try{return JSON.parse(localStorage.getItem('uns_'+k))??d}catch(e){return d}},set(k,v){try{localStorage.setItem('uns_'+k,JSON.stringify(v))}catch(e){}},del(k){try{localStorage.removeItem('uns_'+k)}catch(e){}}};
+const hex=h=>[1,3,5].map(i=>parseInt(h.slice(i,i+2),16));
+const mix=(a,b,f)=>{const A=hex(a),B=hex(b);return `rgb(${A.map((v,i)=>Math.round(v+(B[i]-v)*f)).join(',')})`};
+const mulberry=a=>()=>{a|=0;a=a+0x6D2B79F5|0;let t=Math.imul(a^a>>>15,1|a);t=t+Math.imul(t^t>>>7,61|t)^t;return((t^t>>>14)>>>0)/4294967296};
+const dec=s=>{const t=document.createElement('textarea');t.innerHTML=s;return t.value};
+/* typewriter that reserves its final height so nothing jumps */
+function typeText(el,s,ms=22,done){clearInterval(el._t);s=dec(s);
+  if(reduce){el.textContent=s;done&&done();return}
+  const a=document.createElement('span'),b=document.createElement('span');b.style.opacity='0';el.textContent='';el.append(a,b);b.textContent=s;let i=0;
+  el._t=setInterval(()=>{i++;a.textContent=s.slice(0,i);b.textContent=s.slice(i);if(i>=s.length){clearInterval(el._t);done&&done()}},ms)}
 
-/* ---------- header + reveal + active nav ---------- */
-const hdr=$('#top');
-addEventListener('scroll',()=>hdr.classList.toggle('solid',scrollY>40),{passive:true});
+/* ---------- sound: generated, no files. Off until you ask for it. ---------- */
+const MOODS=[[110,138.6,164.8],[98,116.5,146.8],[82.4,123.5,164.8],[65.4,92.5,130.8],[73.4,110,146.8]];
+const Snd={on:false,ctx:null,m:4,
+  enable(){try{if(!this.ctx){const C=window.AudioContext||window.webkitAudioContext;if(!C)return false;this.build(new C())}
+    this.ctx.resume();this.on=true;this.master.gain.setTargetAtTime(.7,this.ctx.currentTime,.9);return true}catch(e){return false}},
+  disable(){this.on=false;if(this.ctx)this.master.gain.setTargetAtTime(0,this.ctx.currentTime,.25)},
+  build(c){this.ctx=c;const m=this.master=c.createGain();m.gain.value=0;m.connect(c.destination);
+    const d=c.createDelay(1.5);d.delayTime.value=.42;const fb=c.createGain();fb.gain.value=.45;
+    const l2=c.createBiquadFilter();l2.type='lowpass';l2.frequency.value=1700;d.connect(l2);l2.connect(fb);fb.connect(d);
+    const wet=c.createGain();wet.gain.value=.4;l2.connect(wet);wet.connect(m);this.fx=d;
+    const pad=c.createGain();pad.gain.value=.5;pad.connect(m);pad.connect(d);
+    this.v=[0,1,2].map(i=>{const o=c.createOscillator(),f=c.createBiquadFilter(),g=c.createGain(),l=c.createOscillator(),lg=c.createGain();
+      o.type=['sine','triangle','sawtooth'][i];f.type='lowpass';f.frequency.value=420;g.gain.value=[.14,.08,.035][i];
+      l.frequency.value=.06+i*.045;lg.gain.value=i?150:0;l.connect(lg);lg.connect(f.frequency);l.start();
+      o.connect(f);f.connect(g);g.connect(pad);o.start();return o});
+    this.mood(this.m)},
+  mood(i){this.m=i;if(!this.ctx)return;const t=this.ctx.currentTime;this.v.forEach((o,k)=>o.frequency.setTargetAtTime(MOODS[i][k]*(k==2?2:1),t,1.6))},
+  chime(freqs,vol=.12,dur=2.6){if(!this.on)return;const c=this.ctx,t=c.currentTime;
+    freqs.forEach((f,i)=>[1,2.01,3.9].forEach((mu,j)=>{const o=c.createOscillator(),g=c.createGain(),s=t+i*.09;o.type='sine';o.frequency.value=f*mu;
+      g.gain.setValueAtTime(0,s);g.gain.linearRampToValueAtTime(vol/(j+1)/(1+i*.2),s+.01);g.gain.exponentialRampToValueAtTime(.0001,s+dur/(j+1));
+      o.connect(g);g.connect(this.master);g.connect(this.fx);o.start(s);o.stop(s+dur+.1)}))},
+  tick(){if(!this.on)return;const c=this.ctx,t=c.currentTime,o=c.createOscillator(),g=c.createGain();o.type='sine';o.frequency.value=660;
+    g.gain.setValueAtTime(.05,t);g.gain.exponentialRampToValueAtTime(.0001,t+.12);o.connect(g);g.connect(this.master);o.start(t);o.stop(t+.15)},
+  holdStart(){if(!this.on)return;const c=this.ctx,o=c.createOscillator(),g=c.createGain(),f=c.createBiquadFilter();o.type='sawtooth';o.frequency.value=110;f.type='lowpass';f.frequency.value=200;
+    g.gain.value=0;g.gain.setTargetAtTime(.06,c.currentTime,.1);o.connect(f);f.connect(g);g.connect(this.master);o.start();this.h={o,g,f}},
+  holdUpdate(p){if(this.h){const t=this.ctx.currentTime;this.h.f.frequency.setTargetAtTime(200+p*1800,t,.05);this.h.o.frequency.setTargetAtTime(110+p*110,t,.05)}},
+  holdStop(){if(this.h){const {o,g}=this.h,t=this.ctx.currentTime;g.gain.setTargetAtTime(0,t,.08);o.stop(t+.6);this.h=null}}
+};
+(function(){const b=$('#sound'),l=$('#soundLabel');let want=store.get('snd',false);
+  const ui=()=>{const on=Snd.on||want;b.setAttribute('aria-pressed',on);l.textContent=on?'Sound on':'Sound off'};
+  b.onclick=()=>{if(Snd.on){Snd.disable();want=false}else{want=Snd.enable()}store.set('snd',want);ui();Snd.tick()};
+  if(want)addEventListener('pointerdown',()=>{if(want&&!Snd.on)Snd.enable()},{once:true});
+  document.addEventListener('visibilitychange',()=>{if(!Snd.ctx)return;document.hidden?Snd.ctx.suspend():(Snd.on&&Snd.ctx.resume())});ui()})();
+
+/* ---------- header, progress, reveal, chapter rail ---------- */
+const hdr=$('#top'),prog=$('#prog');
+addEventListener('scroll',()=>{hdr.classList.toggle('solid',scrollY>40);prog.style.transform=`scaleX(${scrollY/Math.max(1,document.documentElement.scrollHeight-innerHeight)})`},{passive:true});
 const io=new IntersectionObserver(es=>es.forEach(e=>{if(e.isIntersecting){e.target.classList.add('in');io.unobserve(e.target)}}),{threshold:.12});
 $$('.rv').forEach(el=>io.observe(el));
-const links=$$('header nav a[href^="#"]');
-const so=new IntersectionObserver(es=>es.forEach(e=>{if(e.isIntersecting)links.forEach(a=>a.classList.toggle('on',a.getAttribute('href')==='#'+e.target.id))}),{rootMargin:'-45% 0px -50% 0px'});
-$$('section[id]').forEach(s=>so.observe(s));
+const rail=$('#rail');
+[['hero','Intro'],...$$('section[data-label]').map(s=>[s.id,s.dataset.label])].forEach(([id,l])=>{const a=document.createElement('a');a.href='#'+(id==='hero'?'top':id);a.dataset.t=id;a.innerHTML=`<span>${l}</span><i></i>`;rail.appendChild(a)});
+const links=$$('header nav a[href^="#"]'),rl2=$$('#rail a');
+const so=new IntersectionObserver(es=>es.forEach(e=>{if(e.isIntersecting){links.forEach(a=>a.classList.toggle('on',a.getAttribute('href')==='#'+e.target.id));rl2.forEach(a=>a.classList.toggle('on',a.dataset.t===e.target.id))}}),{rootMargin:'-45% 0px -50% 0px'});
+$$('section[id],#hero').forEach(s=>so.observe(s));
 
-/* ---------- hero: the Iris, drawn in pixels, looks at your cursor ---------- */
+/* ---------- hero: the Iris looks at you, and the shade hides things ---------- */
 (function(){
-  const c=$('#sky'),g=c.getContext('2d');let W,H,PS=4,stars=[],motes=[],mx=null,my=null;
+  const hero=$('#hero'),c=$('#sky'),g=c.getContext('2d'),hint=$('#lampHint');
+  let W,H,PS=4,stars=[],motes=[],ptr=null,lastMove=-1e9,lx=0,ly=0,vis=true,running=false,T0=null,pulse=0,ripples=[];
   const rnd=(a,b)=>a+Math.random()*(b-a),lim=(v,m)=>Math.max(-m,Math.min(m,v));
   const R=(x,y,w,h,col)=>{g.fillStyle=col;g.fillRect(Math.round(x),Math.round(y),Math.max(1,Math.round(w)),Math.max(1,Math.round(h)))};
   function size(){const r=c.getBoundingClientRect();W=Math.ceil(r.width/PS);H=Math.ceil(r.height/PS);c.width=W;c.height=H;
     stars=[...Array(Math.round(W*H/220))].map(()=>({x:rnd(0,W),y:rnd(0,H*.85),ph:rnd(0,6),p:Math.random()<.2}));
-    motes=[...Array(40)].map(()=>({x:rnd(0,W),y:rnd(0,H),v:rnd(.05,.25),ph:rnd(0,6)}))}
+    motes=[...Array(40)].map(()=>({x:rnd(0,W),y:rnd(0,H),v:rnd(.05,.25),ph:rnd(0,6)}));
+    if(lx===0&&ly===0){lx=r.width*.35;ly=r.height*.6}}
   function frame(t){
+    if(T0===null)T0=t;
+    const rect=c.getBoundingClientRect();
+    const live=ptr&&t-lastMove<5000;
+    /* the light: your pointer, or a slow wander when you are not moving it */
+    const tx=live?ptr.x-rect.left:rect.width*(.5+.32*Math.sin(t/2900)),ty=live?ptr.y-rect.top:rect.height*(.55+.28*Math.sin(t/2100));
+    lx+=(tx-lx)*.14;ly+=(ty-ly)*.14;hero.style.setProperty('--lx',lx.toFixed(1)+'px');hero.style.setProperty('--ly',ly.toFixed(1)+'px');
     g.clearRect(0,0,W,H);
     const bands=['#050408','#0a0614','#180d32','#2f1a66'];for(let y=0;y<H;y+=3){const u=y/H*3,i=Math.min(2,Math.floor(u)),f=u-i,A=bands[i],B=bands[i+1];
       const m=(a,b)=>Math.round(parseInt(A.slice(a,a+2),16)+(parseInt(B.slice(a,a+2),16)-parseInt(A.slice(a,a+2),16))*f);R(0,y,W,3,`rgb(${m(1)},${m(3)},${m(5)})`)}
     stars.forEach(s=>{g.globalAlpha=reduce?.7:.3+.7*Math.abs(Math.sin(t/900+s.ph));R(s.x,s.y,1,1,s.p?'#b79cff':'#f4f1ff')});g.globalAlpha=1;
-    /* the eye sits to the right on wide screens, high and centred on narrow ones */
     const wide=W>H*.9,cx=wide?W*.7:W*.5,cy=wide?H*.42:H*.2,rx=Math.round(Math.min(W*(wide?.26:.4),H*.9)),ry=Math.round(rx*.42);
-    const px=mx===null?Math.sin(t/3000)*.5:lim((mx/PS-cx)/(W*.5),1),py=my===null?Math.sin(t/2200)*.25:lim((my/PS-cy)/(H*.5),1);
-    const ph=(t%6500)/6500,h=ry*(ph>.96?Math.abs(Math.cos((ph-.96)/.04*Math.PI)):1);
-    const ix=cx+px*rx*.3,iy=cy+py*ry*.45,ir=Math.round(ry*.9);
+    const mx=live?(ptr.x-rect.left)/PS:null,my=live?(ptr.y-rect.top)/PS:null;
+    const px=mx===null?Math.sin(t/3000)*.5:lim((mx-cx)/(W*.5),1),py=my===null?Math.sin(t/2200)*.25:lim((my-cy)/(H*.5),1);
+    /* the eye opens at load, blinks now and then, and widens when clicked */
+    const age=reduce?9e3:t-T0,wake=Math.min(1,Math.max(0,(age-300)/2300)),op=wake*wake*(3-2*wake);
+    const ph=(t%6500)/6500,blink=ph>.96?Math.abs(Math.cos((ph-.96)/.04*Math.PI)):1;
+    pulse*=.94;const h=ry*op*blink*(1+pulse*.22);
+    const ix=cx+px*rx*.3,iy=cy+py*ry*.45,ir=Math.round(ry*.9*(1+pulse*.18));
     const lid=u=>Math.round(h*(1-Math.pow(Math.abs(u),1.7)));
-    /* soft violet glow behind it */
-    const q=g.createRadialGradient(cx,cy,0,cx,cy,rx*1.6);q.addColorStop(0,'rgba(139,92,246,.28)');q.addColorStop(1,'rgba(139,92,246,0)');g.fillStyle=q;g.fillRect(cx-rx*1.7,cy-rx*1.7,rx*3.4,rx*3.4);
+    const q=g.createRadialGradient(cx,cy,0,cx,cy,rx*1.6);q.addColorStop(0,`rgba(139,92,246,${.28*op+pulse*.3})`);q.addColorStop(1,'rgba(139,92,246,0)');g.fillStyle=q;g.fillRect(cx-rx*1.7,cy-rx*1.7,rx*3.4,rx*3.4);
     for(let dx=-rx;dx<=rx;dx++){const half=lid(dx/rx);if(half<1)continue;R(cx+dx,cy-half,1,half*2+1,'#1b1033')}
     const ring=(rad,col,sq)=>{for(let x=-rad;x<=rad;x++){const col2=Math.round(ix)+x,u=(col2-cx)/rx;if(Math.abs(u)>=1)continue;const half=lid(u),d=Math.round(Math.sqrt(rad*rad-x*x)*sq),y0=Math.max(-half,Math.round(iy)-Math.round(cy)-d),y1=Math.min(half,Math.round(iy)-Math.round(cy)+d);if(y1>=y0)R(col2,Math.round(cy)+y0,1,y1-y0+1,col)}};
-    ring(ir,'#4b2a9e',1);ring(Math.round(ir*.72),'#8b5cf6',1);ring(Math.round(ir*.4),'#b79cff',1);ring(2,'#050408',ir/2);
-    R(ix-ir*.45,iy-ir*.45,2,2,'#fff');
+    if(op>.02){ring(ir,'#4b2a9e',1);ring(Math.round(ir*.72),'#8b5cf6',1);ring(Math.round(ir*.4),'#b79cff',1);ring(2,'#050408',ir/2);R(ix-ir*.45,iy-ir*.45,2,2,'#fff')}
     for(let dx=-rx;dx<=rx;dx++){const half=lid(dx/rx);if(half<1)continue;R(cx+dx,cy-half-1,1,1,'#f4f1ff');R(cx+dx,cy+half+1,1,1,'#6a4cc4')}
-    /* hills + rising motes */
+    /* click ripples */
+    ripples=ripples.filter(r=>t-r<1400);ripples.forEach(r=>{const a=(t-r)/1400,rad=a*W*.55;g.globalAlpha=(1-a)*.8;for(let k=0;k<360;k+=2){const ang=k*Math.PI/180;R(cx+Math.cos(ang)*rad,cy+Math.sin(ang)*rad*.5,1,1,'#b79cff')}});g.globalAlpha=1;
     g.fillStyle='#1d1040';for(let x=0;x<W;x++){const y=Math.round(H*.86+Math.sin(x*.03+2)*5);g.fillRect(x,y,1,H-y)}
     g.fillStyle='#0b0618';for(let x=0;x<W;x++){const y=Math.round(H*.92+Math.sin(x*.05+5)*4);g.fillRect(x,y,1,H-y)}
     motes.forEach(m=>{if(!reduce){m.y-=m.v;if(m.y<-3){m.y=H+3;m.x=rnd(0,W)}}g.globalAlpha=.4+.5*Math.sin(t/500+m.ph);R(m.x,m.y,1,1,'#b79cff')});g.globalAlpha=1;
-    if(!reduce&&!document.hidden)requestAnimationFrame(frame)}
+  }
+  function loop(t){if(!vis||document.hidden){running=false;return}frame(t);requestAnimationFrame(loop)}
+  function kick(){if(!running&&!reduce){running=true;requestAnimationFrame(loop)}}
   size();addEventListener('resize',()=>{size();if(reduce)frame(0)});
-  addEventListener('pointermove',e=>{mx=e.clientX;my=e.clientY});
-  document.addEventListener('visibilitychange',()=>{if(!document.hidden&&!reduce)requestAnimationFrame(frame)});
-  reduce?frame(0):requestAnimationFrame(frame);
+  new IntersectionObserver(es=>{vis=es[0].isIntersecting;kick()}).observe(hero);
+  document.addEventListener('visibilitychange',kick);
+  addEventListener('pointermove',e=>{ptr={x:e.clientX,y:e.clientY};lastMove=performance.now();hint.classList.add('hide');
+    if(reduce){const r=c.getBoundingClientRect();hero.style.setProperty('--lx',(e.clientX-r.left)+'px');hero.style.setProperty('--ly',(e.clientY-r.top)+'px')}},{passive:true});
+  hero.addEventListener('pointerdown',e=>{if(e.target.closest('a,button'))return;pulse=1;ripples.push(performance.now());Snd.chime([196,293.7],.09,3.2);hint.classList.add('hide');if(reduce)frame(0)});
+  if(matchMedia('(hover:none)').matches)hint.textContent='Drag to cast light. Tap the Iris.';
+  reduce?frame(0):kick();
 })();
 
-/* ---------- case file ---------- */
+/* ---------- the case: hold to listen ---------- */
 const THREADS=[
- {t:'The sighting',lead:'A stranger was seen near the granary on the night the grain went missing.',q:['Who was near the granary that night?','What were they carrying, if anything?','Why were they afraid?'],e:0},
- {t:'The witness',lead:'Someone swears they know who did it. Someone else swears they are not to be trusted.',q:['What was the witness doing out that late?','What do they gain by speaking up?','What do they lose if they are wrong?'],e:1},
- {t:'The paper trail',lead:'In a place where little is written down, something was. Writing outlasts memory.',q:['What was written, and by whom?','Who was it meant to reach?','Why did it end up somewhere else?'],e:2}
+ {t:'The sighting',lead:'A stranger was seen near the granary on the night the grain went missing.',q:['Who was near the granary that night?','What were they carrying, if anything?','Why were they afraid?']},
+ {t:'The witness',lead:'Someone swears they know who did it. Someone else swears they are not to be trusted.',q:['What was the witness doing out that late?','What do they gain by speaking up?','What do they lose if they are wrong?']},
+ {t:'The paper trail',lead:'In a place where little is written down, something was. Writing outlasts memory.',q:['What was written, and by whom?','Who was it meant to reach?','Why did it end up somewhere else?']}
 ];
 const F=['A woman by the granary after dark. Her hands were empty. They would not stop shaking.',
 'A man swears he saw her take it. He has never said what he was doing out that late.',
 'A strongbox, and a letter that was never meant to arrive.'];
+const HOLD=1300,ABC='abcdefghijklmnopqrstuvwxyz';
+const TH=F.map((s,i)=>{const r=mulberry(31+i*17);return [...s].map(ch=>/[a-z]/i.test(ch)?.08+r()*.84:-1)});
 const found=()=>{const f=store.get('found',[]);return Array.isArray(f)?f:[]};
-function showThread(i){
-  const T=THREADS[i],has=found().includes(T.e);
-  $$('.tabs button').forEach(b=>b.setAttribute('aria-selected',+b.dataset.i===i));
-  $('#panel').innerHTML=`<h3>${T.t}</h3><p>${T.lead}</p>`+
-   (has?`<div class="echo-line world">${F[T.e]}</div>`:`<div class="echo-line locked world">An Echo here has not been heard. <a href="../index.html#about">Find it on the portfolio page.</a></div>`)+
-   `<h4>Still unanswered</h4><ul>${T.q.map(x=>`<li>${x}</li>`).join('')}</ul>`;
-  $('#panel').setAttribute('aria-labelledby','t'+i)}
-$$('.tabs button').forEach(b=>b.onclick=()=>showThread(+b.dataset.i));
-showThread(0);
+const garble=(i,p)=>{const s=[...F[i]];return s.map((ch,k)=>(TH[i][k]<0||p>=TH[i][k])?ch.replace(/&/g,'&amp;').replace(/</g,'&lt;'):`<i>${ABC[Math.floor(Math.random()*26)]}</i>`).join('')};
+const ol=$('#threads');
+ol.innerHTML=THREADS.map((T,i)=>`<li class="thread" data-i="${i}">
+  <div class="tmain"><span class="tnum">0${i+1}</span><div><h3>${T.t}</h3><p>${T.lead}</p></div>
+  <button class="listen" type="button" aria-label="Press and hold to listen: ${T.t}"><svg viewBox="0 0 66 66" aria-hidden="true"><circle class="bg" cx="33" cy="33" r="28"/><circle class="fg" cx="33" cy="33" r="28"/></svg><span>Hold</span></button></div>
+  <div class="frag world" aria-hidden="true"></div><span class="sr" aria-live="polite"></span>
+  <div class="unans" hidden><h4>Still unanswered</h4><ul>${T.q.map(x=>`<li>${x}</li>`).join('')}</ul></div></li>`).join('');
+const heard=i=>found().includes(i);
+function ring(li,p){li.querySelector('.fg').style.strokeDashoffset=176*(1-p)}
+function paint(i){const li=ol.children[i],on=heard(i);li.classList.toggle('heard',on);li.querySelector('.frag').innerHTML=on?garble(i,1):garble(i,0);
+  li.querySelector('.listen span').textContent=on?'Heard':'Hold';ring(li,on?1:0);li.querySelector('.unans').hidden=!on}
+function paintAll(){THREADS.forEach((_,i)=>paint(i));const f=found(),n=[0,1,2].filter(i=>f.includes(i)).length;
+  $('#tracker').innerHTML=`<span>Echoes heard ${n} of 3</span>`+[0,1,2].map(i=>`<u class="${f.includes(i)?'on':''}"></u>`).join('');$('#allHeard').hidden=n<3}
+paintAll();
+let hold=null;
+function startHold(i){if(hold)return;const li=ol.children[i],b=li.querySelector('.listen');hold={i,li,b,t0:performance.now(),raf:0,last:0};b.classList.add('on');li.querySelector('.frag').classList.add('live');Snd.holdStart();step()}
+function step(){const h=hold;if(!h)return;const now=performance.now(),p=Math.min(1,(now-h.t0)/HOLD);ring(h.li,p);Snd.holdUpdate(p);
+  if(!heard(h.i)&&now-h.last>70){h.last=now;h.li.querySelector('.frag').innerHTML=garble(h.i,p)}
+  if(p>=1)return finish();h.raf=requestAnimationFrame(step)}
+function finish(){const {i,li}=hold,first=!heard(i);end(true);
+  if(first){const f=found();f.push(i);store.set('found',f);li.querySelector('.sr').textContent=F[i]}
+  Snd.chime([392,587.3,783.99],.13,3);paintAll()}
+function end(done){if(!hold)return;cancelAnimationFrame(hold.raf);const {i,b,li}=hold;hold=null;b.classList.remove('on');li.querySelector('.frag').classList.remove('live');Snd.holdStop();if(!done)paint(i)}
+$$('.listen').forEach((b,i)=>{
+  b.addEventListener('pointerdown',e=>{e.preventDefault();b.setPointerCapture?.(e.pointerId);startHold(i)});
+  ['pointerup','pointercancel','lostpointercapture'].forEach(ev=>b.addEventListener(ev,()=>end(false)));
+  b.addEventListener('contextmenu',e=>e.preventDefault());
+  b.addEventListener('keydown',e=>{if((e.key===' '||e.key==='Enter')&&!e.repeat){e.preventDefault();startHold(i)}});
+  b.addEventListener('keyup',e=>{if(e.key===' '||e.key==='Enter')end(false)});
+  b.addEventListener('blur',()=>end(false))});
+$('#forget').onclick=()=>{store.del('found');paintAll();THREADS.forEach((_,i)=>paint(i))};
+addEventListener('storage',()=>{paintAll();THREADS.forEach((_,i)=>paint(i))});
 
 /* ---------- memory demo: the choice is stored, and the tavern knows you next time ---------- */
 const CH={
- round:{label:'Buy a round for the whole room.',rep:'Generous. Possibly trying too hard.',next:'&ldquo;Back already? Sit. The room has been telling the story of your round all morning. Half of it is even true.&rdquo;',sub:'People are more willing to talk to you. Someone will want something in return.'},
- quiet:{label:'Pay for your drink, say nothing, and leave.',rep:'Quiet. Hard to read.',next:'&ldquo;You again. Said nothing last time, and that made people nervous. A silent stranger is worse than a loud one.&rdquo;',sub:'No one has a reason to like you, or a reason to hate you. Yet.'},
- accuse:{label:'Point at the man by the fire and call him a thief.',rep:'Accuser. Dangerous to be near.',next:'&ldquo;Three people stopped drinking here the night you left. The man by the fire has not been back. I would not ask my questions loudly, if I were you.&rdquo;',sub:'Doors close. The man by the fire now has a reason to hate you, and a story to tell about you.'}
+round:{label:'Buy a round for the whole room.',rep:'Generous. Possibly trying too hard.',next:'&ldquo;Back already? Sit. The room has been telling the story of your round all morning. Half of it is even true.&rdquo;',sub:'People are more willing to talk to you. Someone will want something in return.'},
+quiet:{label:'Pay for your drink, say nothing, and leave.',rep:'Quiet. Hard to read.',next:'&ldquo;You again. Said nothing last time, and that made people nervous. A silent stranger is worse than a loud one.&rdquo;',sub:'No one has a reason to like you, or a reason to hate you. Yet.'},
+accuse:{label:'Point at the man by the fire and call him a thief.',rep:'Accuser. Dangerous to be near.',next:'&ldquo;Three people stopped drinking here the night you left. The man by the fire has not been back. I would not ask my questions loudly, if I were you.&rdquo;',sub:'Doors close. The man by the fire now has a reason to hate you, and a story to tell about you.'}
 };
 const scene=$('#scene');
 function drawScene(){
@@ -425,44 +587,131 @@ function drawScene(){
   if(!k||!CH[k]){
     $('#repu').textContent='Unknown. No one has met you yet.';$('#seen').textContent='Nowhere.';$('#reset').hidden=true;
     scene.innerHTML=`<div class="where">Ashbourne &middot; The tavern</div>
-     <div class="say world">The tavern goes quiet as you step inside. A fire, a few farmers, and a man by the hearth who will not meet your eye.<small>What do you do?</small></div>
+     <div class="say world"><span id="say1"></span><small id="sm1" class="in">What do you do?</small></div>
      <div class="choices">${Object.entries(CH).map(([id,c])=>`<button data-c="${id}">${c.label}</button>`).join('')}</div>`;
-    $$('.choices button').forEach(b=>b.onclick=()=>{store.set('tavern',b.dataset.c);drawScene();scene.querySelector('.say')?.focus?.()});
+    typeText($('#say1'),'The tavern goes quiet as you step inside. A fire, a few farmers, and a man by the hearth who will not meet your eye.',20);
+    $$('.choices button').forEach(b=>b.onclick=()=>{Snd.tick();store.set('tavern',b.dataset.c);Snd.chime([293.7,440],.07,2);drawScene()});
   }else{
     const c=CH[k];
     $('#repu').textContent=c.rep;$('#seen').textContent='Ashbourne, in the tavern.';$('#reset').hidden=false;
     scene.innerHTML=`<div class="where">Ashbourne &middot; The tavern &middot; The next day</div>
-     <div class="say world">${c.next}<small>${c.sub}</small></div>
-     <div class="where" style="color:var(--glow)">Seren remembers. This page did too.</div>`}
+     <div class="say world"><span id="say1"></span><small id="sm1">${c.sub}</small></div>
+     <div class="where" style="color:var(--glow)">Seren remembers. This page did too.</div>`;
+    typeText($('#say1'),c.next,24,()=>$('#sm1').classList.add('in'));
+  }
 }
 $('#reset').onclick=()=>{store.del('tavern');drawScene()};
 drawScene();
 
-/* ---------- regions ---------- */
+/* ---------- the kingdom: four pixel worlds ---------- */
 const RG=[
  {n:'Ashbourne',k:'Farmland &middot; Markets &middot; The tavern',c:['#6dbf2a','#f0d33a','#050802'],names:['green','yellow','black'],d:'Farms, markets, and a tavern where everyone knows your name. Peaceful, for now.',s:'Golden harvest light, windmills and bunting, and the sense that every smile is guarding something.',w:'The harvest smells of smoke this year.',a:['#6dbf2a','#f0d33a','#2f6b1f','#050802']},
  {n:'Constantina',k:'Capital &middot; Cathedrals &middot; Industry',c:['#d4202e','#f3efe8','#050405'],names:['red','white','black'],d:'A gothic capital of cathedrals and factories. Power lives here, and so does the poverty beside it.',s:'Empty streets under red banners, chimneys that never stop, and a city that watches itself.',w:'The chimneys never stop. Nobody is out to hear them.',a:['#d4202e','#f3efe8','#7a0f18','#050405']},
  {n:'Westfall',k:'Frontier &middot; Citadel &middot; The Schism',c:['#8a929c','#8fb0d6','#06080b'],names:['grey','faint blue','black'],d:'A frontier citadel worn down by war. Here the Schism is not history. People remember it.',s:'Cold, damaged and isolated. The people here do not need an Echo to remember what happened.',w:'The wind here carries names.',a:['#8a929c','#8fb0d6','#4a525c','#06080b']},
  {n:'Blackwood',k:'Forest &middot; Ancient &middot; Unmapped',c:['#2a7a52','#3b82ff','#020605'],names:['dark green','blue','black'],d:'A forest so old the sunlight gives up. Something was here long before Seren.',s:'Deep shade, still water, and a quiet that feels like being listened to.',w:'Something older than the kingdom watches. Not me.',a:['#2a7a52','#3b82ff','#0f4a35','#020605'],anc:1}
 ];
-const rl=$('#rlist'),rp=$('#rpanel'),sec=$('#seren');
+const rl=$('#rlist'),rp=$('#rpanel'),sec=$('#seren');let cur=0,renderLand=()=>{};
 RG.forEach((r,i)=>{const b=document.createElement('button');b.setAttribute('role','tab');b.dataset.i=i;
   b.innerHTML=`<span class="sw">${r.c.map(x=>`<u style="background:${x}"></u>`).join('')}</span><span class="hd">${r.n}</span>`;
-  b.onclick=()=>pickRegion(i);rl.appendChild(b)});
-function pickRegion(i){const r=RG[i];
-  $$('#rlist button').forEach((b,j)=>b.setAttribute('aria-selected',j===i));
+  b.onclick=()=>go(i);
+  b.onkeydown=e=>{if(e.key==='ArrowRight'||e.key==='ArrowLeft'){e.preventDefault();const j=(i+(e.key==='ArrowRight'?1:3))%4;go(j);rl.children[j].focus()}};
+  rl.appendChild(b)});
+function setRegion(i){const r=RG[i];cur=i;
+  $$('#rlist button').forEach((b,j)=>{b.setAttribute('aria-selected',j===i);b.tabIndex=j===i?0:-1});
   sec.style.setProperty('--acc',r.a[0]);sec.style.setProperty('--acc2',r.a[1]);sec.style.setProperty('--acc3',r.a[2]);
   rp.innerHTML=`<span class="kind">${r.k}</span><h3 class="hd">${r.n}</h3><p>${r.d}</p><p class="scene-note">${r.s}</p>
-   <p class="scene-note mono">Palette: ${r.names.join(' / ')}</p>
-   <p class="whisper ${r.anc?'ancient':'world'}">&ldquo;${r.w}&rdquo;</p>`}
-pickRegion(0);
+   <p class="scene-note mono">Palette: ${r.names.join(' / ')}</p><p class="whisper ${r.anc?'ancient':'world'}"></p>`;
+  typeText(rp.querySelector('.whisper'),'&ldquo;'+r.w+'&rdquo;',30);Snd.mood(i);renderLand()}
+let busy=false;
+function go(i){i=(i+4)%4;if(i===cur||busy)return;if(reduce){setRegion(i);return}busy=true;Snd.tick();const bl=$('#blink');bl.classList.remove('go');void bl.offsetWidth;bl.classList.add('go');
+  setTimeout(()=>setRegion(i),290);setTimeout(()=>{busy=false;bl.classList.remove('go')},780)}
+let sx=null;sec.addEventListener('touchstart',e=>{sx=e.touches[0].clientX},{passive:true});
+sec.addEventListener('touchend',e=>{if(sx===null)return;const d=e.changedTouches[0].clientX-sx;sx=null;if(Math.abs(d)>70)go(cur+(d<0?1:-1))},{passive:true});
 
-/* ---------- echoes found on the portfolio page ---------- */
-function drawEchoes(){const f=found();
-  $('#echoList').innerHTML=F.map((x,i)=>{const on=f.includes(i);return `<li class="${on?'on':''}"><b>${String(i+1).padStart(2,'0')}</b><span>${on?x:'Not yet heard.'}</span></li>`}).join('');
-  $('#echoHint').textContent=f.length>=3?'You have heard all three. The Iris has more to show.':f.length?`${f.length} of 3 heard. The rest are hidden in the text on the portfolio page.`:'None heard yet. Two are hidden in the text on the portfolio page, and one is in its footer.'}
-drawEchoes();
-addEventListener('storage',()=>{drawEchoes();showThread(+($('.tabs [aria-selected=true]').dataset.i))});
+(function(){
+  const c=$('#land'),g=c.getContext('2d'),PS=4;let W,H,S,px=0,tpx=0,vis=false,running=false,lastMove=-1e9;
+  const R=(x,y,w,h,col)=>{g.fillStyle=col;g.fillRect(Math.round(x),Math.round(y),Math.max(1,Math.round(w)),Math.max(1,Math.round(h)))};
+  const bands=st=>{const n=st.length-1;for(let y=0;y<H;y+=3){const u=y/H*n,i=Math.min(n-1,Math.floor(u));R(0,y,W,3,mix(st[i],st[i+1],u-i))}};
+  const yAt=(X,b,a,f,p)=>Math.round(b+Math.sin(X*f+p)*a+Math.sin(X*f*2.3+p*1.7)*a*.4);
+  const ridge=(b,a,f,p,col,par)=>{g.fillStyle=col;for(let x=0;x<W;x++){const y=yAt(x+px*par,b,a,f,p);g.fillRect(x,y,1,H-y)}};
+  const disc=(cx,cy,r,col)=>{for(let dy=-r;dy<=r;dy++){const hw=Math.round(Math.sqrt(r*r-dy*dy));R(cx-hw,cy+dy,hw*2+1,1,col)}};
+  const glow=(x,y,r,rgb,a)=>{const q=g.createRadialGradient(x,y,0,x,y,r);q.addColorStop(0,`rgba(${rgb},${a})`);q.addColorStop(1,`rgba(${rgb},0)`);g.fillStyle=q;g.fillRect(x-r,y-r,r*2,r*2)};
+  function mkCity(r,hs){const a=[];let x=-14;while(x<W+24){const w=8+Math.floor(r()*18),k=r();a.push({x,w,h:H*(.16+r()*.26)*hs,t:k<.2?'spire':k<.4?'tower':'flat',ch:r()<.3,ban:r()<.3,win:[...Array(Math.round(w*.5))].map(()=>({dx:1+Math.floor(r()*(w-3)),dy:4+Math.floor(r()*28),on:r()<.45,ph:r()*6}))});x+=w+Math.floor(r()*3)}return a}
+  function build(){const r=mulberry(7);
+    S={parts:[...Array(70)].map(()=>({x:r()*W,y:r()*H,v:.1+r()*.9,ph:r()*6,s:r()})),
+       city:[mkCity(r,.7),mkCity(r,1.05)],
+       trees:[0,1,2].map(L=>{const n=Math.round(W/(34-L*9)),a=[];for(let i=0;i<n;i++)a.push({x:-W*.12+r()*W*1.24,w:[2,4,7][L]+Math.floor(r()*3)});return a})};
+    S.rune=S.trees[2].find(t=>t.x>W*.66&&t.x<W*.84)||S.trees[2][0];
+    S.city[1][Math.floor(S.city[1].length*.55)]={x:S.city[1][Math.floor(S.city[1].length*.55)].x,w:26,h:H*.5,t:'spire',ch:false,ban:true,win:[]}}
+  function size(){const r=sec.getBoundingClientRect();W=Math.ceil(r.width/PS);H=Math.ceil(r.height/PS);c.width=W;c.height=H;build()}
+  function parts(t,kind){S.parts.forEach(p=>{let x,y,col,a,w=1;
+    if(kind===0){x=(p.x+Math.sin(t/1400+p.ph)*8+W)%W;y=H*.58+p.y*.3+Math.sin(t/1100+p.ph)*5;a=Math.max(0,Math.sin(t/500+p.ph*3));col='#f0d33a'}
+    else if(kind===1){x=((p.x-t*.004*p.v)%W+W)%W;y=(p.y+t*.012*(.4+p.v))%H;a=.55;col=p.s<.5?'#f3efe8':'#d4202e'}
+    else if(kind===2){x=((p.x-t*.07*(.7+p.s*1.6))%W+W)%W;y=p.y*.86;a=.28;w=4+Math.floor(p.s*7);col=p.s<.5?'#8fb0d6':'#8a929c'}
+    else{x=p.x+Math.sin(t/900+p.ph)*4;y=((p.y-t*.01*(.4+p.v))%H+H)%H;if(y>H*.8)return;a=.35+.6*Math.abs(Math.sin(t/600+p.ph));col=p.s<.75?'#3b82ff':'#0ABF00'}
+    g.globalAlpha=a;R(x,y,w,1,col)});g.globalAlpha=1}
+  function ashbourne(t){
+    bands(['#0a1205','#2c3a0c','#8a7a1c','#e0b93a']);
+    const sx=W*.74-px*2,sy=H*.52;glow(sx,sy,H*.55,'240,211,58',.55);disc(Math.round(sx),Math.round(sy),Math.round(H*.07),'#f0d33a');
+    ridge(H*.60,5,.021,1,'#46651f',5);ridge(H*.68,7,.027,2,'#2f6b1f',12);
+    const X0=W*.57,wx=X0-px*12,by=yAt(X0,H*.68,7,.027,2)+2,hy=by-20;
+    for(let i=0;i<20;i++)R(wx-(9-i*.3)/2,by-i,9-i*.3,1,'#050802');
+    for(let j=0;j<4;j++){const a=t/2600+j*Math.PI/2,cs=Math.cos(a),sn=Math.sin(a);for(let k=2;k<17;k++){R(wx+cs*k,hy+sn*k,1,1,'#050802');if(k>7)R(wx+cs*k-sn*(k-6)*.25,hy+sn*k+cs*(k-6)*.25,1,1,'#050802')}}
+    ridge(H*.80,5,.03,4,'#1c3d12',24);
+    for(let x=-10;x<W+20;x+=13){const X=x-px*34%13;R(X,H*.84+Math.sin(X*.2)*0,1,8,'#0a1605');R(X-1,H*.85,6,1,'#0a1605')}
+    ridge(H*.93,3,.05,6,'#050802',40);parts(t,0)}
+  function constantina(t){
+    bands(['#14050a','#4a0a14','#a3141f']);
+    g.globalAlpha=.9;disc(Math.round(W*.47-px*2),Math.round(H*.3),Math.round(H*.045),'#f3efe8');g.globalAlpha=1;
+    const gy=Math.round(H*.84);
+    S.city.forEach((layer,li)=>{const par=li?12:5,col=li?'#0a0306':'#2a0812';
+      layer.forEach(b=>{const bx=b.x-px*par,top=gy-Math.round(b.h);R(bx,top,b.w,gy-top,col);
+        if(b.t==='spire'){const sh=Math.round(b.w*1.9);for(let k=0;k<sh;k++){const w=Math.max(1,Math.round(b.w*(1-k/sh)));R(bx+(b.w-w)/2,top-k-1,w,1,col)}}
+        else if(b.t==='tower')R(bx+b.w*.25,top-7,b.w*.5,7,col);
+        if(b.ch&&li){R(bx+b.w*.3,top-9,2,9,col);for(let i=0;i<5;i++){const age=(t/70+i*10+b.x)%50;g.globalAlpha=(1-age/50)*.3;R(bx+b.w*.3+Math.sin(age*.2+b.x)*2+age*.2,top-10-age,2+age/12,2+age/12,'#f3efe8')}g.globalAlpha=1}
+        if(li&&b.ban)for(let i=0;i<13;i++)R(bx+b.w-3+Math.round(Math.sin(t/420+i*.3+b.x)*1.3),top+i,3,1,'#d4202e');
+        if(li)b.win.forEach(w=>{if(w.on&&w.dy<b.h-4){g.globalAlpha=.45+.35*Math.sin(t/900+w.ph);R(bx+w.dx,top+w.dy,1,2,'#f3efe8')}});g.globalAlpha=1})});
+    R(0,gy,W,H-gy,'#050405');g.globalAlpha=.6;R(0,gy,W,1,'#d4202e');g.globalAlpha=1;parts(t,1)}
+  function westfall(t){
+    bands(['#06080b','#1a212a','#4a525c','#8a929c']);
+    ridge(H*.56,10,.013,1,'#2d353f',4);ridge(H*.66,9,.018,3,'#1b2128',10);
+    const sx=Math.round(W*.62-px*14),base=Math.round(H*.8),top=base-30,col='#0d1116';
+    for(let dx=-46;dx<=46;dx++){const h=Math.round(32*(1-Math.pow(Math.abs(dx)/46,2.6)));R(sx+dx,base-h,1,H-base+h,col)}
+    R(sx-24,top-14,48,34,col);for(let i=-24;i<24;i+=4)R(sx+i,top-17,2,3,col);
+    R(sx-27,top-34,10,50,col);R(sx+17,top-30,10,46,col);R(sx-7,top-46,14,62,col);
+    for(const x of [-27,-23,-19,17,21,25])R(sx+x,top-(x<0?37:33),2,3,col);for(let i=-7;i<7;i+=4)R(sx+i,top-49,2,3,col);
+    g.globalAlpha=.6+.4*Math.sin(t/700);R(sx-1,top-34,2,4,'#8fb0d6');g.globalAlpha=.4;R(sx-22,top-24,1,3,'#8fb0d6');g.globalAlpha=1;
+    R(sx,top-64,1,17,col);for(let i=0;i<9;i++)R(sx+1+i,top-64+Math.round(Math.sin(t/200+i*.6)*1.4)+Math.floor(i*.25),1,3,'#8fb0d6');
+    parts(t,2);ridge(H*.9,4,.04,5,'#06080b',30);
+    for(let x=-10;x<W+20;x+=29){const X=x-px*30%29;R(X,H*.86-(x%3)*2,2,H*.06,'#06080b')}}
+  function blackwood(t){
+    bands(['#010403','#04120d','#0a2a1f']);
+    const ox=Math.round(W*.58-px*6),oy=Math.round(H*.48),wy=Math.round(H*.8);
+    glow(ox,oy,H*.55,'59,130,255',.45+.08*Math.sin(t/900));disc(ox,oy,3,'#9cc3ff');
+    const cols=['#072a21','#041a14','#020b08'],pars=[6,14,28];
+    const lit=['#0d3a2c','#0a2a20','#06150f'];
+    S.trees.forEach((layer,L)=>layer.forEach(tr=>{const x=tr.x-px*pars[L];R(x,0,tr.w,wy,cols[L]);R(x+(x<ox?tr.w-1:0),0,1,wy,lit[L]);R(x-1,wy-H*.04,tr.w+2,H*.05,cols[L])}));
+    g.fillStyle='#010403';for(let x=0;x<W;x++){const h=Math.round(H*.1+Math.sin((x+px*10)*.05)*5+Math.sin((x+px*10)*.13)*3);g.fillRect(x,0,1,h)}
+    for(let i=0;i<3;i++){g.globalAlpha=.05;R(0,H*(.5+i*.1)+Math.sin(t/3000+i)*4,W,10,'#6fd0b0')}g.globalAlpha=1;
+    const rt=S.rune;if(rt){const rx=Math.round(rt.x-px*28+rt.w/2),ry=Math.round(H*.4);g.globalAlpha=.55+.45*Math.sin(t/500);R(rx,ry,1,11,'#0ABF00');R(rx-3,ry+2,3,1,'#0ABF00');R(rx+1,ry+5,3,1,'#0ABF00');R(rx-2,ry+8,2,1,'#0ABF00');R(rx-3,ry+2,1,3,'#0ABF00');g.globalAlpha=1}
+    for(let y=wy;y<H;y+=2)R(0,y,W,2,mix('#04201a','#010403',(y-wy)/(H-wy)));
+    for(let r=0;r<26;r++){const w=Math.max(1,7-r*.22);g.globalAlpha=.55*(1-r/26);R(ox+Math.sin(t/500+r*.7)*2-w/2,wy+r*2,w,1,'#3b82ff')}g.globalAlpha=1;
+    const rr=(t/40)%46;g.globalAlpha=1-rr/46;for(let k=0;k<360;k+=4){const a=k*Math.PI/180;R(ox+Math.cos(a)*rr,wy+14+Math.sin(a)*rr*.22,1,1,'#9cc3ff')}g.globalAlpha=1;
+    parts(t,3)}
+  const SCENES=[ashbourne,constantina,westfall,blackwood];
+  function frame(t){const live=t-lastMove<3000;if(!live)tpx=Math.sin(t/4000)*.6;px+=(tpx-px)*.06;g.clearRect(0,0,W,H);SCENES[cur](t);g.globalAlpha=1}
+  function loop(t){if(!vis||document.hidden){running=false;return}frame(t);requestAnimationFrame(loop)}
+  function kick(){if(!running&&!reduce){running=true;requestAnimationFrame(loop)}}
+  renderLand=()=>{if(reduce&&W)frame(0)};
+  size();new ResizeObserver(()=>{size();renderLand()}).observe(sec);
+  sec.addEventListener('pointermove',e=>{const r=sec.getBoundingClientRect();tpx=((e.clientX-r.left)/r.width-.5)*2;lastMove=performance.now()},{passive:true});
+  new IntersectionObserver(es=>{vis=es[0].isIntersecting;kick()},{rootMargin:'100px'}).observe(sec);
+  document.addEventListener('visibilitychange',kick);
+  setRegion(0);reduce&&frame(0);
+})();
+
+/* ---------- steam button: set STEAM_URL at the top to switch it on ---------- */
+if(STEAM_URL){['#steamHero','#steamCta'].forEach(s=>{const a=$(s);a.href=STEAM_URL;a.target='_blank';a.rel='noopener';a.removeAttribute('aria-disabled');a.textContent='Wishlist on Steam'});$('#storeCell').innerHTML=`<a href="${STEAM_URL}" target="_blank" rel="noopener">Wishlist on Steam</a>`}
 </script>
 </body>
 </html>
