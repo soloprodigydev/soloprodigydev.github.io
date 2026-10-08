@@ -106,7 +106,7 @@ h1.pix{font-size:clamp(3rem,12vw,8.5rem);letter-spacing:.04em;line-height:1;colo
 .meta{font-size:.78rem;color:var(--dim);letter-spacing:.08em;display:flex;flex-wrap:wrap;gap:.3rem 1.2rem;margin-top:2rem}
 .btns{display:flex;flex-wrap:wrap;gap:.8rem}
 .btn{font:400 .8rem Plex,monospace;letter-spacing:.14em;text-transform:uppercase;text-decoration:none;padding:.9rem 1.7rem;border:1px solid var(--acc);color:var(--acc2);border-radius:4px;transition:background .25s,box-shadow .25s,transform .25s,translate .25s;display:inline-block;cursor:pointer}
-.btn:hover{background:rgba(139,92,246,.28);box-shadow:0 0 30px rgba(139,92,246,.35);transform:translateY(-2px)}
+.btn:hover{background:rgba(139,92,246,.28);transform:translateY(-2px)}
 .btn.solid{background:var(--acc);color:#fff}
 .btn.solid:hover{background:#9d78ff}
 .btn[aria-disabled=true]{opacity:.55;pointer-events:none}
@@ -450,10 +450,8 @@ html.fail .curtain{display:none!important}
 
 footer{position:relative;overflow:hidden;border-top:0;padding:5.5rem 0 2.2rem;text-align:left;font-size:.9rem;color:var(--dim);isolation:isolate}
 footer::before{content:"";position:absolute;top:0;left:0;right:0;height:1px;background:linear-gradient(90deg,transparent,var(--glow),transparent);box-shadow:0 0 22px 2px var(--acc);opacity:.85}
-.fglow{position:absolute;left:50%;top:0;width:min(1000px,130vw);height:420px;translate:-50% -48%;z-index:-1;background:radial-gradient(ellipse at 50% 50%,color-mix(in srgb,var(--acc) 32%,transparent),transparent 68%);pointer-events:none;animation:fbreath 7s ease-in-out infinite}
-@keyframes fbreath{50%{opacity:.5;scale:1.1 1}}
 .fbrand{text-align:center;margin-bottom:3.2rem}
-.fmark{display:block;font-size:clamp(2.4rem,10vw,6.4rem);letter-spacing:.06em;line-height:1;color:transparent;background:linear-gradient(100deg,var(--acc),var(--acc3) 55%,var(--acc2));-webkit-background-clip:text;background-clip:text;filter:drop-shadow(0 0 calc(22px + var(--beat,0)*30px) rgba(139,92,246,calc(.4 + var(--beat,0)*.35)))}
+.fmark{display:block;font-size:clamp(2.4rem,10vw,6.4rem);letter-spacing:.06em;line-height:1;color:var(--glow);filter:drop-shadow(0 0 calc(22px + var(--beat,0)*30px) rgba(139,92,246,calc(.4 + var(--beat,0)*.35)))}
 .fbrand p{margin-top:.9rem;color:var(--glow);font-size:1.05rem}
 .flinks{display:flex;flex-wrap:wrap;justify-content:center;gap:.5rem 1.6rem;margin-bottom:2.5rem}
 .flinks a{font:400 .85rem Plex,monospace;color:var(--bone);text-decoration:none}
@@ -485,7 +483,7 @@ footer::before{content:"";position:absolute;top:0;left:0;right:0;height:1px;back
 @media(hover:none){.lore .lhint .desk{display:none}.lore .lhint .touch{display:inline}}
 @media(max-width:760px){.lore .lhint{bottom:4rem;left:.8rem;max-width:80vw}}
 @keyframes lhint{0%{opacity:0}12%,80%{opacity:.9}100%{opacity:0}}
-@media(prefers-reduced-motion:reduce){.lore .lhint{animation:none;opacity:.8}.fglow{animation:none}}
+@media(prefers-reduced-motion:reduce){.lore .lhint{animation:none;opacity:.8}}
 </style>
 <noscript><style>.rv{opacity:1!important;transform:none!important;filter:none!important}.curtain{display:none!important}</style></noscript>
 <script>setTimeout(function(){if(!window.__ready)document.documentElement.classList.add('fail')},4000)</script>
@@ -542,9 +540,9 @@ footer::before{content:"";position:absolute;top:0;left:0;right:0;height:1px;back
 </div>
 
 <div class="pillars">
-  <div class="rv"><h3>Fragments, not answers</h3><p>Your Echoes of the Iris show pieces of the past. They never tell you who is right.</p></div>
-  <div class="rv"><h3>Everyone has a reason to lie</h3><p>Witnesses hold grudges. Neighbours protect secrets. The truth is whatever survives the doubt.</p></div>
-  <div class="rv"><h3>Seren remembers</h3><p>People keep track of what you say and do, and they change how they treat you because of it.</p></div>
+  <div ><h3>Fragments, not answers</h3><p>Your Echoes of the Iris show pieces of the past. They never tell you who is right.</p></div>
+  <div ><h3>Everyone has a reason to lie</h3><p>Witnesses hold grudges. Neighbours protect secrets. The truth is whatever survives the doubt.</p></div>
+  <div ><h3>Seren remembers</h3><p>People keep track of what you say and do, and they change how they treat you because of it.</p></div>
 </div>
 
 <!-- the case -->
@@ -556,7 +554,7 @@ footer::before{content:"";position:absolute;top:0;left:0;right:0;height:1px;back
       <div class="intro rv">
         <p class="lead">It starts small, in a quiet valley. Grain disappears from the granary, and a kingdom already split by war has no patience left for small things.</p>
         <p>A stranger was seen near the granary. A witness has a grudge. Everyone you meet has something to protect, and a reason to point you somewhere else.</p>
-        <p class="world">&ldquo;Echoes show fragments of the past, never answers.&rdquo;</p>
+        <p class="world">"Echoes show fragments of the past, never answers."</p>
         <p>You are not handed a culprit. You gather what people say, what the Echoes show, and what each person stands to lose, then decide for yourself what happened.</p>
         <p class="hintline" style="color:var(--glow);font-size:.85rem">Try it. Press and hold a circle to listen.</p>
       </div>
@@ -576,9 +574,9 @@ footer::before{content:"";position:absolute;top:0;left:0;right:0;height:1px;back
 <!-- memory demo -->
 <section id="memory" class="mem" data-label="Memory">
   <div class="wrap">
-    <h2 class="rv">Try it. This page will remember too.</h2>
-    <p class="lead rv">A small taste of the idea: you walk into a tavern, you do one thing, and that choice follows you. Leave, come back, and see.</p>
-    <div class="stage rv">
+    <h2 >Try it. This page will remember too.</h2>
+    <p class="lead">A small taste of the idea: you walk into a tavern, you do one thing, and that choice follows you. Leave, come back, and see.</p>
+    <div class="stage">
       <div class="scene" id="scene" aria-live="polite"></div>
       <aside class="ledger2">
         <h3>What Seren knows about you</h3>
@@ -620,23 +618,23 @@ footer::before{content:"";position:absolute;top:0;left:0;right:0;height:1px;back
 <!-- how it plays -->
 <section id="play" data-label="How it plays">
   <div class="wrap">
-    <h2 class="rv">What you actually do</h2>
-    <p class="lead rv">The whole game is one loop, and Seren pushes back at every step.</p>
+    <h2 >What you actually do</h2>
+    <p class="lead">The whole game is one loop, and Seren pushes back at every step.</p>
     <div class="loop">
-      <article class="rv"><span class="n">01</span><h3>Investigate</h3><p>Walk Seren's roads, question its people, and look closely at what they would rather you didn't.</p></article>
-      <article class="rv"><span class="n">02</span><h3>Listen</h3><p>Use the Echoes of the Iris to hear what a place remembers: a glimpse, a sentence, a thing left behind. Never the whole picture.</p></article>
-      <article class="rv"><span class="n">03</span><h3>Decide</h3><p>No narrator names the guilty. Weigh the fragments against what each person stands to lose, and commit to a conclusion.</p></article>
-      <article class="rv"><span class="n">04</span><h3>Be remembered</h3><p>Seren keeps count. People change what they tell you, and what they hide, based on what you have already done.</p></article>
+      <article ><span class="n">01</span><h3>Investigate</h3><p>Walk Seren's roads, question its people, and look closely at what they would rather you didn't.</p></article>
+      <article ><span class="n">02</span><h3>Listen</h3><p>Use the Echoes of the Iris to hear what a place remembers: a glimpse, a sentence, a thing left behind. Never the whole picture.</p></article>
+      <article ><span class="n">03</span><h3>Decide</h3><p>No narrator names the guilty. Weigh the fragments against what each person stands to lose, and commit to a conclusion.</p></article>
+      <article ><span class="n">04</span><h3>Be remembered</h3><p>Seren keeps count. People change what they tell you, and what they hide, based on what you have already done.</p></article>
     </div>
-    <p class="loopnote rv">Because the Echoes are partial and the people are biased, two players can walk the same road, hear the same fragment, and come away certain of different things.</p>
+    <p class="loopnote">Because the Echoes are partial and the people are biased, two players can walk the same road, hear the same fragment, and come away certain of different things.</p>
   </div>
 </section>
 
 <!-- details -->
 <section id="details" data-label="Details">
   <div class="wrap">
-    <h2 class="rv">Quick facts</h2>
-    <table class="spec rv">
+    <h2 >Quick facts</h2>
+    <table class="spec">
       <tr><td>Status</td><td><span class="dot"></span>In active development</td></tr>
       <tr><td>Genre</td><td>Story-driven mystery</td></tr>
       <tr><td>Setting</td><td>The Kingdom of Seren: Ashbourne, Constantina, Westfall and Blackwood</td></tr>
@@ -644,7 +642,7 @@ footer::before{content:"";position:absolute;top:0;left:0;right:0;height:1px;back
       <tr><td>Store</td><td id="storeCell">Steam page coming soon</td></tr>
       <tr><td>Release</td><td>TBA. Ships when it's ready.</td></tr>
     </table>
-    <div class="cta rv">
+    <div class="cta">
       <div><h3>Follow the case.</h3><p>Questions, bugs, feedback, or press? Come say hello.</p></div>
       <div class="btns"><a class="btn solid" href="#" id="steamCta" aria-disabled="true">Steam page coming soon</a><a class="btn" href="contact.html">Contact</a><a class="btn" href="https://beacons.ai/soloprodigy" rel="noopener">Follow the dev</a><a class="btn" href="../index.html">Portfolio</a></div>
     </div>
@@ -652,9 +650,8 @@ footer::before{content:"";position:absolute;top:0;left:0;right:0;height:1px;back
 </section>
 
 <footer id="legal">
-  <div class="fglow" aria-hidden="true"></div>
   <div class="wrap">
-    <div class="fbrand rv"><span class="pix fmark">UNSHADED</span><p class="world">Find out what actually happened.</p></div>
+    <div class="fbrand"><span class="pix fmark">UNSHADED</span><p class="world">Find out what actually happened.</p></div>
     <nav class="flinks" aria-label="Legal and contact">
       <a href="eula.html">EULA</a>
       <a href="terms.html">Terms of Service</a>
@@ -662,7 +659,7 @@ footer::before{content:"";position:absolute;top:0;left:0;right:0;height:1px;back
       <a href="mods.html">Modding</a>
       <a href="contact.html">Contact</a>
     </nav>
-    <div class="fbase rv"><div>&copy; 2026 UNSHADED by Solo Prodigy Dev. All rights reserved.</div><button class="totop" id="toTop" type="button">Back to top <span aria-hidden="true">&uarr;</span></button></div>
+    <div class="fbase"><div>&copy; 2026 UNSHADED by Solo Prodigy Dev. All rights reserved.</div><button class="totop" id="toTop" type="button">Back to top <span aria-hidden="true">&uarr;</span></button></div>
   </div>
 </footer>
 <noscript><p style="position:fixed;bottom:0;left:0;right:0;padding:1rem;background:#1b1033;color:#f4f1ff;text-align:center;z-index:99">UNSHADED's page is interactive and needs JavaScript. The game is a story-driven mystery set in the Kingdom of Seren. Contact: soloprodigydev@gmail.com</p></noscript>
@@ -1278,9 +1275,9 @@ addEventListener('storage',()=>{paintAll();THREADS.forEach((_,i)=>paint(i))});
 
 /* memory demo: the choice is stored, and the tavern knows you next time */
 const CH={
-round:{label:'Buy a round for the whole room.',rep:'Generous. Possibly trying too hard.',next:'&ldquo;Back already? Sit. The room has been telling the story of your round all morning. Half of it is even true.&rdquo;',sub:'People are more willing to talk to you. Someone will want something in return.'},
-quiet:{label:'Pay for your drink, say nothing, and leave.',rep:'Quiet. Hard to read.',next:'&ldquo;You again. Said nothing last time, and that made people nervous. A silent stranger is worse than a loud one.&rdquo;',sub:'No one has a reason to like you, or a reason to hate you. Yet.'},
-accuse:{label:'Point at the man by the fire and call him a thief.',rep:'Accuser. Dangerous to be near.',next:'&ldquo;Three people stopped drinking here the night you left. The man by the fire has not been back. I would not ask my questions loudly, if I were you.&rdquo;',sub:'Doors close. The man by the fire now has a reason to hate you, and a story to tell about you.'}
+round:{label:'Buy a round for the whole room.',rep:'Generous. Possibly trying too hard.',next:'"Back already? Sit. The room has been telling the story of your round all morning. Half of it is even true."',sub:'People are more willing to talk to you. Someone will want something in return.'},
+quiet:{label:'Pay for your drink, say nothing, and leave.',rep:'Quiet. Hard to read.',next:'"You again. Said nothing last time, and that made people nervous. A silent stranger is worse than a loud one."',sub:'No one has a reason to like you, or a reason to hate you. Yet.'},
+accuse:{label:'Point at the man by the fire and call him a thief.',rep:'Accuser. Dangerous to be near.',next:'"Three people stopped drinking here the night you left. The man by the fire has not been back. I would not ask my questions loudly, if I were you."',sub:'Doors close. The man by the fire now has a reason to hate you, and a story to tell about you.'}
 };
 const scene=$('#scene');
 function drawScene(){
@@ -1325,7 +1322,7 @@ function setRegion(i){const r=RG[i];cur=i;
   rp.innerHTML=`<span class="kind">${r.k}</span><h3 class="hd">${r.t}</h3><p class="rtag world">${r.tag}</p><p>${r.b}</p>
    <button class="btn learn" type="button" data-i="${i}">Learn more <span aria-hidden="true">&rarr;</span></button><p class="whisper ${r.anc?'ancient':'world'}"></p>`;
   rp.querySelector('.learn').onclick=e=>openLore(i,e.currentTarget);
-  typeText(rp.querySelector('.whisper'),'&ldquo;'+r.w+'&rdquo;',30);Snd.mood(i);syncZone();renderLand()}
+  typeText(rp.querySelector('.whisper'),'"'+r.w+'"',30);Snd.mood(i);syncZone();renderLand()}
 let busy=false;
 function go(i){i=(i+4)%4;if(i===cur||busy)return;if(reduce){setRegion(i);return}busy=true;Snd.tick();const bl=$('#blink');bl.classList.remove('go');void bl.offsetWidth;bl.classList.add('go');
   setTimeout(()=>setRegion(i),430);setTimeout(()=>{busy=false;bl.classList.remove('go')},1150)}
@@ -1344,7 +1341,7 @@ const P=s=>s.trim().split('\n').map(x=>x.trim()).filter(Boolean);
 const ARCH=[
 [
  {no:'Archive 01',t:'Founding of the Valley',m:[['Classification','Historical Record'],['Origin','Ashbourne Municipal Archive'],['Estimated Age','600–700 years']],
-  q:P(`“The first settlement was established beside the river, where the soil was dark and the water ran clear.”`),
+  q:P(`"The first settlement was established beside the river, where the soil was dark and the water ran clear."`),
   p:P(`There is little agreement regarding the exact founding of Ashbourne.
 The oldest surviving records describe no grand ceremony, no royal decree and no military conquest.
 Instead, they describe farmers.
@@ -1379,14 +1376,14 @@ Newer districts are more organised, but even these often curve around old proper
 The city was never designed all at once.
 It accumulated.`)},
  {no:'Archive 03',t:'A Letter from Home',m:[['Classification','Personal Correspondence'],['Author','Unknown'],['Date','Approximately 80 years before the Schism']],
-  q:P(`“You asked whether I intend to leave.”
-“I don't think I could.”
-“There are places beyond the valley where people live completely different lives. I know that. I have heard their stories.”
-“But here, everyone knows everyone.”
-“When the harvest is good, the whole valley knows.”
-“When someone's house burns, the whole valley knows.”
-“Perhaps that is what makes Ashbourne different.”
-“You are never really alone here.”`),
+  q:P(`"You asked whether I intend to leave."
+"I don't think I could."
+"There are places beyond the valley where people live completely different lives. I know that. I have heard their stories."
+"But here, everyone knows everyone."
+"When the harvest is good, the whole valley knows."
+"When someone's house burns, the whole valley knows."
+"Perhaps that is what makes Ashbourne different."
+"You are never really alone here."`),
   p:P(`The letter was discovered in a private collection and later donated to the Ashbourne Historical Society.
 The identity of the author remains unknown.`)},
  {no:'Archive 04',t:'The Schism',m:[['Classification','Historical Record']],
@@ -1435,7 +1432,7 @@ But peace is not the same thing as being untouched.
 The people of Ashbourne have learned that the outside world can reach them eventually.
 No matter how far away it seems.`)},
  {no:'Archive Note',t:'',c:'note',l:'The following statement has been removed from the public archive.',
-  q:P(`“Ashbourne survived because nobody important thought it worth destroying.”`),
+  q:P(`"Ashbourne survived because nobody important thought it worth destroying."`),
   p:P(`The author of the statement is unknown.`)}
 ],
 [
@@ -1465,7 +1462,7 @@ Bridges connect parts of the city that were once separate settlements.
 The city became a record of itself.
 To walk through Constantina is to walk through hundreds of years of construction.`)},
  {no:'Archive 03',t:'The Capital',m:[['Classification','Royal Decree']],
-  q:P(`“From this city shall the affairs of Seren be administered, its laws maintained, and its people represented.”`),
+  q:P(`"From this city shall the affairs of Seren be administered, its laws maintained, and its people represented."`),
   p:P(`Constantina eventually became the undisputed political centre of Seren.
 The kingdom's most powerful institutions were concentrated within its walls.
 The government.
@@ -1518,14 +1515,14 @@ Who had the right to speak for Seren?
 And at what point does defending a kingdom become destroying it?
 The official records do not answer these questions.`)},
  {no:'Archive 07',t:`Worker's Journal`,m:[['Classification','Personal Account'],['Author','Redacted'],['Origin','Constantina Industrial District']],
-  q:P(`“They say the city is growing.”
-“I suppose it is.”
-“There are more buildings every year.”
-“More machines.”
-“More soldiers.”
-“More smoke.”
-“They say we should be proud.”
-“I think I would like to see the sky again.”`),
+  q:P(`"They say the city is growing."
+"I suppose it is."
+"There are more buildings every year."
+"More machines."
+"More soldiers."
+"More smoke."
+"They say we should be proud."
+"I think I would like to see the sky again."`),
   p:P(`The remainder of the journal is missing.`)},
  {no:'Archive 08',t:'Present Constantina',
   p:P(`Constantina remains the largest city in Seren.
@@ -1591,9 +1588,9 @@ Food became scarce.
 Trade routes were disrupted.
 Yet the city remained.`)},
  {no:'Archive 05',t:`A Soldier's Letter`,m:[['Classification','Personal Correspondence'],['Author','Unknown Westfall Soldier']],
-  q:P(`“Mother asked when I will come home.”
-“I did not know what to tell her.”
-“I am home.”`),
+  q:P(`"Mother asked when I will come home."
+"I did not know what to tell her."
+"I am home."`),
   p:P(`The letter contains no further explanation.`)},
  {no:'Archive 06',t:'The Ruins',m:[['Classification','Reconstruction Record']],
   p:P(`By the later stages of the conflict, entire districts of Westfall had been damaged or abandoned.
@@ -1634,7 +1631,7 @@ Not because the war spared it.
 Because it didn't.`)},
  {no:'Archive Note',t:'',c:'note',
   pre:P(`A common saying among older Westfall residents is:`),
-  q:P(`“The walls remember.”`),
+  q:P(`"The walls remember."`),
   p:P(`The origin of the phrase is unknown.`)}
 ],
 [
@@ -1679,11 +1676,11 @@ Its unexplained structures.
 To many people, the forest is sacred.
 Others simply consider it dangerous.`)},
  {no:'Archive 05',t:`Traveller's Journal`,m:[['Classification','Personal Account']],
-  q:P(`“There are places beneath the forest where the trees are larger than buildings.”
-“I found a river underground.”
-“There were lights in the water.”
-“I heard something moving beyond the cavern.”
-“We left before we found out what it was.”`),
+  q:P(`"There are places beneath the forest where the trees are larger than buildings."
+"I found a river underground."
+"There were lights in the water."
+"I heard something moving beyond the cavern."
+"We left before we found out what it was."`),
   p:P(`The traveller returned to Ashbourne three days later.
 They never returned to Blackwood.`)},
  {no:'Archive 06',t:'The Deepest Chambers',m:[['Classification','Restricted Archaeological Record']],
@@ -1721,7 +1718,7 @@ Something that does not fit neatly into any historical record.`)},
  {no:'Final Archive Note',t:'',c:'note',l:'This document has been amended several times.',
   pre:P(`The original final paragraph has been removed.
 The replacement reads:`),
-  q:P(`“Further exploration is unnecessary.”`),
+  q:P(`"Further exploration is unnecessary."`),
   p:P(`No author is listed.
 The previous version cannot be located.`)}
 ]
@@ -1813,14 +1810,6 @@ sec.addEventListener('touchend',e=>{if(sx===null)return;const d=e.changedTouches
   renderLand=()=>land.setScene(NAMES[cur]);
   setRegion(0);
 })();
-
-/* cinematic layer: slow parallax on the painted plates */
-(function(){
-  const plates=[[$('#hero'),$('#sky').parentNode,.1],[sec,$('#land').parentNode,.04]];let q=false;
-  function upd(){q=false;const vh=innerHeight;plates.forEach(([h,p,k])=>{const r=h.getBoundingClientRect();if(r.bottom<-80||r.top>vh+80)return;p.style.setProperty('--py',((vh/2-(r.top+r.height/2))*k).toFixed(1)+'px')})}
-  if(reduce)return;addEventListener('scroll',()=>{if(!q){q=true;requestAnimationFrame(upd)}},{passive:true});addEventListener('resize',upd);upd();
-})();
-
 
 /* cursor aura */
 (function(){if(matchMedia('(hover:none)').matches)return;
