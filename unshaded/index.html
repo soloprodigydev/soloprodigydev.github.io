@@ -765,6 +765,7 @@ const Snd={on:false,ctx:null,m:4,
 /* soundtrack: the real OST, from the music/ folder */
 const DIRS=['music/','../music/'];/* folders to look in, in order */
 const TRACKS={
+ main:{f:'Main_Theme.mp3',t:'Main Theme',s:'UNSHADED OST'},
  home:{f:'Do_You_Remember.mp3',t:'Do You Remember',s:'Piano'},
  quiet:{f:'A_Quiet_Place.mp3',t:'A Quiet Place',s:'Ashbourne Valley OST'},
  below:{f:'The_Quiet_Below.mp3',t:'The Quiet Below',s:'The Depths of Blackwood OST'}};
@@ -1375,7 +1376,7 @@ function go(i){i=(i+4)%4;if(i===cur||busy)return;if(reduce){setRegion(i);return}
 /* the music and the cursor glow follow whichever region you are in */
 let inSeren=false,loreOpen=false;
 function syncZone(){const z=inSeren||loreOpen;document.documentElement.style.setProperty('--ac',z?RG[cur].a[0]:'#8b5cf6');
-  if(Mus.on)Mus.want(z?REGION_TRACK[cur]:'home',z?REGION_TONE[cur]:20000)}
+  if(Mus.on)Mus.want(z?REGION_TRACK[cur]:'main',z?REGION_TONE[cur]:20000)}
 new IntersectionObserver(es=>{inSeren=es[0].isIntersecting;syncZone()},{rootMargin:'-30% 0px -30% 0px'}).observe(sec);
 addEventListener('keydown',e=>{if(!inSeren||loreOpen||e.target.closest('input,textarea'))return;if(e.key==='ArrowRight')go(cur+1);else if(e.key==='ArrowLeft')go(cur-1)});
 
